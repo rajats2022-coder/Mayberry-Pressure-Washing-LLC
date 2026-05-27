@@ -66,3 +66,77 @@ document.querySelectorAll("[data-comparison-slider]").forEach(async (slider) => 
   range.addEventListener("input", update);
   update();
 });
+
+const galleryGrid = document.querySelector(".gallery-page-grid");
+const lightbox = document.querySelector("[data-gallery-lightbox]");
+
+if (galleryGrid && lightbox) {
+  const lightboxImage = lightbox.querySelector("[data-lightbox-image]");
+  const lightboxCaption = lightbox.querySelector("[data-lightbox-caption]");
+  const closeButton = lightbox.querySelector("[data-lightbox-close]");
+  const previousButton = lightbox.querySelector("[data-lightbox-prev]");
+  const nextButton = lightbox.querySelector("[data-lightbox-next]");
+  const galleryCards = Array.from(galleryGrid.querySelectorAll(".gallery-photo-card"));
+  let activeGalleryIndex = 0;
+
+  const getGalleryItem = (card) => {
+    const image = card.querySelector("img");
+    const title = card.querySelector("h3")?.textContent.trim() || image?.alt || "Gallery image";
+    const description = card.querySelector("p")?.textContent.trim();
+    return {
+      src: image?.currentSrc || image?.src,
+      alt: image?.alt || title,
+      caption: description ? `${title}: ${description}` : title
+    };
+  };
+
+  const openLightbox = (index) => {
+    const item = getGalleryItem(galleryCards[index]);
+    if (!item.src || !lightboxImage || !lightboxCaption) return;
+
+    activeGalleryIndex = index;
+    lightboxImage.src = item.src;
+    lightboxImage.alt = item.alt;
+    lightboxCaption.textContent = item.caption;
+    lightbox.hidden = false;
+    document.body.classList.add("lightbox-open");
+    closeButton?.focus();
+  };
+
+  const closeLightbox = () => {
+    lightbox.hidden = true;
+    document.body.classList.remove("lightbox-open");
+    galleryCards[activeGalleryIndex]?.focus();
+  };
+
+  const showAdjacentImage = (direction) => {
+    const nextIndex = (activeGalleryIndex + direction + galleryCards.length) % galleryCards.length;
+    openLightbox(nextIndex);
+  };
+
+  galleryCards.forEach((card, index) => {
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", `Open larger view of ${card.querySelector("h3")?.textContent.trim() || "gallery image"}`);
+    card.addEventListener("click", () => openLightbox(index));
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openLightbox(index);
+      }
+    });
+  });
+
+  closeButton?.addEventListener("click", closeLightbox);
+  previousButton?.addEventListener("click", () => showAdjacentImage(-1));
+  nextButton?.addEventListener("click", () => showAdjacentImage(1));
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) closeLightbox();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (lightbox.hidden) return;
+    if (event.key === "Escape") closeLightbox();
+    if (event.key === "ArrowLeft") showAdjacentImage(-1);
+    if (event.key === "ArrowRight") showAdjacentImage(1);
+  });
+}
