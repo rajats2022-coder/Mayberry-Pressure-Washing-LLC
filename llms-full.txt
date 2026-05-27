@@ -24,8 +24,10 @@ Website positioning:
 - Before-and-after gallery should be populated from client-owned photos or approved Instagram assets
 
 Current known source:
+- Facebook profile: https://www.facebook.com/profile.php?id=61576662606045
 - Instagram profile: https://www.instagram.com/mayberrypressurewashingllc/
 - Public Instagram metadata during research showed 66 followers, 6 following, and 64 posts.
+- Facebook profile screenshot showed phone (336) 374-8664, email c.bray@mayberrypw.com, address 1120 W Lebanon St, Mount Airy, NC 27030, always open hours, licensed and insured wording, free estimates, and 100% recommend based on 6 reviews.
 
 Publication notes:
-- Do not publish phone, email, hours, address, insurance, licensing, pricing, warranty, or review claims until the owner confirms them.
+- Do not publish pricing, warranty, or unsupported star-rating claims until the owner confirms them.

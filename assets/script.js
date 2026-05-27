@@ -47,7 +47,7 @@ document.querySelectorAll("[data-estimate-form]").forEach((form) => {
     const service = data.get("service") || "Exterior cleaning";
     const city = data.get("city") || "your area";
     if (status) {
-      status.textContent = `Estimate request ready for ${service} in ${city}. Connect this form to email/SMS once the client confirms contact details.`;
+      status.textContent = `Estimate request ready for ${service} in ${city}. Use the phone, email, or Facebook links for live contact until the form is connected.`;
     }
   });
 });

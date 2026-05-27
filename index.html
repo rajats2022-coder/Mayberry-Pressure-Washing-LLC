@@ -12,35 +12,95 @@
   <meta property="og:title" content="Mayberry Pressure Washing LLC | Mount Airy Exterior Cleaning" />
   <meta property="og:description" content="Residential and commercial exterior cleaning across Mount Airy and northwest North Carolina." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/images/business-logo.jpg" />
+  <meta property="og:url" content="https://mayberrypressurewashing.com/" />
+  <meta property="og:image" content="https://mayberrypressurewashing.com/assets/images/business-logo.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mayberry Pressure Washing LLC | Mount Airy Exterior Cleaning" />
+  <meta name="twitter:description" content="Pressure washing, soft washing, roof washing, driveway cleaning, gutters, windows, decks, fences, and wood staining across northwest NC." />
+  <meta name="twitter:image" content="https://mayberrypressurewashing.com/assets/images/business-logo.jpg" />
   <link rel="preconnect" href="https://unpkg.com" />
   <link rel="stylesheet" href="assets/styles.css" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": "https://mayberrypressurewashing.com/#business",
-    "name": "Mayberry Pressure Washing LLC",
-    "url": "https://mayberrypressurewashing.com/",
-    "image": "https://mayberrypressurewashing.com/assets/images/business-logo.jpg",
-    "description": "Residential and commercial exterior cleaning company serving Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and surrounding areas.",
-    "address": { "@type": "PostalAddress", "addressRegion": "NC", "addressCountry": "US" },
-    "areaServed": [
-      "Mount Airy NC", "Winston-Salem NC", "Pilot Mountain NC", "Elkin NC", "Dobson NC", "Wilkesboro NC"
-    ],
-    "sameAs": ["https://www.instagram.com/mayberrypressurewashingllc/"],
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Exterior Cleaning Services",
-      "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "House Washing" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Soft Washing" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Driveway Cleaning" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Roof Washing" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gutter Cleaning" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Deck and Fence Staining" } }
-      ]
-    }
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://mayberrypressurewashing.com/#website",
+        "url": "https://mayberrypressurewashing.com/",
+        "name": "Mayberry Pressure Washing LLC",
+        "publisher": { "@id": "https://mayberrypressurewashing.com/#business" }
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://mayberrypressurewashing.com/#business",
+        "name": "Mayberry Pressure Washing LLC",
+        "url": "https://mayberrypressurewashing.com/",
+        "telephone": "+1-336-374-8664",
+        "email": "c.bray@mayberrypw.com",
+        "image": "https://mayberrypressurewashing.com/assets/images/business-logo.jpg",
+        "logo": "https://mayberrypressurewashing.com/assets/images/business-logo.jpg",
+        "description": "Licensed and insured residential and commercial exterior cleaning company serving Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and surrounding northwest North Carolina areas.",
+        "address": { "@type": "PostalAddress", "streetAddress": "1120 W Lebanon St", "addressLocality": "Mount Airy", "addressRegion": "NC", "postalCode": "27030", "addressCountry": "US" },
+        "areaServed": ["Mount Airy NC", "Winston-Salem NC", "Pilot Mountain NC", "Elkin NC", "Dobson NC", "Wilkesboro NC"],
+        "sameAs": ["https://www.facebook.com/profile.php?id=61576662606045", "https://www.instagram.com/mayberrypressurewashingllc/"],
+        "openingHours": "Mo-Su 00:00-23:59",
+        "priceRange": "$$",
+        "knowsAbout": ["Pressure washing", "Soft washing", "House washing", "Roof cleaning", "Driveway cleaning", "Gutter cleaning", "Wood staining", "Commercial exterior cleaning"],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Exterior Cleaning Services",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "House Washing", "areaServed": "Northwest North Carolina" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Soft Washing", "areaServed": "Northwest North Carolina" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Driveway Cleaning", "areaServed": "Northwest North Carolina" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Roof Cleaning", "areaServed": "Northwest North Carolina" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gutter Cleaning", "areaServed": "Northwest North Carolina" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wood Staining", "areaServed": "Northwest North Carolina" } }
+          ]
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://mayberrypressurewashing.com/#webpage",
+        "url": "https://mayberrypressurewashing.com/",
+        "name": "Mount Airy Pressure Washing and Exterior Cleaning",
+        "isPartOf": { "@id": "https://mayberrypressurewashing.com/#website" },
+        "about": { "@id": "https://mayberrypressurewashing.com/#business" },
+        "primaryImageOfPage": { "@type": "ImageObject", "url": "https://mayberrypressurewashing.com/assets/images/business-logo.jpg" }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://mayberrypressurewashing.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What pressure washing services does Mayberry Pressure Washing LLC offer?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Mayberry Pressure Washing LLC offers house washing, soft washing, roof cleaning, driveway cleaning, surface cleaning, gutter cleaning, window cleaning, deck cleaning, fence cleaning, wood staining, gutter guards, and commercial exterior cleaning." }
+          },
+          {
+            "@type": "Question",
+            "name": "What areas does Mayberry Pressure Washing serve?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The company serves Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and surrounding northwest North Carolina communities." }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I get a free estimate?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Call or text 336-374-8664, or use the estimate form with the property city, service needed, photos, and project details." }
+          }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://mayberrypressurewashing.com/#videos",
+        "name": "Mayberry Pressure Washing job videos",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "item": { "@type": "VideoObject", "name": "Mayberry Pressure Washing job video 1", "thumbnailUrl": "https://mayberrypressurewashing.com/assets/images/business-logo.jpg", "contentUrl": "https://mayberrypressurewashing.com/assets/videos/mayberry-work-1.mp4", "uploadDate": "2026-05-27" } },
+          { "@type": "ListItem", "position": 2, "item": { "@type": "VideoObject", "name": "Mayberry Pressure Washing job video 2", "thumbnailUrl": "https://mayberrypressurewashing.com/assets/images/business-logo.jpg", "contentUrl": "https://mayberrypressurewashing.com/assets/videos/mayberry-work-2.mp4", "uploadDate": "2026-05-27" } },
+          { "@type": "ListItem", "position": 3, "item": { "@type": "VideoObject", "name": "Mayberry Pressure Washing job video 3", "thumbnailUrl": "https://mayberrypressurewashing.com/assets/images/business-logo.jpg", "contentUrl": "https://mayberrypressurewashing.com/assets/videos/mayberry-work-3.mp4", "uploadDate": "2026-05-27" } }
+        ]
+      }
+    ]
   }
   </script>
 </head>
@@ -57,6 +117,8 @@
         <a href="service-areas.html">Service Areas</a>
         <a href="gallery.html">Gallery</a>
         <a href="contact.html">Contact</a>
+        <a href="https://www.facebook.com/profile.php?id=61576662606045" target="_blank" rel="noopener">Facebook</a>
+        <a class="btn btn-phone" href="tel:+13363748664"><i data-lucide="phone"></i> Call/Text</a>
         <a class="btn btn-primary" href="contact.html"><i data-lucide="clipboard-check"></i> Free Estimate</a>
       </div>
     </nav>
@@ -71,6 +133,7 @@
           <p class="hero-copy">Residential and commercial exterior cleaning across northwest North Carolina, including house washing, soft washing, roof washing, driveways, gutters, windows, decks, fences, staining, and gutter guards.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="contact.html"><i data-lucide="send"></i> Request a Free Estimate</a>
+            <a class="btn btn-secondary" href="tel:+13363748664"><i data-lucide="phone"></i> Call or Text (336) 374-8664</a>
             <a class="btn btn-secondary" href="#services"><i data-lucide="image"></i> See Before & After</a>
             <a class="btn btn-secondary btn-quiet" href="service-areas.html"><i data-lucide="map"></i> Service Areas</a>
           </div>
@@ -82,8 +145,9 @@
             <li><i data-lucide="check"></i><span>Homes, roofs, concrete, gutters, and wood care</span></li>
             <li><i data-lucide="check"></i><span>Residential and commercial properties</span></li>
             <li><i data-lucide="check"></i><span>Mount Airy and nearby service areas</span></li>
+            <li><i data-lucide="check"></i><span>Licensed and insured</span></li>
           </ul>
-          <a class="btn btn-primary" href="contact.html"><i data-lucide="message-square"></i> Start Estimate</a>
+          <a class="btn btn-primary" href="tel:+13363748664"><i data-lucide="phone"></i> Call/Text (336) 374-8664</a>
         </aside>
       </div>
     </section>
@@ -92,7 +156,7 @@
       <div class="trust-item"><strong>House Washing</strong><span>Siding, trim, soffits, porches, and entry areas.</span></div>
       <div class="trust-item"><strong>Concrete Cleaning</strong><span>Driveways, sidewalks, patios, and walkways.</span></div>
       <div class="trust-item"><strong>Soft Washing</strong><span>Lower-pressure care for more delicate surfaces.</span></div>
-      <div class="trust-item"><strong>Local Coverage</strong><span>Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro.</span></div>
+      <div class="trust-item"><strong>100% Recommend</strong><span>Based on 6 Facebook reviews shown on the business profile.</span></div>
     </div>
 
     <section class="client-proof" aria-labelledby="client-proof-title">
@@ -217,7 +281,7 @@
     <section class="section social-section">
       <div class="wrap">
         <div class="section-head">
-          <p class="eyebrow"><i data-lucide="instagram"></i> Job highlights</p>
+          <p class="eyebrow"><i data-lucide="thumbs-up"></i> Job highlights</p>
           <h2>Check out a few cleans from Mayberry.</h2>
           <p>A quick look at siding, concrete, and exterior cleaning work from real Mayberry Pressure Washing jobs.</p>
         </div>
@@ -309,13 +373,32 @@
       </div>
     </section>
 
+    <section class="section">
+      <div class="wrap faq-grid">
+        <div class="section-head">
+          <p class="eyebrow light"><i data-lucide="circle-help"></i> Quick answers</p>
+          <h2>Pressure washing questions people ask before booking.</h2>
+          <p>Short answers for homeowners, property managers, and business owners comparing exterior cleaning options in northwest North Carolina.</p>
+        </div>
+        <div class="faq-list">
+          <details open><summary>What services does Mayberry Pressure Washing LLC offer?</summary><p>Mayberry offers house washing, soft washing, roof cleaning, driveway cleaning, surface cleaning, gutter cleaning, window cleaning, deck and fence cleaning, wood staining, gutter guards, and commercial exterior cleaning.</p></details>
+          <details><summary>What areas does Mayberry Pressure Washing serve?</summary><p>Service areas include Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and surrounding northwest North Carolina communities.</p></details>
+          <details><summary>How do I get a faster pressure washing estimate?</summary><p>Call or text <a href="tel:+13363748664">(336) 374-8664</a>, or send the property city, service needed, and photos through the estimate form.</p></details>
+        </div>
+      </div>
+    </section>
+
     <section class="cta-band">
       <div class="wrap">
         <div>
           <h2>Ready to clean up the outside of the property?</h2>
           <p>Send the city, service needed, and a few project details so Mayberry Pressure Washing can quote the right scope.</p>
         </div>
-        <a class="btn btn-primary" href="contact.html"><i data-lucide="message-square"></i> Start Estimate</a>
+        <div class="section-actions">
+          <a class="btn btn-primary" href="contact.html"><i data-lucide="message-square"></i> Start Estimate</a>
+          <a class="btn btn-dark" href="tel:+13363748664"><i data-lucide="phone"></i> Call/Text (336) 374-8664</a>
+          <a class="btn btn-secondary" href="https://www.facebook.com/profile.php?id=61576662606045" target="_blank" rel="noopener"><i data-lucide="external-link"></i> Message on Facebook</a>
+        </div>
       </div>
     </section>
   </main>
@@ -324,7 +407,7 @@
     <div class="footer-grid">
       <div><strong>Mayberry Pressure Washing LLC</strong><p>Residential and commercial exterior cleaning serving Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and surrounding areas.</p></div>
       <div><strong>Services</strong><p><a href="services.html">Pressure washing, soft washing, roof washing, surface cleaning, gutters, windows, decks, fences, staining, gutter guards.</a></p></div>
-      <div><strong>Social</strong><p><a href="https://www.instagram.com/mayberrypressurewashingllc/">Instagram @mayberrypressurewashingllc</a></p></div>
+      <div><strong>Contact</strong><p><a href="tel:+13363748664">(336) 374-8664</a><br><a href="mailto:c.bray@mayberrypw.com">c.bray@mayberrypw.com</a><br><a href="https://www.facebook.com/profile.php?id=61576662606045" target="_blank" rel="noopener">Facebook Mayberry Pressure Washing LLC</a><br><a href="https://www.instagram.com/mayberrypressurewashingllc/">Instagram @mayberrypressurewashingllc</a></p></div>
     </div>
   </footer>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
