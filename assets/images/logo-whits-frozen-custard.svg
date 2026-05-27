@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 140" role="img" aria-labelledby="title desc">
+  <title id="title">Whit's Frozen Custard</title>
+  <desc id="desc">Red and blue Whit's Frozen Custard storefront-style logo.</desc>
+  <g font-family="Arial Black, Arial, sans-serif" font-weight="900">
+    <text x="32" y="78" fill="#ffffff" stroke="#ffffff" stroke-width="12" font-size="62" letter-spacing="2.3" paint-order="stroke">WHIT'S</text>
+    <text x="32" y="78" fill="#e43d65" stroke="#e43d65" stroke-width="2.6" font-size="62" letter-spacing="2.3" paint-order="stroke">WHIT'S</text>
+    <text x="96" y="111" fill="#1d61b8" font-size="27" letter-spacing="5.2">FROZEN CUSTARD</text>
+  </g>
+  <g transform="translate(279 22) scale(.68)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 27c-5-12 6-21 18-15 12-6 23 3 18 15" fill="#ffffff" stroke="#ffffff" stroke-width="9"/>
+    <path d="M21 27c-5-12 6-21 18-15 12-6 23 3 18 15" fill="#ffffff" stroke="#e43d65" stroke-width="4.5"/>
+    <path d="M27 30h38L54 68H38z" fill="#ffffff" stroke="#ffffff" stroke-width="9"/>
+    <path d="M27 30h38L54 68H38z" fill="#ffffff" stroke="#e43d65" stroke-width="4.5"/>
+    <path d="M40 32v32M51 32 42 65" stroke="#e43d65" stroke-width="2.2"/>
+  </g>
+  <text x="178" y="133" fill="#ffffff" font-family="Brush Script MT, cursive" font-size="27" opacity=".82">made fresh daily</text>
+</svg>

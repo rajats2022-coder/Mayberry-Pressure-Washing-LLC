@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 120" role="img" aria-labelledby="title desc">
+  <title id="title">Spencers Mill Apartments</title>
+  <desc id="desc">Monochrome partner-style logo for Spencers Mill apartments.</desc>
+  <g transform="translate(46 27)" fill="none" stroke="#dbe7f0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+    <circle cx="34" cy="34" r="28"/>
+    <path d="M34 9v50M12 34h44M18 18l32 32M50 18 18 50"/>
+  </g>
+  <text x="117" y="57" fill="#eef7fb" font-family="Georgia, 'Times New Roman', serif" font-size="33" font-weight="700" letter-spacing=".8">Spencers</text>
+  <text x="119" y="88" fill="#dbe7f0" font-family="Arial, sans-serif" font-size="19" font-weight="800" letter-spacing="4.5" opacity=".72">MILL APARTMENTS</text>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" role="img" aria-labelledby="title desc">
+  <title id="title">Nationwide</title>
+  <desc id="desc">Nationwide-style blue eagle mark with black wordmark.</desc>
+  <g transform="translate(34 19)">
+    <rect x="0" y="15" width="78" height="58" fill="#0a63b5"/>
+    <path d="M58 0c-15 18-16 38-10 61 2 8 4 15 4 20-10-6-22-14-33-17 16 13 31 22 51 24-9 7-21 10-35 8 20 9 42 5 55-9 9-1 18-4 27-8-10 1-19 0-29-2C76 64 66 44 66 20c0-7 1-14 4-20z" fill="#fff"/>
+    <path d="M58 0c-15 18-16 38-10 61 2 8 4 15 4 20-10-6-22-14-33-17 16 13 31 22 51 24-9 7-21 10-35 8 20 9 42 5 55-9 9-1 18-4 27-8-10 1-19 0-29-2C76 64 66 44 66 20c0-7 1-14 4-20z" fill="none" stroke="#0a63b5" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M54 16c-6 17-5 35 2 55M64 20c-7 17-5 35 5 52M38 67c14 3 28 8 44 12" fill="none" stroke="#0a63b5" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <text x="172" y="72" fill="#eef7fb" font-family="Arial Black, Arial, sans-serif" font-size="35" font-weight="900" letter-spacing="-.8">Nationwide</text>
+  <circle cx="370" cy="47" r="5" fill="none" stroke="#eef7fb" stroke-width="1.5"/>
+  <text x="367" y="50" fill="#eef7fb" font-family="Arial, sans-serif" font-size="7" font-weight="900">R</text>
+</svg>
