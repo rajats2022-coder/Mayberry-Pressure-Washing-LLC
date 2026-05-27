@@ -8,6 +8,37 @@ if (navToggle && navLinks) {
   });
 }
 
+document.querySelectorAll(".comparison-gallery, .instagram-grid").forEach((scroller) => {
+  const rail = document.createElement("div");
+  const thumb = document.createElement("span");
+  rail.className = "horizontal-scrollbar";
+  rail.setAttribute("aria-hidden", "true");
+  thumb.className = "horizontal-scrollbar-thumb";
+  rail.append(thumb);
+  scroller.insertAdjacentElement("afterend", rail);
+
+  const updateScrollbar = () => {
+    const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+    const railWidth = rail.clientWidth;
+    if (maxScroll <= 1 || railWidth <= 1) {
+      rail.hidden = true;
+      return;
+    }
+
+    rail.hidden = false;
+    const thumbWidth = Math.max((scroller.clientWidth / scroller.scrollWidth) * railWidth, 46);
+    const maxThumbTravel = railWidth - thumbWidth;
+    const thumbLeft = (scroller.scrollLeft / maxScroll) * maxThumbTravel;
+    rail.style.setProperty("--scroll-thumb-width", `${thumbWidth}px`);
+    rail.style.setProperty("--scroll-thumb-left", `${thumbLeft}px`);
+  };
+
+  scroller.addEventListener("scroll", updateScrollbar, { passive: true });
+  window.addEventListener("resize", updateScrollbar);
+  window.addEventListener("load", updateScrollbar);
+  updateScrollbar();
+});
+
 document.querySelectorAll("[data-estimate-form]").forEach((form) => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
