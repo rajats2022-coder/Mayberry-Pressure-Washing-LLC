@@ -926,8 +926,8 @@ p { margin: 0; }
 .cta-band p { max-width: 680px; margin-top: 14px; color: rgba(255,255,255,.76); }
 
 .page-hero {
-  padding: 124px 22px 76px;
-  margin-top: -86px;
+  padding: 138px 22px 76px;
+  margin-top: -100px;
   color: white;
   background:
     radial-gradient(circle at 12% 10%, rgba(110,215,255,.24), transparent 34%),
