@@ -1,0 +1,18 @@
+# Mayberry Pressure Washing LLC
+
+Mayberry Pressure Washing LLC is a residential and commercial exterior cleaning business serving Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and surrounding northwest North Carolina areas.
+
+Services include house washing, soft washing, driveway cleaning, surface cleaning, roof washing, window cleaning, gutter cleaning, deck cleaning, deck staining, fence staining, and gutter guards.
+
+Primary pages:
+- Home: /
+- Services: /services.html
+- Service Areas: /service-areas.html
+- Gallery: /gallery.html
+- Contact: /contact.html
+
+Social:
+- Instagram: https://www.instagram.com/mayberrypressurewashingllc/
+
+Unconfirmed details:
+- Phone number, email, hours, address, review rating, and review count should be confirmed before publication.

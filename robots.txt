@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mayberrypressurewashingllc.com/sitemap.xml
+Sitemap: https://mayberrypressurewashing.com/sitemap.xml
