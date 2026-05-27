@@ -533,7 +533,6 @@ const createChatbot = () => {
       );
       renderSuggestions();
     }
-    input.focus();
   };
 
   const closeChat = () => {

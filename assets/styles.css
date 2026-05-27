@@ -1770,15 +1770,18 @@ footer a, footer p { color: rgba(255,255,255,.72); }
     font-size: 14px;
   }
   .chatbot-panel {
-    width: min(340px, calc(100vw - 24px));
-    max-height: min(520px, calc(100svh - 84px));
+    width: min(330px, calc(100vw - 32px));
+    max-height: min(410px, calc(100svh - 32px));
     border-radius: 22px;
   }
+  .chatbot-widget.is-open .chatbot-launcher {
+    display: none;
+  }
   .chatbot-header {
-    padding: 13px 14px;
+    padding: 12px 13px;
   }
   .chatbot-header strong {
-    font-size: 21px;
+    font-size: 20px;
   }
   .chatbot-header span {
     font-size: 12px;
@@ -1789,8 +1792,8 @@ footer a, footer p { color: rgba(255,255,255,.72); }
     flex-basis: 38px;
   }
   .chatbot-messages {
-    min-height: 210px;
-    padding: 12px;
+    min-height: 150px;
+    padding: 10px;
     gap: 8px;
   }
   .chatbot-message {
@@ -1811,7 +1814,7 @@ footer a, footer p { color: rgba(255,255,255,.72); }
     font-size: 11px;
   }
   .chatbot-suggestions {
-    padding: 0 12px 10px;
+    padding: 0 10px 9px;
     gap: 6px;
   }
   .chatbot-suggestions button {
@@ -1820,17 +1823,17 @@ footer a, footer p { color: rgba(255,255,255,.72); }
     font-size: 11px;
   }
   .chatbot-form {
-    padding: 10px;
-    grid-template-columns: 1fr 42px;
+    padding: 9px;
+    grid-template-columns: 1fr 40px;
   }
   .chatbot-form input {
-    min-height: 42px;
+    min-height: 40px;
     padding: 10px 12px;
     font-size: 14px;
   }
   .chatbot-form button {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
   }
   @keyframes client-logo-scroll {
     from { transform: translate3d(calc(-50% - 14px), 0, 0); }
