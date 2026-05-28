@@ -1379,6 +1379,139 @@ textarea { min-height: 126px; resize: vertical; }
   transform: translateY(10px);
 }
 
+.reviews-preview {
+  background: rgba(255,255,255,.28);
+}
+.review-callout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: clamp(24px, 4vw, 58px);
+  align-items: center;
+}
+.review-callout .section-actions,
+.review-score-card .section-actions {
+  margin-top: 20px;
+}
+.review-score-card {
+  padding: clamp(24px, 3vw, 34px);
+  border: 1px solid rgba(255,255,255,.68);
+  border-radius: 28px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.86), rgba(230,246,251,.78)),
+    var(--card);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.review-score-card .stars {
+  display: inline-flex;
+  margin-bottom: 10px;
+  color: #f4a51c;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.review-score-card strong {
+  display: block;
+  color: var(--ink);
+  font-family: "Cabinet Grotesk", "Satoshi", sans-serif;
+  font-size: clamp(68px, 8vw, 104px);
+  line-height: .86;
+}
+.review-score-card p {
+  margin-top: 10px;
+  color: var(--muted);
+  font-weight: 900;
+}
+.reviews-hero {
+  background:
+    linear-gradient(90deg, rgba(6,24,50,.92), rgba(6,24,50,.72)),
+    url("images/gallery/driveway-surface-cleaning.jpg") center / cover no-repeat;
+}
+.reviews-page .chatbot-widget {
+  display: none;
+}
+.review-page-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 390px) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 58px);
+  align-items: start;
+}
+.review-score-card-large {
+  position: sticky;
+  top: 118px;
+}
+.review-copy {
+  display: grid;
+  gap: 24px;
+}
+.review-note-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.review-note {
+  min-height: 230px;
+}
+.reviews-list-section {
+  padding-top: 0;
+}
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.review-card {
+  min-height: 250px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255,255,255,.68);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.82), rgba(230,246,251,.68)),
+    var(--card);
+  box-shadow: 0 16px 44px rgba(6,24,50,.08);
+}
+.review-card strong {
+  display: block;
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1.1;
+}
+.review-card span {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+.review-card .stars {
+  margin-top: 18px;
+  color: #c87f05;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.review-card blockquote {
+  margin: 12px 0 0;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.45;
+}
+.google-profile-panel {
+  display: grid;
+  grid-template-columns: .82fr 1.18fr;
+  gap: clamp(24px, 4vw, 58px);
+  align-items: center;
+}
+.google-profile-panel iframe {
+  width: 100%;
+  min-height: 430px;
+  border: 1px solid rgba(255,255,255,.68);
+  border-radius: 28px;
+  background: rgba(255,255,255,.6);
+  box-shadow: var(--shadow);
+}
+
 footer {
   padding: 46px 22px;
   color: white;
@@ -1640,7 +1773,7 @@ footer a, footer p { color: rgba(255,255,255,.72); }
   .hero { min-height: auto; margin-top: 0; padding-top: 54px; }
   .page-hero { margin-top: 0; padding-top: 64px; }
   .page-hero .wrap { padding-top: 0; }
-  .hero-inner, .hero-split, .seo-intro, .trust-strip, .services-grid, .services-grid-compact, .instagram-grid, .feature-band, .gallery-grid, .gallery-page-grid, .split, .footer-grid, .field-grid, .faq-grid {
+  .hero-inner, .hero-split, .seo-intro, .trust-strip, .services-grid, .services-grid-compact, .instagram-grid, .feature-band, .gallery-grid, .gallery-page-grid, .split, .footer-grid, .field-grid, .faq-grid, .review-callout, .review-page-grid, .google-profile-panel, .review-note-grid, .reviews-grid {
     grid-template-columns: 1fr;
   }
   .service-page-hero,
@@ -1720,6 +1853,7 @@ footer a, footer p { color: rgba(255,255,255,.72); }
   .estimate-panel { max-width: 460px; }
   .trust-strip { margin-top: 12px; }
   .photo-panel { min-height: 360px; }
+  .review-score-card-large { position: static; }
   .cta-band .wrap { display: block; }
   .chatbot-panel {
     max-height: min(640px, calc(100svh - 94px));
@@ -1778,11 +1912,12 @@ footer a, footer p { color: rgba(255,255,255,.72); }
     bottom: 12px;
   }
   .chatbot-launcher {
-    width: auto;
+    width: 48px;
     min-height: 48px;
-    padding: 11px 15px;
+    padding: 0;
     font-size: 14px;
   }
+  .chatbot-launcher span { display: none; }
   .chatbot-panel {
     width: min(330px, calc(100vw - 32px));
     max-height: min(410px, calc(100svh - 32px));

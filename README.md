@@ -16,7 +16,7 @@ Static website draft for Mayberry Pressure Washing LLC.
 
 ## Before Publishing
 
-Confirm phone number, email, hours, business address or service-area-only preference, owner name, logo, brand colors, Google review rating/count, and approved review quotes.
+Confirm phone number, email, hours, business address or service-area-only preference, owner name, logo, brand colors, and any approved customer review quotes.
 
 The estimate form currently does not send. Until it is connected to email, SMS, or a CRM, the contact page points users to phone, email, and Facebook.
 
@@ -26,3 +26,7 @@ Current contact details from the provided Facebook profile screenshot:
 - Email: c.bray@mayberrypw.com
 - Address: 1120 W Lebanon St, Mount Airy, NC 27030
 - Hours: Always open
+
+Google review details provided by the owner:
+- Rating/count: 5.0 from 13 Google reviews
+- Leave a review: https://g.page/r/CfwShzKiaw83EAE/review
