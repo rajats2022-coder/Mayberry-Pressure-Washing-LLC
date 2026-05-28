@@ -550,7 +550,8 @@ p { margin: 0; }
   height: 150px;
   margin: 0 0 16px;
   border-radius: 18px;
-  object-fit: cover;
+  object-fit: contain;
+  background: linear-gradient(135deg, #edf7fb, #dbe8ec);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.28), 0 16px 36px rgba(6,24,50,.12);
 }
 .card .icon {
