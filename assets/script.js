@@ -187,7 +187,7 @@ const chatbotConfig = {
     gallery: "gallery.html",
     contact: "contact.html"
   },
-  serviceAreas: "Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and nearby northwest North Carolina communities",
+  serviceAreas: "Mount Airy, NC and the Triad, including Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and nearby communities",
   services: [
     "house washing",
     "soft washing",
