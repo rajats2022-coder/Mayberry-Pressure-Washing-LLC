@@ -1476,13 +1476,6 @@ textarea { min-height: 126px; resize: vertical; }
   font-size: 20px;
   line-height: 1.1;
 }
-.review-card span {
-  display: block;
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 800;
-}
 .review-card .stars {
   margin-top: 18px;
   color: #c87f05;
