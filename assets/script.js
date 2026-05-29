@@ -540,11 +540,12 @@ const createChatbot = () => {
   const suggestions = widget.querySelector(".chatbot-suggestions");
   const form = widget.querySelector(".chatbot-form");
   const input = widget.querySelector("input");
+  let hasStartedConversation = false;
   const starterQuestions = [
-    "What services do you offer?",
-    "Can I get an estimate?",
-    "Do you serve my area?",
-    "Show me the gallery"
+    ["Services", "What services do you offer?"],
+    ["Estimate", "Can I get an estimate?"],
+    ["Areas", "Do you serve my area?"],
+    ["Gallery", "Show me the gallery"]
   ];
 
   const appendMessage = (sender, text, actions = []) => {
@@ -574,10 +575,12 @@ const createChatbot = () => {
 
   const renderSuggestions = () => {
     suggestions.innerHTML = "";
-    starterQuestions.forEach((question) => {
+    if (hasStartedConversation) return;
+    starterQuestions.forEach(([label, question]) => {
       const button = document.createElement("button");
       button.type = "button";
-      button.textContent = question;
+      button.textContent = label;
+      button.setAttribute("aria-label", question);
       button.addEventListener("click", () => {
         input.value = question;
         form.requestSubmit();
@@ -587,6 +590,11 @@ const createChatbot = () => {
   };
 
   const answerUser = (text) => {
+    if (!hasStartedConversation) {
+      hasStartedConversation = true;
+      widget.classList.add("has-conversation");
+      suggestions.innerHTML = "";
+    }
     appendMessage("user", text);
     window.setTimeout(() => {
       const reply = getChatbotReply(text);
@@ -598,15 +606,11 @@ const createChatbot = () => {
     panel.hidden = false;
     launcher.setAttribute("aria-expanded", "true");
     widget.classList.add("is-open");
+    document.body.classList.add("chatbot-open");
     if (!messages.children.length) {
       appendMessage(
         "bot",
-        "Hey, this is Mayberry's website helper. I can answer the basics, help you pick a service, or send you to the right page.",
-        [
-          ["Services", chatbotConfig.pages.services],
-          ["Gallery", chatbotConfig.pages.gallery],
-          ["Estimate", chatbotConfig.pages.contact]
-        ]
+        "Hey, this is Mayberry's website helper. I can answer the basics, help you pick a service, or send you to the right page."
       );
       renderSuggestions();
     }
@@ -616,6 +620,7 @@ const createChatbot = () => {
     panel.hidden = true;
     launcher.setAttribute("aria-expanded", "false");
     widget.classList.remove("is-open");
+    document.body.classList.remove("chatbot-open");
     launcher.focus();
   };
 
