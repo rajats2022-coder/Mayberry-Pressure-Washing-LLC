@@ -18,9 +18,16 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; background: var(--paper); }
+html {
+  max-width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  background: var(--paper);
+}
 body {
   margin: 0;
+  width: 100%;
+  max-width: 100%;
   min-height: 100%;
   color: var(--ink);
   background:
@@ -46,6 +53,18 @@ body::before {
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 svg { width: 1.05em; height: 1.05em; }
+
+.card,
+.service-card,
+.area-card,
+.hero-stat-panel,
+.local-service-panel,
+.faq-list details,
+.link-grid a,
+.keyword-cloud span {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
 
 h1, h2, h3 {
   margin: 0;
@@ -1996,7 +2015,7 @@ body.chatbot-open .mobile-quick-cta,
   .hero { min-height: auto; margin-top: 0; padding-top: 54px; }
   .page-hero { margin-top: 0; padding-top: 64px; }
   .page-hero .wrap { padding-top: 0; }
-  .hero-inner, .hero-split, .seo-intro, .trust-strip, .services-grid, .services-grid-compact, .instagram-grid, .feature-band, .gallery-grid, .gallery-page-grid, .split, .footer-grid, .field-grid, .faq-grid, .review-callout, .review-page-grid, .google-profile-panel, .review-note-grid, .reviews-grid, .link-grid, .proof-grid, .resource-grid {
+  .hero-inner, .hero-split, .seo-intro, .trust-strip, .services-grid, .services-grid-compact, .service-detail-grid, .area-detail-grid, .instagram-grid, .feature-band, .gallery-grid, .gallery-page-grid, .split, .footer-grid, .field-grid, .faq-grid, .review-callout, .review-page-grid, .google-profile-panel, .review-note-grid, .reviews-grid, .link-grid, .proof-grid, .resource-grid {
     grid-template-columns: 1fr;
   }
   .service-page-hero,
@@ -2130,10 +2149,29 @@ body.chatbot-open .mobile-quick-cta,
   .brand-mark { width: 50px; height: 50px; flex-basis: 50px; }
   .brand small { font-size: 10px; }
   h1 { font-size: 46px; }
+  .page-hero h1 {
+    font-size: clamp(40px, 12.6vw, 50px);
+    line-height: .98;
+  }
+  .page-hero p {
+    max-width: 100%;
+    font-size: 16px;
+    line-height: 1.55;
+  }
   .hero { padding-bottom: 42px; }
   .hero-copy { font-size: 16px; }
   .hero-actions .btn, .section-actions .btn, .estimate-panel .btn { width: 100%; }
   .section { padding: 66px 16px; }
+  .card,
+  .service-card,
+  .area-card {
+    width: 100%;
+    min-height: auto;
+  }
+  .service-card a,
+  .area-card a {
+    width: 100%;
+  }
   .services-showcase-wrap { width: 100%; }
   .comparison-gallery {
     grid-template-columns: repeat(3, minmax(260px, 1fr));
