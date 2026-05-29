@@ -1,12 +1,89 @@
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelector(".nav-links");
 
+const pathDepth = location.pathname
+  .split("/")
+  .filter(Boolean)
+  .slice(0, -1)
+  .length;
+const relativeRoot = pathDepth > 0 ? "../".repeat(pathDepth) : "";
+
+const navHref = (path) => `${relativeRoot}${path}`;
+const currentPath = location.pathname.replace(/\/$/, "/index.html");
+const isActiveNav = (paths) => paths.some((path) => currentPath.endsWith(`/${path}`) || currentPath.endsWith(path));
+
+if (navLinks) {
+  navLinks.innerHTML = `
+    <div class="nav-group${isActiveNav(["services.html", "services/pressure-washing.html", "services/house-washing.html", "services/soft-washing.html", "services/driveway-cleaning.html", "services/roof-washing.html", "services/gutter-cleaning.html", "services/window-cleaning.html", "services/commercial-pressure-washing.html"]) ? " active" : ""}">
+      <button type="button" class="nav-group-trigger" aria-expanded="false">Services <i data-lucide="chevron-down"></i></button>
+      <div class="nav-menu">
+        <a href="${navHref("services.html")}">All Services</a>
+        <a href="${navHref("services/pressure-washing.html")}">Pressure Washing</a>
+        <a href="${navHref("services/house-washing.html")}">House Washing</a>
+        <a href="${navHref("services/driveway-cleaning.html")}">Driveway Cleaning</a>
+        <a href="${navHref("services/commercial-pressure-washing.html")}">Commercial Cleaning</a>
+      </div>
+    </div>
+    <div class="nav-group${isActiveNav(["service-areas.html"]) || currentPath.includes("/service-areas/") ? " active" : ""}">
+      <button type="button" class="nav-group-trigger" aria-expanded="false">Areas <i data-lucide="chevron-down"></i></button>
+      <div class="nav-menu">
+        <a href="${navHref("service-areas.html")}">All Service Areas</a>
+        <a href="${navHref("service-areas/mount-airy-nc.html")}">Mount Airy</a>
+        <a href="${navHref("service-areas/winston-salem-nc.html")}">Winston-Salem</a>
+        <a href="${navHref("service-areas/pilot-mountain-nc.html")}">Pilot Mountain</a>
+        <a href="${navHref("service-areas/elkin-nc.html")}">Elkin</a>
+      </div>
+    </div>
+    <div class="nav-group${currentPath.includes("/resources/") ? " active" : ""}">
+      <button type="button" class="nav-group-trigger" aria-expanded="false">Resources <i data-lucide="chevron-down"></i></button>
+      <div class="nav-menu nav-menu-wide">
+        <a href="${navHref("resources/pressure-washing-cost-mount-airy-nc.html")}">Pressure Washing Cost</a>
+        <a href="${navHref("resources/soft-washing-vs-pressure-washing.html")}">Soft Washing vs Pressure Washing</a>
+        <a href="${navHref("resources/how-often-wash-house-north-carolina.html")}">House Washing Timing</a>
+        <a href="${navHref("resources/choose-pressure-washing-company-mount-airy.html")}">Choosing a Company</a>
+      </div>
+    </div>
+    <a href="${navHref("gallery.html")}"${isActiveNav(["gallery.html"]) ? ' aria-current="page"' : ""}>Gallery</a>
+    <a href="${navHref("reviews.html")}"${isActiveNav(["reviews.html"]) ? ' aria-current="page"' : ""}>Reviews</a>
+    <a href="${navHref("contact.html")}"${isActiveNav(["contact.html"]) ? ' aria-current="page"' : ""}>Contact</a>
+    <a class="btn btn-phone" href="tel:+13363748664"><i data-lucide="phone"></i> Call/Text</a>
+    <a class="btn btn-primary" href="${navHref("contact.html")}"><i data-lucide="clipboard-check"></i> Free Estimate</a>
+  `;
+
+  navLinks.querySelectorAll(".nav-group-trigger").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const group = trigger.closest(".nav-group");
+      navLinks.querySelectorAll(".nav-group.open").forEach((openGroup) => {
+        if (openGroup !== group) {
+          openGroup.classList.remove("open");
+          openGroup.querySelector(".nav-group-trigger")?.setAttribute("aria-expanded", "false");
+        }
+      });
+      const isOpen = group?.classList.toggle("open");
+      trigger.setAttribute("aria-expanded", String(Boolean(isOpen)));
+    });
+  });
+}
+
 if (navToggle && navLinks) {
   navToggle.addEventListener("click", () => {
     const isOpen = navLinks.classList.toggle("open");
     navToggle.setAttribute("aria-expanded", String(isOpen));
   });
 }
+
+const mobileCta = document.createElement("div");
+mobileCta.className = "mobile-quick-cta";
+mobileCta.innerHTML = `
+  <a class="mobile-quick-cta-call" href="tel:+13363748664" aria-label="Call or text Mayberry Pressure Washing">
+    <i data-lucide="phone"></i><span>Call/Text</span>
+  </a>
+  <a class="mobile-quick-cta-estimate" href="${relativeRoot}contact.html" aria-label="Request a free estimate from Mayberry Pressure Washing">
+    <i data-lucide="clipboard-check"></i><span>Free Estimate</span>
+  </a>
+`;
+document.body.append(mobileCta);
+window.lucide?.createIcons();
 
 document.querySelectorAll(".comparison-gallery, .instagram-grid").forEach((scroller) => {
   const rail = document.createElement("div");

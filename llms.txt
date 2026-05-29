@@ -8,6 +8,8 @@ Primary pages:
 - Home: /
 - Services: /services.html
 - Service Areas: /service-areas.html
+- Local SEO service pages: /services/pressure-washing.html, /services/house-washing.html, /services/soft-washing.html, /services/driveway-cleaning.html, /services/roof-washing.html, /services/gutter-cleaning.html, /services/window-cleaning.html, /services/commercial-pressure-washing.html
+- Local SEO city pages: /service-areas/mount-airy-nc.html, /service-areas/winston-salem-nc.html, /service-areas/pilot-mountain-nc.html, /service-areas/elkin-nc.html, /service-areas/dobson-nc.html, /service-areas/wilkesboro-nc.html
 - Gallery: /gallery.html
 - Contact: /contact.html
 
