@@ -2,3 +2,8 @@
 node_modules/
 dist/
 .vercel/
+.env.local
+logs/
+automation/google-photo-inbox/*
+!automation/google-photo-inbox/.gitkeep
+automation/google-photo-archive/
