@@ -1548,9 +1548,19 @@ textarea { min-height: 126px; resize: vertical; }
   gap: clamp(24px, 4vw, 58px);
   align-items: center;
 }
+.reviews-bottom-cta {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+.reviews-list-section .reviews-bottom-cta {
+  margin-top: 30px;
+}
 .review-callout .section-actions,
 .review-score-card .section-actions {
   margin-top: 20px;
+  justify-content: center;
 }
 .review-score-card {
   padding: clamp(24px, 3vw, 34px);
