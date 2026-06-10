@@ -44,7 +44,9 @@
     <section class="page-hero"><div class="wrap"><p class="eyebrow"><i data-lucide="message-square"></i> Request a free estimate</p><h1>Tell Mayberry what needs cleaning.</h1><p>Call, text, email, send the form details, or message Mayberry Pressure Washing LLC on Facebook for a free estimate.</p></div></section>
     <section class="section">
       <div class="wrap split">
-        <form class="form-panel" data-estimate-form>
+        <form class="form-panel" data-estimate-form action="https://formspree.io/f/xbdekgbg" method="POST">
+          <input type="hidden" name="_subject" value="New estimate request — Mayberry Pressure Washing website">
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="field-grid">
             <label>Name<input name="name" autocomplete="name" required></label>
             <label>Phone<input name="phone" autocomplete="tel" required></label>
@@ -54,8 +56,8 @@
             <label class="full">Service needed<select name="service" required><option value="">Choose a service</option><option>House washing</option><option>Soft washing</option><option>Driveway cleaning</option><option>Surface cleaning</option><option>Roof washing</option><option>Window cleaning</option><option>Gutter cleaning</option><option>Deck staining</option><option>Fence staining</option><option>Deck cleaning</option><option>Gutter guards</option><option>Commercial cleaning</option></select></label>
             <label class="full">Project details<textarea name="message" placeholder="Tell us what needs cleaned, approximate size, and any timing notes." required></textarea></label>
           </div>
-          <button class="btn btn-primary" type="submit"><i data-lucide="send"></i> Prepare Estimate Request</button>
-          <p class="form-note" data-form-status>This static draft does not send yet. Use the phone, email, or Facebook links for live contact until the form is connected.</p>
+          <button class="btn btn-primary" type="submit"><i data-lucide="send"></i> Send Estimate Request</button>
+          <p class="form-note" data-form-status>We typically reply within one business day. Need a faster answer? Use the phone or Facebook links any time.</p>
         </form>
         <div>
           <div class="section-head"><h2>Reach Mayberry Pressure Washing LLC.</h2><p>Serving Mount Airy and surrounding areas with free estimates, licensed and insured exterior cleaning, and always-open contact options.</p></div>

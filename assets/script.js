@@ -117,14 +117,40 @@ document.querySelectorAll(".comparison-gallery, .instagram-grid").forEach((scrol
 });
 
 document.querySelectorAll("[data-estimate-form]").forEach((form) => {
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const status = form.querySelector("[data-form-status]");
-    const data = new FormData(form);
-    const service = data.get("service") || "Exterior cleaning";
-    const city = data.get("city") || "your area";
-    if (status) {
-      status.textContent = `Estimate request ready for ${service} in ${city}. Use the phone, email, or Facebook links for live contact until the form is connected.`;
+    const button = form.querySelector("button[type=\"submit\"]");
+    if (button) button.disabled = true;
+    if (status) status.textContent = "Sending...";
+    try {
+      const data = new FormData(form);
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (response.ok) {
+        form.reset();
+        if (status) {
+          status.textContent = "Thanks! Your estimate request was sent. We'll be in touch within one business day.";
+        }
+      } else {
+        const result = await response.json().catch(() => null);
+        if (status) {
+          if (result && Array.isArray(result.errors) && result.errors.length) {
+            status.textContent = result.errors.map((error) => error.message).join(", ");
+          } else {
+            status.textContent = "Something went wrong sending your request. Please call, text, or message us on Facebook.";
+          }
+        }
+      }
+    } catch (error) {
+      if (status) {
+        status.textContent = "Something went wrong sending your request. Please call, text, or message us on Facebook.";
+      }
+    } finally {
+      if (button) button.disabled = false;
     }
   });
 });
