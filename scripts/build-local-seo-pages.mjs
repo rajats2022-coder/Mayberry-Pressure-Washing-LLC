@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-const siteUrl = "https://mayberrypressurewashing.com";
+const siteUrl = "https://mayberrypw.com";
 const phone = "(336) 374-8664";
 const phoneHref = "tel:+13363748664";
 const email = "c.bray@mayberrypw.com";

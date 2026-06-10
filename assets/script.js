@@ -121,8 +121,21 @@ document.querySelectorAll("[data-estimate-form]").forEach((form) => {
     event.preventDefault();
     const status = form.querySelector("[data-form-status]");
     const button = form.querySelector("button[type=\"submit\"]");
+    if (button && !button.dataset.defaultHtml) button.dataset.defaultHtml = button.innerHTML;
+    const defaultButtonHtml = button?.dataset.defaultHtml;
+    let sentSuccessfully = false;
+    const setStatus = (type, message) => {
+      if (!status) return;
+      status.classList.remove("form-status-note", "form-status-success", "form-status-error", "form-status-sending");
+      status.classList.add(`form-status-${type}`);
+      status.textContent = message;
+    };
+
     if (button) button.disabled = true;
-    if (status) status.textContent = "Sending...";
+    if (button) button.innerHTML = '<i data-lucide="loader-circle"></i> Sending...';
+    setStatus("sending", "Sending your estimate request...");
+    window.lucide?.createIcons();
+
     try {
       const data = new FormData(form);
       const response = await fetch(form.action, {
@@ -132,25 +145,24 @@ document.querySelectorAll("[data-estimate-form]").forEach((form) => {
       });
       if (response.ok) {
         form.reset();
-        if (status) {
-          status.textContent = "Thanks! Your estimate request was sent. We'll be in touch within one business day.";
-        }
+        sentSuccessfully = true;
+        setStatus("success", "Sent. Thanks, your estimate request went through. Mayberry Pressure Washing will be in touch within one business day.");
+        if (button) button.innerHTML = '<i data-lucide="check-circle"></i> Request Sent';
       } else {
         const result = await response.json().catch(() => null);
-        if (status) {
-          if (result && Array.isArray(result.errors) && result.errors.length) {
-            status.textContent = result.errors.map((error) => error.message).join(", ");
-          } else {
-            status.textContent = "Something went wrong sending your request. Please call, text, or message us on Facebook.";
-          }
+        if (result && Array.isArray(result.errors) && result.errors.length) {
+          setStatus("error", result.errors.map((error) => error.message).join(", "));
+        } else {
+          setStatus("error", "Something went wrong sending your request. Please call, text, or message us on Facebook.");
         }
+        if (button && defaultButtonHtml) button.innerHTML = defaultButtonHtml;
       }
     } catch (error) {
-      if (status) {
-        status.textContent = "Something went wrong sending your request. Please call, text, or message us on Facebook.";
-      }
+      setStatus("error", "Something went wrong sending your request. Please call, text, or message us on Facebook.");
+      if (button && defaultButtonHtml) button.innerHTML = defaultButtonHtml;
     } finally {
-      if (button) button.disabled = false;
+      if (button) button.disabled = sentSuccessfully;
+      window.lucide?.createIcons();
     }
   });
 });

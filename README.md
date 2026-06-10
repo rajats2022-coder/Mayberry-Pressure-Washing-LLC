@@ -78,7 +78,7 @@ The morning review automation also checks whether a Google post is due. It publi
 
 Each post invites visitors to contact Mayberry Pressure Washing or use the website to request a free quote, and every post links to:
 
-`https://mayberrypressurewashing.com/contact.html`
+`https://mayberrypw.com/contact.html`
 
 Use this dry run to preview the next post without publishing:
 

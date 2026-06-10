@@ -332,7 +332,7 @@ async function draftReplyWithOpenRouter(review) {
     headers: {
       authorization: `Bearer ${apiKey}`,
       "content-type": "application/json",
-      "http-referer": "https://mayberrypressurewashing.com",
+      "http-referer": "https://mayberrypw.com",
       "x-title": "Mayberry Review Reply Automation"
     },
     body: JSON.stringify(payload),
@@ -402,7 +402,7 @@ function shouldCreateGooglePost(state) {
 }
 
 function nextGooglePostSummary(state) {
-  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://mayberrypressurewashing.com/contact.html";
+  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://mayberrypw.com/contact.html";
   const posts = [
     `Need exterior cleaning around Mount Airy or the surrounding area? Contact Mayberry Pressure Washing for a free quote on house washing, driveway cleaning, roof washing, gutters, windows, decks, fences, or commercial pressure washing. Request your quote here: ${contactUrl}`,
     `Is your siding, concrete, roofline, deck, or storefront ready for a refresh? Mayberry Pressure Washing makes it simple to request a free exterior cleaning quote online. Start here: ${contactUrl}`,
@@ -421,7 +421,7 @@ async function createGoogleLocalPost(summary) {
     return null;
   }
 
-  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://mayberrypressurewashing.com/contact.html";
+  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://mayberrypw.com/contact.html";
   const url = `https://mybusiness.googleapis.com/v4/${locationName}/localPosts`;
   return fetchJson(url, {
     method: "POST",

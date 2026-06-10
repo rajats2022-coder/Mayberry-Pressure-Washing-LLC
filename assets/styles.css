@@ -1496,7 +1496,37 @@ input, select, textarea {
 }
 textarea { min-height: 126px; resize: vertical; }
 .full { grid-column: 1 / -1; }
-.form-note { margin-top: 12px; color: var(--muted); font-size: 13px; }
+.form-status {
+  margin-top: 14px;
+  padding: 13px 15px;
+  border: 1px solid rgba(6,41,90,.12);
+  border-radius: 16px;
+  color: var(--muted);
+  background: rgba(255,255,255,.68);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+.form-status-sending {
+  color: #33465e;
+  border-color: rgba(42,170,225,.34);
+  background: rgba(224,245,253,.82);
+}
+.form-status-success {
+  color: #154734;
+  border-color: rgba(31,122,84,.28);
+  background: rgba(229,247,238,.92);
+}
+.form-status-error {
+  color: #7a1f1f;
+  border-color: rgba(188,54,54,.30);
+  background: rgba(255,235,235,.92);
+}
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: .72;
+  transform: none;
+}
 .split {
   display: grid;
   grid-template-columns: 1.05fr .95fr;
