@@ -22,7 +22,7 @@ Static website draft for Mayberry Pressure Washing LLC.
 
 Confirm phone number, email, hours, business address or service-area-only preference, owner name, logo, brand colors, and any approved customer review quotes.
 
-The estimate form submits to Formspree (`https://formspree.io/f/xbdekgbg`) via AJAX, with a native POST fallback when JavaScript is unavailable. Submissions arrive in the Formspree inbox/email tied to that form — confirm it forwards to the client's preferred address before handoff.
+The estimate form submits to Formspree (`https://formspree.io/f/mzdqagvg`) via the existing Vanilla JS AJAX handler in `assets/script.js`, with the form `action`/`method="POST"` kept as a native fallback when JavaScript is unavailable. Submissions arrive in the Formspree inbox/email tied to that form — confirm it forwards to the client's preferred address before handoff.
 
 ## Local SEO Rollout
 
