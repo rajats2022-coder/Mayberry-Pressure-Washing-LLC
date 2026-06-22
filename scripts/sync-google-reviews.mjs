@@ -252,15 +252,13 @@ function mergeReviewData(current, fetched) {
 
   const currentById = new Map((current.reviews ?? []).map((review) => [review.id, review]));
   const fetchedReviews = fetched.reviews ?? [];
-  const merged = [];
-  const seen = new Set();
+  const merged = [...fetchedReviews];
 
-  for (const review of fetchedReviews) {
-    merged.push(review);
-    seen.add(review.id);
-  }
-  for (const review of current.reviews ?? []) {
-    if (!seen.has(review.id)) merged.push(review);
+  if (fetched.source !== "google-business-profile") {
+    const seen = new Set(fetchedReviews.map((review) => review.id));
+    for (const review of current.reviews ?? []) {
+      if (!seen.has(review.id) && review.name) merged.push(review);
+    }
   }
 
   for (const review of merged) {
@@ -271,20 +269,18 @@ function mergeReviewData(current, fetched) {
   const googleReviewCount = fetched.source === "google-business-profile"
     ? Math.max(Number(fetched.reviewCount || 0), fetchedReviews.filter((review) => review.name).length)
     : Number(current.googleReviewCount || merged.filter((review) => review.name).length || 0);
-  const websiteReviewCount = merged.filter((review) => !review.name).length;
-  const totalReviewCount = googleReviewCount + websiteReviewCount;
 
   return {
     ...current,
     rating: fetched.rating || current.rating || 5,
-    reviewCount: totalReviewCount,
+    reviewCount: googleReviewCount,
     googleReviewCount,
-    websiteReviewCount,
-    totalReviewCount,
+    websiteReviewCount: 0,
+    totalReviewCount: googleReviewCount,
     source: fetched.source,
     lastFetchedAt: new Date().toISOString(),
     expectedManagerEmail: process.env.GOOGLE_BUSINESS_PROFILE_MANAGER_EMAIL || expectedManagerEmail,
-    reviews: merged.slice(0, Math.max(totalReviewCount, merged.length))
+    reviews: merged.slice(0, Math.max(googleReviewCount, merged.length))
   };
 }
 
@@ -543,14 +539,12 @@ function ratingText(value) {
 }
 
 function reviewStats(data) {
-  const googleCount = Number(data.googleReviewCount || (data.reviews ?? []).filter((review) => review.name).length || 0);
-  const websiteCount = Number(data.websiteReviewCount || (data.reviews ?? []).filter((review) => !review.name).length || 0);
-  const totalCount = Number(data.totalReviewCount || googleCount + websiteCount || data.reviewCount || 0);
-  return { googleCount, websiteCount, totalCount };
+  const googleCount = Number(data.googleReviewCount || data.reviewCount || (data.reviews ?? []).filter((review) => review.name).length || 0);
+  return { googleCount, totalCount: googleCount };
 }
 
 function updateReviewPage(html, data) {
-  const { googleCount, websiteCount, totalCount } = reviewStats(data);
+  const { googleCount } = reviewStats(data);
   const rating = ratingText(data.rating);
   const cards = data.reviews.map(reviewCard).join("\n");
   return html
@@ -558,35 +552,40 @@ function updateReviewPage(html, data) {
       /<div class="reviews-grid">\n[\s\S]*?\n        <\/div>\n      <\/div>\n    <\/section>\n\n    <section class="section alt">/,
       `<div class="reviews-grid">\n${cards}\n        </div>\n      </div>\n    </section>\n\n    <section class="section alt">`
     )
-    .replace(/A snapshot of (?:the )?\d+ [^<]*?(?:Google|customer) reviews[^<]*/g, `A snapshot of ${totalCount} ${rating}-star customer reviews, including ${googleCount} Google Business Profile reviews and ${websiteCount} website reviews.`);
+    .replace(/A snapshot of (?:the )?\d+ [^<]*?(?:Google|customer) reviews[^<]*/g, `A snapshot of ${googleCount} ${rating}-star Google Business Profile reviews.`);
 }
 
 function updateHtmlCounts(html, data) {
-  const { googleCount, websiteCount, totalCount } = reviewStats(data);
+  const { googleCount } = reviewStats(data);
   const rating = ratingText(data.rating);
   const schemaRating = Number(data.rating || 5).toFixed(1);
   return html
     .replace(/"ratingValue":\s*"\d+(?:\.\d+)?"/g, `"ratingValue": "${schemaRating}"`)
-    .replace(/"reviewCount":\s*"\d+"/g, `"reviewCount": "${totalCount}"`)
-    .replace(/Mayberry Pressure Washing Reviews \| \d+ 5-Star Google Reviews/g, `Mayberry Pressure Washing Reviews | ${googleCount} Google Reviews + ${websiteCount} Website Reviews`)
-    .replace(/See Mayberry Pressure Washing LLC's \d+(?:\.\d+)? Google rating from \d+ reviews and open the live Google Business Profile\./g, `See Mayberry Pressure Washing LLC's ${schemaRating} Google rating from ${googleCount} Google reviews plus ${websiteCount} website reviews.`)
-    .replace(/Read Mayberry Pressure Washing LLC Google reviews, see the \d+(?:\.\d+)? rating from \d+ Google reviews, and leave a review for exterior cleaning service in Mount Airy, NC\./g, `Read Mayberry Pressure Washing LLC reviews, including ${googleCount} Google reviews and ${websiteCount} website reviews for exterior cleaning service in Mount Airy, NC.`)
-    .replace(/<h1>\d+ 5-star reviews on Google\.<\/h1>/g, `<h1>${googleCount} Google reviews and ${websiteCount} website reviews.</h1>`)
-    .replace(/These 5-star reviews are from Mayberry Pressure Washing's Google Business Profile\./g, `These reviews include Mayberry Pressure Washing's Google Business Profile reviews and customer reviews featured on the website.`)
+    .replace(/"reviewCount":\s*"\d+"/g, `"reviewCount": "${googleCount}"`)
+    .replace(/Mayberry Pressure Washing Reviews \| \d+ Google Reviews \+ \d+ Website Reviews/g, `Mayberry Pressure Washing Reviews | ${googleCount} 5-Star Google Reviews`)
+    .replace(/Mayberry Pressure Washing Reviews \| \d+ 5-Star Google Reviews/g, `Mayberry Pressure Washing Reviews | ${googleCount} 5-Star Google Reviews`)
+    .replace(/See Mayberry Pressure Washing LLC's \d+(?:\.\d+)? Google rating from \d+ Google reviews plus \d+ website reviews\./g, `See Mayberry Pressure Washing LLC's ${schemaRating} Google rating from ${googleCount} Google reviews.`)
+    .replace(/See Mayberry Pressure Washing LLC's \d+(?:\.\d+)? Google rating from \d+ reviews and open the live Google Business Profile\./g, `See Mayberry Pressure Washing LLC's ${schemaRating} Google rating from ${googleCount} Google reviews.`)
+    .replace(/Read Mayberry Pressure Washing LLC reviews, including \d+ Google reviews and \d+ website reviews for exterior cleaning service in Mount Airy, NC\./g, `Read Mayberry Pressure Washing LLC Google reviews, see the ${schemaRating} rating from ${googleCount} Google reviews, and leave a review for exterior cleaning service in Mount Airy, NC.`)
+    .replace(/Read Mayberry Pressure Washing LLC Google reviews, see the \d+(?:\.\d+)? rating from \d+ Google reviews, and leave a review for exterior cleaning service in Mount Airy, NC\./g, `Read Mayberry Pressure Washing LLC Google reviews, see the ${schemaRating} rating from ${googleCount} Google reviews, and leave a review for exterior cleaning service in Mount Airy, NC.`)
+    .replace(/<h1>\d+ Google reviews and \d+ website reviews\.<\/h1>/g, `<h1>${googleCount} 5-star reviews on Google.</h1>`)
+    .replace(/<h1>\d+ 5-star reviews on Google\.<\/h1>/g, `<h1>${googleCount} 5-star reviews on Google.</h1>`)
+    .replace(/These reviews include Mayberry Pressure Washing's Google Business Profile reviews and customer reviews featured on the website\./g, `These 5-star reviews are from Mayberry Pressure Washing's Google Business Profile.`)
+    .replace(/These 5-star reviews are from Mayberry Pressure Washing's Google Business Profile\./g, `These 5-star reviews are from Mayberry Pressure Washing's Google Business Profile.`)
     .replace(/The review total and star rating are presented from the Google Business Profile\./g, `The Google review total and star rating are presented from the Google Business Profile.`)
-    .replace(/<h3>Google reviews<\/h3><strong><a href="reviews\.html">\d+ 5-star reviews<\/a><\/strong><p>Mayberry Pressure Washing's Google Business Profile shows a \d+(?:\.\d+)? rating from \d+ reviews\.<\/p>/g, `<h3>Customer reviews</h3><strong><a href="reviews.html">${totalCount} 5-star reviews</a></strong><p>Mayberry Pressure Washing has ${googleCount} Google reviews and ${websiteCount} website reviews featured on the site.</p>`)
-    .replace(/\d+ 5-Star Google Reviews/g, `${googleCount} Google Reviews + ${websiteCount} Website Reviews`)
+    .replace(/<h3>Customer reviews<\/h3><strong><a href="reviews\.html">\d+ 5-star reviews<\/a><\/strong><p>Mayberry Pressure Washing has \d+ Google reviews and \d+ website reviews featured on the site\.<\/p>/g, `<h3>Google reviews</h3><strong><a href="reviews.html">${googleCount} 5-star reviews</a></strong><p>Mayberry Pressure Washing's Google Business Profile shows a ${schemaRating} rating from ${googleCount} reviews.</p>`)
+    .replace(/<h3>Google reviews<\/h3><strong><a href="reviews\.html">\d+ 5-star reviews<\/a><\/strong><p>Mayberry Pressure Washing's Google Business Profile shows a \d+(?:\.\d+)? rating from \d+ reviews\.<\/p>/g, `<h3>Google reviews</h3><strong><a href="reviews.html">${googleCount} 5-star reviews</a></strong><p>Mayberry Pressure Washing's Google Business Profile shows a ${schemaRating} rating from ${googleCount} reviews.</p>`)
+    .replace(/\d+ 5-Star Google Reviews/g, `${googleCount} 5-Star Google Reviews`)
     .replace(/\d+ Google Reviews/g, `${googleCount} Google Reviews`)
     .replace(/\d+ \d+(?:\.\d+)?-star Google reviews/g, `${googleCount} ${rating}-star Google reviews`)
-    .replace(/\d+ \d+(?:\.\d+)?-star reviews/g, `${totalCount} ${rating}-star reviews`)
+    .replace(/\d+ \d+(?:\.\d+)?-star reviews/g, `${googleCount} ${rating}-star reviews`)
     .replace(/\d+ Google reviews/g, `${googleCount} Google reviews`)
-    .replace(/from \d+ reviews/g, `from ${totalCount} reviews`)
+    .replace(/from \d+ reviews/g, `from ${googleCount} reviews`)
     .replace(/from \d+ Google reviews/g, `from ${googleCount} Google reviews`)
     .replace(/Based on \d+ Google reviews/g, `Based on ${googleCount} Google reviews`)
     .replace(/review total and star rating/g, `review total and star rating`)
     .replace(/has a \d+(?:\.\d+)? rating from \d+ Google reviews/g, `has a ${schemaRating} rating from ${googleCount} Google reviews`)
-    .replace(/shows a \d+(?:\.\d+)? rating from \d+ reviews/g, `shows a ${schemaRating} rating from ${totalCount} reviews`)
-    .replace(/(\d+) Google reviews and (\d+) website reviews/g, `${googleCount} Google reviews and ${websiteCount} website reviews`);
+    .replace(/shows a \d+(?:\.\d+)? rating from \d+ reviews/g, `shows a ${schemaRating} rating from ${googleCount} reviews`);
 }
 
 function updateSiteFiles(data) {

@@ -56,8 +56,7 @@ Current contact details from the provided Facebook profile screenshot:
 
 Current review details:
 - Google Business Profile: 5.0 from 24 Google reviews
-- Website/local review entries: 13
-- Total customer reviews shown on the site: 37
+- Site review count: 24 Google Business Profile reviews only
 - Leave a review: https://g.page/r/CfwShzKiaw83EAE/review
 
 ## Google Review Automation
@@ -72,7 +71,7 @@ It runs every morning at 7:15 AM:
 node scripts/sync-google-reviews.mjs --update-site --reply-unanswered
 ```
 
-The updater reads `data/google-reviews.json`, fetches Google review data when credentials are available, replies to Google reviews that do not already have an owner reply, updates the featured homepage review count, rewrites `reviews.html`, and refreshes review-count/schema text across the static HTML files. It keeps separate counts for Google reviews, website/local reviews, and total customer reviews.
+The updater reads `data/google-reviews.json`, fetches Google review data when credentials are available, replies to Google reviews that do not already have an owner reply, updates the featured homepage review count, rewrites `reviews.html`, and refreshes review-count/schema text across the static HTML files. The public site count should use only the live Google Business Profile review count.
 
 Use `s4aiagency@gmail.com` for the Google Business Profile manager account. Copy `.env.example` to `.env.local` and fill in credentials. Prefer Google Business Profile OAuth credentials because the official Reviews API returns the full owned-location review list and supports owner replies. A Places API key can update the public rating/count and a limited set of reviews, but it is not a full review-history or reply source.
 
