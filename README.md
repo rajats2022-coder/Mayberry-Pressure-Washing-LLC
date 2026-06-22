@@ -1,6 +1,19 @@
 # Mayberry Pressure Washing LLC Website
 
-Static website draft for Mayberry Pressure Washing LLC.
+Static website for Mayberry Pressure Washing LLC. Any update to tracked site files should be committed and pushed to `origin/main` so Vercel can deploy it live.
+
+## Publishing Rule
+
+After every site update, run a quick verification, commit the tracked changes, and push:
+
+```bash
+git status --short
+git add .
+git commit -m "Describe the site update"
+git push origin main
+```
+
+Do not commit `.env.local` or `logs/`. They are local runtime files only.
 
 ## Files
 
@@ -41,8 +54,10 @@ Current contact details from the provided Facebook profile screenshot:
 - Address: 1120 W Lebanon St, Mount Airy, NC 27030
 - Hours: Always open
 
-Google review details provided by the owner:
-- Rating/count: 5.0 from 13 Google reviews
+Current review details:
+- Google Business Profile: 5.0 from 24 Google reviews
+- Website/local review entries: 13
+- Total customer reviews shown on the site: 37
 - Leave a review: https://g.page/r/CfwShzKiaw83EAE/review
 
 ## Google Review Automation
@@ -57,7 +72,7 @@ It runs every morning at 7:15 AM:
 node scripts/sync-google-reviews.mjs --update-site --reply-unanswered
 ```
 
-The updater reads `data/google-reviews.json`, fetches Google review data when credentials are available, replies to Google reviews that do not already have an owner reply, creates a Google Business Profile post every other day, updates the featured homepage review count, rewrites `reviews.html`, and refreshes review-count/schema text across the static HTML files.
+The updater reads `data/google-reviews.json`, fetches Google review data when credentials are available, replies to Google reviews that do not already have an owner reply, updates the featured homepage review count, rewrites `reviews.html`, and refreshes review-count/schema text across the static HTML files. It keeps separate counts for Google reviews, website/local reviews, and total customer reviews.
 
 Use `s4aiagency@gmail.com` for the Google Business Profile manager account. Copy `.env.example` to `.env.local` and fill in credentials. Prefer Google Business Profile OAuth credentials because the official Reviews API returns the full owned-location review list and supports owner replies. A Places API key can update the public rating/count and a limited set of reviews, but it is not a full review-history or reply source.
 
@@ -68,23 +83,54 @@ node scripts/setup-google-oauth.mjs
 node scripts/sync-google-reviews.mjs --discover-locations
 ```
 
-Then fill `GOOGLE_BUSINESS_PROFILE_ACCOUNT_ID` and `GOOGLE_BUSINESS_PROFILE_LOCATION_ID` from the discovered Mayberry location. Review replies are drafted with OpenRouter using `openai/gpt-4.1-nano` by default because it is cheap and sufficient for short business replies.
+Then fill `GOOGLE_BUSINESS_PROFILE_ACCOUNT_ID` and `GOOGLE_BUSINESS_PROFILE_LOCATION_ID` from the discovered Mayberry location. Review replies are drafted with OpenRouter using `openai/gpt-4.1-nano` when `OPENROUTER_API_KEY` is set. If it is not set, the script uses a deterministic local fallback that includes the reviewer first name, service details detected from the review, and the Mayberry contact URL.
 
 Set `MAYBERRY_REVIEWS_AUTO_PUSH=1` in `.env.local` only if the morning job should commit and push changed website files automatically.
 
 ## Google Business Profile Posts
 
-The morning review automation also checks whether a Google post is due. It publishes no more than once every 47 hours, so the result is effectively every other day.
+Google posts are handled by a separate macOS LaunchAgent template:
 
-Each post invites visitors to contact Mayberry Pressure Washing or use the website to request a free quote, and every post links to:
+`automation/com.s4ai.mayberry-google-posts.plist`
 
-`https://mayberrypw.com/contact.html`
+It checks daily at 8:30 AM:
+
+```bash
+node scripts/sync-google-reviews.mjs --maybe-post --local-data
+```
+
+The script publishes no more than once every 47 hours, so the result is effectively every other day even though the scheduler checks daily.
+
+Post strategy:
+- 2-3 Google posts per week.
+- Rotate house washing, driveway/concrete cleaning, seasonal refreshes, roofline/gutter care, service-area coverage, and commercial exterior cleaning.
+- Use one clear quote request CTA.
+- Link every post to:
+
+`https://www.mayberrypw.com/contact`
 
 Use this dry run to preview the next post without publishing:
 
 ```bash
 node scripts/sync-google-reviews.mjs --maybe-post --dry-run-post --local-data
 ```
+
+To install or refresh LaunchAgents:
+
+```bash
+cp automation/com.s4ai.mayberry-google-reviews.plist ~/Library/LaunchAgents/
+cp automation/com.s4ai.mayberry-google-posts.plist ~/Library/LaunchAgents/
+launchctl unload ~/Library/LaunchAgents/com.s4ai.mayberry-google-reviews.plist 2>/dev/null || true
+launchctl unload ~/Library/LaunchAgents/com.s4ai.mayberry-google-posts.plist 2>/dev/null || true
+launchctl load ~/Library/LaunchAgents/com.s4ai.mayberry-google-reviews.plist
+launchctl load ~/Library/LaunchAgents/com.s4ai.mayberry-google-posts.plist
+```
+
+Logs:
+- Review automation: `logs/review-automation.log`
+- Review launchd stdout/stderr: `logs/review-automation-launchd.log`, `logs/review-automation-launchd.err`
+- Google post automation: `logs/google-post-automation.log`
+- Google post launchd stdout/stderr: `logs/google-post-automation-launchd.log`, `logs/google-post-automation-launchd.err`
 
 ## Google Photo Uploads
 

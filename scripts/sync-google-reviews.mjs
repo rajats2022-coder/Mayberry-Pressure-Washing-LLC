@@ -268,14 +268,23 @@ function mergeReviewData(current, fetched) {
     if (prior?.text && (!review.text || review.text === "5-star Google review")) review.text = prior.text;
   }
 
+  const googleReviewCount = fetched.source === "google-business-profile"
+    ? Math.max(Number(fetched.reviewCount || 0), fetchedReviews.filter((review) => review.name).length)
+    : Number(current.googleReviewCount || merged.filter((review) => review.name).length || 0);
+  const websiteReviewCount = merged.filter((review) => !review.name).length;
+  const totalReviewCount = googleReviewCount + websiteReviewCount;
+
   return {
     ...current,
     rating: fetched.rating || current.rating || 5,
-    reviewCount: Math.max(fetched.reviewCount || 0, merged.length, current.reviewCount || 0),
+    reviewCount: totalReviewCount,
+    googleReviewCount,
+    websiteReviewCount,
+    totalReviewCount,
     source: fetched.source,
     lastFetchedAt: new Date().toISOString(),
     expectedManagerEmail: process.env.GOOGLE_BUSINESS_PROFILE_MANAGER_EMAIL || expectedManagerEmail,
-    reviews: merged.slice(0, Math.max(fetched.reviewCount || merged.length, merged.length))
+    reviews: merged.slice(0, Math.max(totalReviewCount, merged.length))
   };
 }
 
@@ -286,12 +295,46 @@ function replyToneForRating(rating) {
   return "calm, apologetic, and move the conversation offline";
 }
 
-function fallbackReply(review) {
-  const author = review.author && review.author !== "Google reviewer" ? `, ${review.author.split(" ")[0]}` : "";
-  if (review.rating >= 4) {
-    return `Thank you${author}! We appreciate you taking the time to share your experience with Mayberry Pressure Washing.`;
+function firstName(author) {
+  const name = String(author || "").trim();
+  if (!name || name === "Google reviewer") return "";
+  return name.split(/\s+/)[0].replace(/[^\p{L}'-]/gu, "");
+}
+
+function positiveReviewDetail(review) {
+  const text = String(review.text || "").toLowerCase();
+  const details = [
+    [/house|home|siding/, "your home"],
+    [/driveway|concrete|surface/, "the driveway and concrete cleaning"],
+    [/garage/, "the house and garage"],
+    [/window/, "the window cleaning"],
+    [/roof/, "the roof washing"],
+    [/gutter/, "the gutter cleaning"],
+    [/deck/, "the deck cleaning"],
+    [/commercial|business|storefront|property/, "your property"],
+    [/quote|schedule|appointment|responsive|communication|communicative/, "the communication and scheduling"],
+    [/on time|reliable|professional/, "the reliable, professional service"],
+    [/price|pricing|fair/, "the fair pricing and finished work"],
+    [/rain|weather/, "the work even with the weather"],
+    [/recommend|10\/10|best/, "the experience enough to recommend us"]
+  ];
+  const matches = [];
+  for (const [pattern, detail] of details) {
+    if (pattern.test(text) && !matches.includes(detail)) matches.push(detail);
+    if (matches.length >= 2) break;
   }
-  return `Thank you for the feedback${author}. We appreciate the chance to improve and would welcome a direct conversation so we can better understand what happened.`;
+  return matches.length ? matches.join(" and ") : "the work";
+}
+
+function fallbackReply(review) {
+  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://www.mayberrypw.com/contact";
+  const author = firstName(review.author);
+  if (review.rating >= 4) {
+    const greeting = author ? `, ${author}` : "";
+    return `Thank you so much for the review${greeting}. I really appreciate you trusting Mayberry Pressure Washing with ${positiveReviewDetail(review)}, and I am glad you were happy with the result.\n\nIf you know someone in need of pressure washing, please check out our brand new website and have them fill out a request for a free estimate: ${contactUrl}.`;
+  }
+  const greeting = author ? `, ${author}` : "";
+  return `Thank you for the feedback${greeting}. I appreciate you taking the time to share your experience, and I would welcome a direct conversation so we can better understand what happened and make it right.`;
 }
 
 async function draftReplyWithOpenRouter(review) {
@@ -402,12 +445,14 @@ function shouldCreateGooglePost(state) {
 }
 
 function nextGooglePostSummary(state) {
-  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://mayberrypw.com/contact.html";
+  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://www.mayberrypw.com/contact";
   const posts = [
-    `Need exterior cleaning around Mount Airy or the surrounding area? Contact Mayberry Pressure Washing for a free quote on house washing, driveway cleaning, roof washing, gutters, windows, decks, fences, or commercial pressure washing. Request your quote here: ${contactUrl}`,
-    `Is your siding, concrete, roofline, deck, or storefront ready for a refresh? Mayberry Pressure Washing makes it simple to request a free exterior cleaning quote online. Start here: ${contactUrl}`,
-    `Planning a cleanup before guests, listing photos, or a busy season? Reach out to Mayberry Pressure Washing for a free quote and a service plan matched to your property. Book through the website: ${contactUrl}`,
-    `Mayberry Pressure Washing helps homes and businesses look cleaner from the curb. For house washing, soft washing, driveway cleaning, gutters, windows, decks, fences, and commercial exterior cleaning, request a free quote here: ${contactUrl}`
+    `House siding, brick, and trim can collect grime fast in North Carolina weather. Mayberry Pressure Washing offers house washing and soft washing around Mount Airy and nearby areas. Request a free estimate here: ${contactUrl}`,
+    `Driveways, sidewalks, and concrete pads make a big first impression. If yours is stained or weathered, Mayberry Pressure Washing can help clean it up with a free exterior cleaning quote: ${contactUrl}`,
+    `Getting a property ready for guests, listing photos, or a seasonal refresh? Mayberry Pressure Washing handles house washing, driveway cleaning, gutters, windows, decks, fences, and commercial exterior cleaning. Start here: ${contactUrl}`,
+    `Rooflines, gutters, and exterior surfaces need the right cleaning method, not just high pressure. Mayberry Pressure Washing can recommend the right service for your home or business. Request a free estimate: ${contactUrl}`,
+    `Serving Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and surrounding areas. Tell Mayberry Pressure Washing what needs cleaned and get a free estimate online: ${contactUrl}`,
+    `Commercial storefronts, apartments, sidewalks, and building exteriors need to look cared for. Mayberry Pressure Washing helps local properties stay clean from the curb. Request a quote here: ${contactUrl}`
   ];
   const index = Number(state.postIndex || 0) % posts.length;
   return posts[index];
@@ -421,7 +466,7 @@ async function createGoogleLocalPost(summary) {
     return null;
   }
 
-  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://mayberrypw.com/contact.html";
+  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://www.mayberrypw.com/contact";
   const url = `https://mybusiness.googleapis.com/v4/${locationName}/localPosts`;
   return fetchJson(url, {
     method: "POST",
@@ -497,8 +542,15 @@ function ratingText(value) {
   return Number.isInteger(rating) ? String(rating) : rating.toFixed(1);
 }
 
+function reviewStats(data) {
+  const googleCount = Number(data.googleReviewCount || (data.reviews ?? []).filter((review) => review.name).length || 0);
+  const websiteCount = Number(data.websiteReviewCount || (data.reviews ?? []).filter((review) => !review.name).length || 0);
+  const totalCount = Number(data.totalReviewCount || googleCount + websiteCount || data.reviewCount || 0);
+  return { googleCount, websiteCount, totalCount };
+}
+
 function updateReviewPage(html, data) {
-  const count = data.reviewCount;
+  const { googleCount, websiteCount, totalCount } = reviewStats(data);
   const rating = ratingText(data.rating);
   const cards = data.reviews.map(reviewCard).join("\n");
   return html
@@ -506,27 +558,35 @@ function updateReviewPage(html, data) {
       /<div class="reviews-grid">\n[\s\S]*?\n        <\/div>\n      <\/div>\n    <\/section>\n\n    <section class="section alt">/,
       `<div class="reviews-grid">\n${cards}\n        </div>\n      </div>\n    </section>\n\n    <section class="section alt">`
     )
-    .replace(/A snapshot of the \d+ [^<]*?Google reviews/g, `A snapshot of the ${count} ${rating}-star Google reviews`);
+    .replace(/A snapshot of (?:the )?\d+ [^<]*?(?:Google|customer) reviews[^<]*/g, `A snapshot of ${totalCount} ${rating}-star customer reviews, including ${googleCount} Google Business Profile reviews and ${websiteCount} website reviews.`);
 }
 
 function updateHtmlCounts(html, data) {
-  const count = data.reviewCount;
+  const { googleCount, websiteCount, totalCount } = reviewStats(data);
   const rating = ratingText(data.rating);
   const schemaRating = Number(data.rating || 5).toFixed(1);
   return html
     .replace(/"ratingValue":\s*"\d+(?:\.\d+)?"/g, `"ratingValue": "${schemaRating}"`)
-    .replace(/"reviewCount":\s*"\d+"/g, `"reviewCount": "${count}"`)
-    .replace(/Mayberry Pressure Washing Reviews \| \d+ 5-Star Google Reviews/g, `Mayberry Pressure Washing Reviews | ${count} 5-Star Google Reviews`)
-    .replace(/\d+ Google Reviews/g, `${count} Google Reviews`)
-    .replace(/\d+ \d+(?:\.\d+)?-star Google reviews/g, `${count} ${rating}-star Google reviews`)
-    .replace(/\d+ \d+(?:\.\d+)?-star reviews/g, `${count} ${rating}-star reviews`)
-    .replace(/\d+ Google reviews/g, `${count} Google reviews`)
-    .replace(/from \d+ reviews/g, `from ${count} reviews`)
-    .replace(/from \d+ Google reviews/g, `from ${count} Google reviews`)
-    .replace(/Based on \d+ Google reviews/g, `Based on ${count} Google reviews`)
+    .replace(/"reviewCount":\s*"\d+"/g, `"reviewCount": "${totalCount}"`)
+    .replace(/Mayberry Pressure Washing Reviews \| \d+ 5-Star Google Reviews/g, `Mayberry Pressure Washing Reviews | ${googleCount} Google Reviews + ${websiteCount} Website Reviews`)
+    .replace(/See Mayberry Pressure Washing LLC's \d+(?:\.\d+)? Google rating from \d+ reviews and open the live Google Business Profile\./g, `See Mayberry Pressure Washing LLC's ${schemaRating} Google rating from ${googleCount} Google reviews plus ${websiteCount} website reviews.`)
+    .replace(/Read Mayberry Pressure Washing LLC Google reviews, see the \d+(?:\.\d+)? rating from \d+ Google reviews, and leave a review for exterior cleaning service in Mount Airy, NC\./g, `Read Mayberry Pressure Washing LLC reviews, including ${googleCount} Google reviews and ${websiteCount} website reviews for exterior cleaning service in Mount Airy, NC.`)
+    .replace(/<h1>\d+ 5-star reviews on Google\.<\/h1>/g, `<h1>${googleCount} Google reviews and ${websiteCount} website reviews.</h1>`)
+    .replace(/These 5-star reviews are from Mayberry Pressure Washing's Google Business Profile\./g, `These reviews include Mayberry Pressure Washing's Google Business Profile reviews and customer reviews featured on the website.`)
+    .replace(/The review total and star rating are presented from the Google Business Profile\./g, `The Google review total and star rating are presented from the Google Business Profile.`)
+    .replace(/<h3>Google reviews<\/h3><strong><a href="reviews\.html">\d+ 5-star reviews<\/a><\/strong><p>Mayberry Pressure Washing's Google Business Profile shows a \d+(?:\.\d+)? rating from \d+ reviews\.<\/p>/g, `<h3>Customer reviews</h3><strong><a href="reviews.html">${totalCount} 5-star reviews</a></strong><p>Mayberry Pressure Washing has ${googleCount} Google reviews and ${websiteCount} website reviews featured on the site.</p>`)
+    .replace(/\d+ 5-Star Google Reviews/g, `${googleCount} Google Reviews + ${websiteCount} Website Reviews`)
+    .replace(/\d+ Google Reviews/g, `${googleCount} Google Reviews`)
+    .replace(/\d+ \d+(?:\.\d+)?-star Google reviews/g, `${googleCount} ${rating}-star Google reviews`)
+    .replace(/\d+ \d+(?:\.\d+)?-star reviews/g, `${totalCount} ${rating}-star reviews`)
+    .replace(/\d+ Google reviews/g, `${googleCount} Google reviews`)
+    .replace(/from \d+ reviews/g, `from ${totalCount} reviews`)
+    .replace(/from \d+ Google reviews/g, `from ${googleCount} Google reviews`)
+    .replace(/Based on \d+ Google reviews/g, `Based on ${googleCount} Google reviews`)
     .replace(/review total and star rating/g, `review total and star rating`)
-    .replace(/has a \d+(?:\.\d+)? rating from \d+ Google reviews/g, `has a ${schemaRating} rating from ${count} Google reviews`)
-    .replace(/shows a \d+(?:\.\d+)? rating from \d+ reviews/g, `shows a ${schemaRating} rating from ${count} reviews`);
+    .replace(/has a \d+(?:\.\d+)? rating from \d+ Google reviews/g, `has a ${schemaRating} rating from ${googleCount} Google reviews`)
+    .replace(/shows a \d+(?:\.\d+)? rating from \d+ reviews/g, `shows a ${schemaRating} rating from ${totalCount} reviews`)
+    .replace(/(\d+) Google reviews and (\d+) website reviews/g, `${googleCount} Google reviews and ${websiteCount} website reviews`);
 }
 
 function updateSiteFiles(data) {

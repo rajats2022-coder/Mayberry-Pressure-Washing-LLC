@@ -8,7 +8,7 @@
   <array>
     <string>/bin/zsh</string>
     <string>-lc</string>
-    <string>cd '/Users/rajatsingh/Documents/Mayberry Pressure Washing llc' &amp;&amp; /usr/bin/env node scripts/sync-google-reviews.mjs --update-site --reply-unanswered --maybe-post &gt;&gt; logs/review-automation.log 2&gt;&amp;1</string>
+    <string>cd '/Users/rajatsingh/Documents/Mayberry Pressure Washing llc' &amp;&amp; /usr/bin/env node scripts/sync-google-reviews.mjs --update-site --reply-unanswered &gt;&gt; logs/review-automation.log 2&gt;&amp;1</string>
   </array>
   <key>StartCalendarInterval</key>
   <dict>
@@ -22,6 +22,6 @@
   <key>StandardErrorPath</key>
   <string>/Users/rajatsingh/Documents/Mayberry Pressure Washing llc/logs/review-automation-launchd.err</string>
   <key>RunAtLoad</key>
-  <true/>
+  <false/>
 </dict>
 </plist>
