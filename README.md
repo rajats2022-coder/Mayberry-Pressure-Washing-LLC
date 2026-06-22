@@ -149,3 +149,9 @@ Photos are uploaded as additional business photos with this description by defau
 `Finished a nice cleaning today, satisfied customer.`
 
 After upload, files move into `automation/google-photo-archive/`, and the upload log is written to `data/google-photo-uploads.json`.
+
+If Google's byte-upload finalize endpoint returns a server error, add the approved photos to the live site first and upload them by public URL:
+
+```bash
+MAYBERRY_PHOTO_SOURCE_BASE_URL=https://www.mayberrypw.com node scripts/upload-google-photos.mjs assets/images/gallery/example-photo.jpg
+```

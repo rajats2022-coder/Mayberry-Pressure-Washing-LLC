@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync, writeFileSync } from "node:fs";
-import { basename, extname, join } from "node:path";
+import { basename, extname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("..", import.meta.url)).replace(/\/$/, "");
@@ -9,6 +9,7 @@ const inboxDir = join(root, "automation", "google-photo-inbox");
 const archiveDir = join(root, "automation", "google-photo-archive");
 const uploadLogPath = join(root, "data", "google-photo-uploads.json");
 const defaultDescription = "Finished a nice cleaning today, satisfied customer.";
+const defaultCategory = "ADDITIONAL";
 
 loadDotEnv(envPath);
 
@@ -32,6 +33,25 @@ async function fetchJson(url, options = {}) {
     throw new Error(`${options.label || "Request"} failed: ${response.status} ${text}`);
   }
   return payload;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchJsonWithRetry(url, options = {}, retries = 3) {
+  let lastError = null;
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      return await fetchJson(url, options);
+    } catch (error) {
+      lastError = error;
+      const status = String(error.message || "").match(/failed: (\d+)/)?.[1];
+      if (!status || Number(status) < 500 || attempt === retries) break;
+      await sleep(750 * 2 ** attempt);
+    }
+  }
+  throw lastError;
 }
 
 async function getGoogleAccessToken() {
@@ -106,7 +126,7 @@ async function startUpload(token, locationName) {
 }
 
 async function uploadBytes(token, resourceName, path) {
-  const response = await fetch(`https://mybusiness.googleapis.com/upload/v1/media/${resourceName}?upload_type=media`, {
+  const response = await fetch(`https://mybusiness.googleapis.com/upload/v1/media/${resourceName}?uploadType=media`, {
     method: "POST",
     headers: {
       authorization: `Bearer ${token}`,
@@ -120,8 +140,8 @@ async function uploadBytes(token, resourceName, path) {
   }
 }
 
-async function createMedia(token, locationName, resourceName, description) {
-  return fetchJson(`https://mybusiness.googleapis.com/v4/${locationName}/media`, {
+async function createMedia(token, locationName, resourceName, description, category) {
+  return fetchJsonWithRetry(`https://mybusiness.googleapis.com/v4/${locationName}/media`, {
     method: "POST",
     headers: {
       authorization: `Bearer ${token}`,
@@ -129,12 +149,37 @@ async function createMedia(token, locationName, resourceName, description) {
     },
     body: JSON.stringify({
       mediaFormat: "PHOTO",
-      locationAssociation: { category: "ADDITIONAL" },
+      locationAssociation: { category },
       description,
       dataRef: { resourceName }
     }),
     label: "Google Business Profile media.create"
   });
+}
+
+async function createMediaFromUrl(token, locationName, sourceUrl, description, category) {
+  return fetchJsonWithRetry(`https://mybusiness.googleapis.com/v4/${locationName}/media`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${token}`,
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({
+      mediaFormat: "PHOTO",
+      locationAssociation: { category },
+      description,
+      sourceUrl
+    }),
+    label: "Google Business Profile media.create"
+  });
+}
+
+function sourceUrlFor(file) {
+  const baseUrl = process.env.MAYBERRY_PHOTO_SOURCE_BASE_URL;
+  if (!baseUrl) return "";
+  const rel = relative(root, file).split("/").map(encodeURIComponent).join("/");
+  if (rel.startsWith("..")) return "";
+  return `${baseUrl.replace(/\/$/, "")}/${rel}`;
 }
 
 async function main() {
@@ -147,6 +192,7 @@ async function main() {
   }
 
   const description = process.env.MAYBERRY_PHOTO_DESCRIPTION || defaultDescription;
+  const category = process.env.MAYBERRY_PHOTO_CATEGORY || defaultCategory;
   const files = candidateFiles();
   if (!files.length) {
     console.log("No Mayberry Google photos found to upload.");
@@ -157,17 +203,26 @@ async function main() {
   const log = readUploadLog();
 
   for (const file of files) {
-    const start = await startUpload(token, locationName);
-    const resourceName = start.resourceName;
-    await uploadBytes(token, resourceName, file);
-    const media = await createMedia(token, locationName, resourceName, description);
-    const archivedPath = join(archiveDir, `${Date.now()}-${basename(file)}`);
-    renameSync(file, archivedPath);
+    const sourceUrl = sourceUrlFor(file);
+    let media;
+    let archivedPath = null;
+    if (sourceUrl) {
+      media = await createMediaFromUrl(token, locationName, sourceUrl, description, category);
+    } else {
+      const start = await startUpload(token, locationName);
+      const resourceName = start.resourceName;
+      await uploadBytes(token, resourceName, file);
+      media = await createMedia(token, locationName, resourceName, description, category);
+      archivedPath = join(archiveDir, `${Date.now()}-${basename(file)}`);
+      renameSync(file, archivedPath);
+    }
     log.uploads.unshift({
       uploadedAt: new Date().toISOString(),
       file: basename(file),
+      sourceUrl: sourceUrl || null,
       archivedPath,
       description,
+      category,
       googleMediaName: media.name || null
     });
     console.log(`Uploaded Google photo: ${basename(file)}`);
