@@ -86,7 +86,7 @@ Then fill `GOOGLE_BUSINESS_PROFILE_ACCOUNT_ID` and `GOOGLE_BUSINESS_PROFILE_LOCA
 
 Set `MAYBERRY_REVIEWS_AUTO_PUSH=1` in `.env.local` only if the morning job should commit and push changed website files automatically.
 
-Telegram confirmations are sent at the end of each scheduled run when `MAYBERRY_TELEGRAM_NOTIFY` is not `0`. The script loads Mayberry's `.env.local` first, then `~/.hermes/.env`, so it can reuse the Hermes `TELEGRAM_BOT_TOKEN` and `TELEGRAM_HOME_CHANNEL` without copying secrets into this repo. Override the destination with `MAYBERRY_TELEGRAM_CHAT_ID` only when this client needs a separate chat.
+Telegram confirmations are sent as one daily digest after the 8:30 AM Google post check when `MAYBERRY_TELEGRAM_NOTIFY` is not `0`. The 7:15 AM review job records its stats locally, then the 8:30 AM job sends one message with the business name and simple stats for both runs. The script loads Mayberry's `.env.local` first, then `~/.hermes/.env`, so it can reuse the Hermes `TELEGRAM_BOT_TOKEN` and `TELEGRAM_HOME_CHANNEL` without copying secrets into this repo. Override the displayed name with `MAYBERRY_BUSINESS_NAME` and the destination with `MAYBERRY_TELEGRAM_CHAT_ID` only when this client needs different values.
 
 ## Google Business Profile Posts
 
@@ -132,7 +132,8 @@ Logs:
 - Review launchd stdout/stderr: `logs/review-automation-launchd.log`, `logs/review-automation-launchd.err`
 - Google post automation: `logs/google-post-automation.log`
 - Google post launchd stdout/stderr: `logs/google-post-automation-launchd.log`, `logs/google-post-automation-launchd.err`
-- Telegram confirmations: sent through the Hermes bot after each run, with review count, changed files, reply stats, post status, and GitHub push status.
+- Telegram digest state: `logs/automation-daily-summary.json`
+- Telegram confirmation: sent once after the 8:30 AM run through the Hermes bot, with business name, review count, changed files, reply stats, post status, and GitHub push status.
 
 ## Google Photo Uploads
 

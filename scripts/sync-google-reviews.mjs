@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { join, relative } from "node:path";
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -16,6 +16,7 @@ const discoverLocations = args.has("--discover-locations");
 const maybePost = args.has("--maybe-post");
 const expectedManagerEmail = "s4aiagency@gmail.com";
 const googlePostStatePath = join(root, "data", "google-post-automation.json");
+const digestStatePath = join(root, "logs", "automation-daily-summary.json");
 
 loadDotEnv(envPath);
 loadDotEnv(hermesEnvPath);
@@ -76,11 +77,27 @@ function runLabel() {
   return "Google review automation";
 }
 
+function runSection() {
+  return maybePost ? "post" : "review";
+}
+
+function configuredBusinessName() {
+  return process.env.MAYBERRY_BUSINESS_NAME || "Mayberry Pressure Washing LLC";
+}
+
+function localDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function readCurrentData() {
   return JSON.parse(readFileSync(dataPath, "utf8"));
 }
 
 function writeJsonIfChanged(path, value) {
+  mkdirSync(dirname(path), { recursive: true });
   const next = `${JSON.stringify(value, null, 2)}\n`;
   const prev = existsSync(path) ? readFileSync(path, "utf8") : "";
   if (prev !== next) {
@@ -659,35 +676,66 @@ function autoPushIfEnabled() {
   return result;
 }
 
-function completionMessage({ dataChanged, fileChanges, reviewCount, replyResult, postResult, pushResult }) {
-  const pushStatus = pushResult.pushed ? "yes" : pushResult.enabled && (dataChanged || fileChanges) ? "no changes" : pushResult.enabled ? "not needed" : "off";
-  return [
-    `Mayberry ${runLabel()} complete`,
-    `Reviews: ${reviewCount}`,
-    `Data changed: ${dataChanged ? "yes" : "no"}`,
-    `HTML files changed: ${fileChanges}`,
-    `Review replies: ${replyResult.published}/${replyResult.attempted}`,
-    `Google post: ${postResult.published ? "published" : postResult.attempted ? "checked, not published" : "not due"}`,
-    `GitHub push: ${pushStatus}`
-  ].join("\n");
+function pushStatus(summary) {
+  if (!summary) return "n/a";
+  const pushResult = summary?.pushResult || {};
+  if (pushResult.pushed) return "yes";
+  if (!pushResult.enabled) return "off";
+  return summary?.dataChanged || summary?.fileChanges ? "no changes" : "not needed";
 }
 
-async function notifyCompletion(summary) {
+function postStatus(summary) {
+  if (!summary) return "no report";
+  if (summary.status === "failed") return "failed";
+  const postResult = summary.postResult || {};
+  if (postResult.published) return "published";
+  if (postResult.attempted) return "checked, not published";
+  return "not due";
+}
+
+function reviewStatus(summary) {
+  if (!summary) return "no report";
+  return summary.status === "failed" ? "failed" : "complete";
+}
+
+function dailyDigestMessage(digest) {
+  const review = digest.review;
+  const post = digest.post;
+  const lines = [
+    `Business: ${digest.business || configuredBusinessName()}`,
+    `Review sync: ${reviewStatus(review)}`,
+    `Reviews: ${review?.reviewCount ?? "n/a"}`,
+    `Review replies: ${review?.replyResult?.published ?? 0}/${review?.replyResult?.attempted ?? 0}`,
+    `Site changes: data ${review?.dataChanged ? "yes" : "no"}, HTML ${review?.fileChanges ?? 0}`,
+    `GitHub push: ${pushStatus(review)}`,
+    `Google post: ${postStatus(post)}`
+  ];
+
+  const failed = [review, post].find(item => item?.status === "failed");
+  if (failed?.error) lines.push(`Error: ${String(failed.error).slice(0, 500)}`);
+  return lines.join("\n");
+}
+
+function saveDailyDigestSection(summary) {
+  const today = localDateKey();
+  const existing = readJsonIfExists(digestStatePath, {});
+  const digest = existing.date === today ? existing : { date: today };
+  digest.business = configuredBusinessName();
+  digest[runSection()] = {
+    ...summary,
+    runLabel: runLabel(),
+    completedAt: new Date().toISOString()
+  };
+  digest.updatedAt = new Date().toISOString();
+  writeJsonIfChanged(digestStatePath, digest);
+  return digest;
+}
+
+async function notifyDailyDigest(digest) {
   try {
-    await sendTelegramMessage(completionMessage(summary));
+    await sendTelegramMessage(dailyDigestMessage(digest));
   } catch (error) {
     console.error(error.stack || error.message);
-  }
-}
-
-async function notifyFailure(error) {
-  try {
-    await sendTelegramMessage([
-      `Mayberry ${runLabel()} failed`,
-      String(error?.message || error).slice(0, 700)
-    ].join("\n"));
-  } catch (notifyError) {
-    console.error(notifyError.stack || notifyError.message);
   }
 }
 
@@ -717,7 +765,8 @@ async function main() {
   } else {
     console.log(`Review sync complete: no changes reviewCount=${nextData.reviewCount} repliesAttempted=${replyResult.attempted} repliesPublished=${replyResult.published} googlePostAttempted=${postResult.attempted} googlePostPublished=${postResult.published}`);
   }
-  await notifyCompletion({
+  const digest = saveDailyDigestSection({
+    status: "complete",
     dataChanged,
     fileChanges,
     reviewCount: nextData.reviewCount,
@@ -725,9 +774,21 @@ async function main() {
     postResult,
     pushResult
   });
+  if (maybePost) await notifyDailyDigest(digest);
 }
 
 main().catch((error) => {
   console.error(error.stack || error.message);
-  notifyFailure(error).finally(() => process.exit(1));
+  const digest = saveDailyDigestSection({
+    status: "failed",
+    error: String(error?.message || error),
+    dataChanged: false,
+    fileChanges: 0,
+    reviewCount: null,
+    replyResult: { attempted: 0, published: 0 },
+    postResult: maybePost ? { attempted: true, published: false } : { attempted: false, published: false },
+    pushResult: { enabled: process.env.MAYBERRY_REVIEWS_AUTO_PUSH === "1", pushed: false }
+  });
+  const done = maybePost ? notifyDailyDigest(digest) : Promise.resolve();
+  done.finally(() => process.exit(1));
 });
