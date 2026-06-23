@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("..", import.meta.url)).replace(/\/$/, "");
 const dataPath = join(root, "data", "google-reviews.json");
 const envPath = join(root, ".env.local");
+const hermesEnvPath = process.env.HOME ? join(process.env.HOME, ".hermes", ".env") : "";
 const args = new Set(process.argv.slice(2));
 const updateSite = args.has("--update-site") || args.has("--local-data");
 const localDataOnly = args.has("--local-data");
@@ -17,9 +18,10 @@ const expectedManagerEmail = "s4aiagency@gmail.com";
 const googlePostStatePath = join(root, "data", "google-post-automation.json");
 
 loadDotEnv(envPath);
+loadDotEnv(hermesEnvPath);
 
 function loadDotEnv(path) {
-  if (!existsSync(path)) return;
+  if (!path || !existsSync(path)) return;
   const raw = readFileSync(path, "utf8");
   for (const line of raw.split(/\r?\n/)) {
     const trimmed = line.trim();
@@ -31,6 +33,47 @@ function loadDotEnv(path) {
       process.env[key] = value.replace(/^["']|["']$/g, "");
     }
   }
+}
+
+function firstConfiguredChatId() {
+  const allowed = process.env.TELEGRAM_ALLOWED_USERS || "";
+  return allowed.split(",").map(value => value.trim()).find(Boolean) || "";
+}
+
+function telegramConfig() {
+  return {
+    enabled: process.env.MAYBERRY_TELEGRAM_NOTIFY !== "0" && !args.has("--no-telegram"),
+    botToken: process.env.MAYBERRY_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "",
+    chatId: process.env.MAYBERRY_TELEGRAM_CHAT_ID || process.env.TELEGRAM_HOME_CHANNEL || firstConfiguredChatId()
+  };
+}
+
+async function sendTelegramMessage(message) {
+  const { enabled, botToken, chatId } = telegramConfig();
+  if (!enabled || !botToken || !chatId) return false;
+
+  const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message,
+      disable_web_page_preview: true
+    })
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Telegram notification failed: ${response.status} ${text}`);
+  }
+  return true;
+}
+
+function runLabel() {
+  if (maybePost && localDataOnly) return "Google post check";
+  if (replyUnanswered) return "Review sync + replies";
+  if (updateSite) return "Review sync";
+  return "Google review automation";
 }
 
 function readCurrentData() {
@@ -605,12 +648,47 @@ function updateSiteFiles(data) {
 }
 
 function autoPushIfEnabled() {
-  if (process.env.MAYBERRY_REVIEWS_AUTO_PUSH !== "1") return;
+  const result = { enabled: process.env.MAYBERRY_REVIEWS_AUTO_PUSH === "1", pushed: false };
+  if (!result.enabled) return result;
   const status = execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }).trim();
-  if (!status) return;
+  if (!status) return result;
   execFileSync("git", ["add", "data/google-reviews.json", "."], { cwd: root, stdio: "inherit" });
   execFileSync("git", ["commit", "-m", "Update Google reviews"], { cwd: root, stdio: "inherit" });
   execFileSync("git", ["push"], { cwd: root, stdio: "inherit" });
+  result.pushed = true;
+  return result;
+}
+
+function completionMessage({ dataChanged, fileChanges, reviewCount, replyResult, postResult, pushResult }) {
+  const pushStatus = pushResult.pushed ? "yes" : pushResult.enabled && (dataChanged || fileChanges) ? "no changes" : pushResult.enabled ? "not needed" : "off";
+  return [
+    `Mayberry ${runLabel()} complete`,
+    `Reviews: ${reviewCount}`,
+    `Data changed: ${dataChanged ? "yes" : "no"}`,
+    `HTML files changed: ${fileChanges}`,
+    `Review replies: ${replyResult.published}/${replyResult.attempted}`,
+    `Google post: ${postResult.published ? "published" : postResult.attempted ? "checked, not published" : "not due"}`,
+    `GitHub push: ${pushStatus}`
+  ].join("\n");
+}
+
+async function notifyCompletion(summary) {
+  try {
+    await sendTelegramMessage(completionMessage(summary));
+  } catch (error) {
+    console.error(error.stack || error.message);
+  }
+}
+
+async function notifyFailure(error) {
+  try {
+    await sendTelegramMessage([
+      `Mayberry ${runLabel()} failed`,
+      String(error?.message || error).slice(0, 700)
+    ].join("\n"));
+  } catch (notifyError) {
+    console.error(notifyError.stack || notifyError.message);
+  }
 }
 
 async function main() {
@@ -631,16 +709,25 @@ async function main() {
   const postResult = maybePost ? await maybeCreateGooglePost() : { attempted: false, published: false };
   const dataChanged = writeJsonIfChanged(dataPath, nextData);
   const fileChanges = updateSite ? updateSiteFiles(nextData) : 0;
+  let pushResult = { enabled: process.env.MAYBERRY_REVIEWS_AUTO_PUSH === "1", pushed: false };
 
   if (dataChanged || fileChanges) {
     console.log(`Review sync complete: dataChanged=${dataChanged} htmlFilesChanged=${fileChanges} reviewCount=${nextData.reviewCount} repliesAttempted=${replyResult.attempted} repliesPublished=${replyResult.published} googlePostAttempted=${postResult.attempted} googlePostPublished=${postResult.published}`);
-    autoPushIfEnabled();
+    pushResult = autoPushIfEnabled();
   } else {
     console.log(`Review sync complete: no changes reviewCount=${nextData.reviewCount} repliesAttempted=${replyResult.attempted} repliesPublished=${replyResult.published} googlePostAttempted=${postResult.attempted} googlePostPublished=${postResult.published}`);
   }
+  await notifyCompletion({
+    dataChanged,
+    fileChanges,
+    reviewCount: nextData.reviewCount,
+    replyResult,
+    postResult,
+    pushResult
+  });
 }
 
 main().catch((error) => {
   console.error(error.stack || error.message);
-  process.exit(1);
+  notifyFailure(error).finally(() => process.exit(1));
 });

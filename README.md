@@ -86,6 +86,8 @@ Then fill `GOOGLE_BUSINESS_PROFILE_ACCOUNT_ID` and `GOOGLE_BUSINESS_PROFILE_LOCA
 
 Set `MAYBERRY_REVIEWS_AUTO_PUSH=1` in `.env.local` only if the morning job should commit and push changed website files automatically.
 
+Telegram confirmations are sent at the end of each scheduled run when `MAYBERRY_TELEGRAM_NOTIFY` is not `0`. The script loads Mayberry's `.env.local` first, then `~/.hermes/.env`, so it can reuse the Hermes `TELEGRAM_BOT_TOKEN` and `TELEGRAM_HOME_CHANNEL` without copying secrets into this repo. Override the destination with `MAYBERRY_TELEGRAM_CHAT_ID` only when this client needs a separate chat.
+
 ## Google Business Profile Posts
 
 Google posts are handled by a separate macOS LaunchAgent template:
@@ -130,6 +132,7 @@ Logs:
 - Review launchd stdout/stderr: `logs/review-automation-launchd.log`, `logs/review-automation-launchd.err`
 - Google post automation: `logs/google-post-automation.log`
 - Google post launchd stdout/stderr: `logs/google-post-automation-launchd.log`, `logs/google-post-automation-launchd.err`
+- Telegram confirmations: sent through the Hermes bot after each run, with review count, changed files, reply stats, post status, and GitHub push status.
 
 ## Google Photo Uploads
 
