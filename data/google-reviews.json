@@ -2,10 +2,21 @@
   "businessName": "Mayberry Pressure Washing LLC",
   "placeId": "ChIJH1R4E00DQg4R_BKHMqJrDzc",
   "rating": 5,
-  "reviewCount": 24,
+  "reviewCount": 25,
   "source": "google-business-profile",
-  "lastFetchedAt": "2026-07-02T11:15:06.158Z",
+  "lastFetchedAt": "2026-07-03T12:11:35.823Z",
   "reviews": [
+    {
+      "id": "AbFvOqliHV8FHrFyr6v1hZyYkAsWK71rcZNf20FlkbyHekHaJFG5vh1tTIvxvcrYtKrYkny9HWi8",
+      "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqliHV8FHrFyr6v1hZyYkAsWK71rcZNf20FlkbyHekHaJFG5vh1tTIvxvcrYtKrYkny9HWi8",
+      "author": "Byron Brady",
+      "rating": 5,
+      "text": "Carter did a great of power washing my front and back decks, staining and sealing, and cleaning up afterwards. I will use his services in the future should I need additional work done on my home.",
+      "createTime": "2026-07-02T17:02:25.150579Z",
+      "updateTime": "2026-07-02T17:02:25.150579Z",
+      "reply": "Thank you so much for the review, Byron. I really appreciate you trusting Mayberry Pressure Washing with your home and the deck cleaning, and I am glad you were happy with the result.\n\nIf you know someone in need of pressure washing, please check out our brand new website and have them fill out a request for a free estimate: https://www.mayberrypw.com/contact.",
+      "replyUpdateTime": "2026-07-03T12:11:37.094Z"
+    },
     {
       "id": "AbFvOql0IleK7g28FeiR45wznjUNM63NYGpbMgzZBMfDLzSF8Mtq5hkuegr-RAOOfP_cdVlwNMEV7g",
       "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOql0IleK7g28FeiR45wznjUNM63NYGpbMgzZBMfDLzSF8Mtq5hkuegr-RAOOfP_cdVlwNMEV7g",
@@ -272,7 +283,7 @@
     }
   ],
   "expectedManagerEmail": "s4aiagency@gmail.com",
-  "googleReviewCount": 24,
+  "googleReviewCount": 25,
   "websiteReviewCount": 0,
-  "totalReviewCount": 24
+  "totalReviewCount": 25
 }
