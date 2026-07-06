@@ -55,8 +55,8 @@ Current contact details from the provided Facebook profile screenshot:
 - Hours: Always open
 
 Current review details:
-- Google Business Profile: 5.0 from 24 Google reviews
-- Site review count: 24 Google Business Profile reviews only
+- Google Business Profile: 5.0 from 25 Google reviews
+- Site review count: 25 Google Business Profile reviews only
 - Leave a review: https://g.page/r/CfwShzKiaw83EAE/review
 
 ## Google Review Automation
