@@ -2,10 +2,21 @@
   "businessName": "Mayberry Pressure Washing LLC",
   "placeId": "ChIJH1R4E00DQg4R_BKHMqJrDzc",
   "rating": 5,
-  "reviewCount": 25,
+  "reviewCount": 26,
   "source": "google-business-profile",
-  "lastFetchedAt": "2026-07-09T11:15:06.735Z",
+  "lastFetchedAt": "2026-07-10T11:15:06.239Z",
   "reviews": [
+    {
+      "id": "AbFvOqko7WPXRyvCJLu3iuPiNGO7uJ9Y8yPFpTCNNQ-FkITMoULh-juA79HY47cVjsCu-TuFFYtwsw",
+      "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqko7WPXRyvCJLu3iuPiNGO7uJ9Y8yPFpTCNNQ-FkITMoULh-juA79HY47cVjsCu-TuFFYtwsw",
+      "author": "Clair W",
+      "rating": 5,
+      "text": "Thank you for your hard work.  Everything looks great!",
+      "createTime": "2026-07-09T15:51:48.915351Z",
+      "updateTime": "2026-07-09T15:51:48.915351Z",
+      "reply": "Thank you so much for the review, Clair. I really appreciate you trusting Mayberry Pressure Washing with the work, and I am glad you were happy with the result.\n\nIf you know someone in need of pressure washing, please check out our brand new website and have them fill out a request for a free estimate: https://www.mayberrypw.com/contact.",
+      "replyUpdateTime": "2026-07-10T11:15:06.851Z"
+    },
     {
       "id": "AbFvOqliHV8FHrFyr6v1hZyYkAsWK71rcZNf20FlkbyHekHaJFG5vh1tTIvxvcrYtKrYkny9HWi8",
       "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqliHV8FHrFyr6v1hZyYkAsWK71rcZNf20FlkbyHekHaJFG5vh1tTIvxvcrYtKrYkny9HWi8",
@@ -283,7 +294,7 @@
     }
   ],
   "expectedManagerEmail": "s4aiagency@gmail.com",
-  "googleReviewCount": 25,
+  "googleReviewCount": 26,
   "websiteReviewCount": 0,
-  "totalReviewCount": 25
+  "totalReviewCount": 26
 }
