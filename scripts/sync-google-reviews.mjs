@@ -14,8 +14,10 @@ const localDataOnly = args.has("--local-data");
 const replyUnanswered = args.has("--reply-unanswered");
 const discoverLocations = args.has("--discover-locations");
 const maybePost = args.has("--maybe-post");
+const syncAnalytics = args.has("--sync-analytics");
 const expectedManagerEmail = "s4aiagency@gmail.com";
 const googlePostStatePath = join(root, "data", "google-post-automation.json");
+const googlePerformancePath = join(root, "data", "google-performance.json");
 const digestStatePath = join(root, "logs", "automation-daily-summary.json");
 
 loadDotEnv(envPath);
@@ -45,12 +47,13 @@ function telegramConfig() {
   return {
     enabled: process.env.MAYBERRY_TELEGRAM_NOTIFY !== "0" && !args.has("--no-telegram"),
     botToken: process.env.MAYBERRY_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "",
-    chatId: process.env.MAYBERRY_TELEGRAM_CHAT_ID || process.env.TELEGRAM_HOME_CHANNEL || firstConfiguredChatId()
+    chatId: process.env.MAYBERRY_TELEGRAM_CHAT_ID || process.env.TELEGRAM_HOME_CHANNEL || firstConfiguredChatId(),
+    threadId: process.env.MAYBERRY_TELEGRAM_THREAD_ID || process.env.TELEGRAM_HOME_CHANNEL_THREAD_ID || ""
   };
 }
 
 async function sendTelegramMessage(message) {
-  const { enabled, botToken, chatId } = telegramConfig();
+  const { enabled, botToken, chatId, threadId } = telegramConfig();
   if (!enabled || !botToken || !chatId) return false;
 
   const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -58,6 +61,7 @@ async function sendTelegramMessage(message) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
       chat_id: chatId,
+      ...(threadId ? { message_thread_id: Number(threadId) } : {}),
       text: message,
       disable_web_page_preview: true
     })
@@ -573,6 +577,155 @@ async function maybeCreateGooglePost() {
   return { attempted: true, published: true };
 }
 
+const performanceMetrics = [
+  "BUSINESS_IMPRESSIONS_DESKTOP_MAPS",
+  "BUSINESS_IMPRESSIONS_DESKTOP_SEARCH",
+  "BUSINESS_IMPRESSIONS_MOBILE_MAPS",
+  "BUSINESS_IMPRESSIONS_MOBILE_SEARCH",
+  "BUSINESS_DIRECTION_REQUESTS",
+  "CALL_CLICKS",
+  "WEBSITE_CLICKS"
+];
+
+function shiftDate(date, days) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function googleDate(date) {
+  return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+}
+
+function dateKeyFromGoogle(value = {}) {
+  return `${String(value.year || 0).padStart(4, "0")}-${String(value.month || 0).padStart(2, "0")}-${String(value.day || 0).padStart(2, "0")}`;
+}
+
+function insightNumber(value) {
+  if (typeof value === "number" || typeof value === "string") return Number(value || 0);
+  return Number(value?.value ?? value?.threshold ?? 0);
+}
+
+function percentChange(current, previous) {
+  if (!previous) return current ? null : 0;
+  return Math.round(((current - previous) / previous) * 1000) / 10;
+}
+
+function sumRange(daily, startKey, endKey) {
+  return Object.entries(daily || {}).reduce((sum, [date, value]) => {
+    return date >= startKey && date <= endKey ? sum + Number(value || 0) : sum;
+  }, 0);
+}
+
+function summarizePerformance(payload, range) {
+  const dailyByMetric = Object.fromEntries(performanceMetrics.map((metric) => [metric, {}]));
+  for (const group of payload.multiDailyMetricTimeSeries || []) {
+    for (const series of group.dailyMetricTimeSeries || []) {
+      const metric = series.dailyMetric;
+      if (!metric) continue;
+      dailyByMetric[metric] ||= {};
+      for (const point of series.timeSeries?.datedValues || []) {
+        const dateKey = dateKeyFromGoogle(point.date);
+        dailyByMetric[metric][dateKey] = Number(dailyByMetric[metric][dateKey] || 0) + insightNumber(point.value);
+      }
+    }
+  }
+
+  const currentStart = localDateKey(shiftDate(range.end, -27));
+  const currentEnd = localDateKey(range.end);
+  const previousStart = localDateKey(range.start);
+  const previousEnd = localDateKey(shiftDate(range.end, -28));
+  const metrics = {};
+  for (const metric of performanceMetrics) {
+    const current = sumRange(dailyByMetric[metric], currentStart, currentEnd);
+    const previous = sumRange(dailyByMetric[metric], previousStart, previousEnd);
+    metrics[metric] = { current28Days: current, previous28Days: previous, changePercent: percentChange(current, previous), daily: dailyByMetric[metric] };
+  }
+
+  const impressionNames = performanceMetrics.filter((metric) => metric.startsWith("BUSINESS_IMPRESSIONS_"));
+  const total = (names, field) => names.reduce((sum, metric) => sum + Number(metrics[metric]?.[field] || 0), 0);
+  const summary = {
+    impressions: {
+      current28Days: total(impressionNames, "current28Days"),
+      previous28Days: total(impressionNames, "previous28Days")
+    },
+    directionRequests: metrics.BUSINESS_DIRECTION_REQUESTS.current28Days,
+    callClicks: metrics.CALL_CLICKS.current28Days,
+    websiteClicks: metrics.WEBSITE_CLICKS.current28Days
+  };
+  summary.impressions.changePercent = percentChange(summary.impressions.current28Days, summary.impressions.previous28Days);
+  summary.totalActions = summary.directionRequests + summary.callClicks + summary.websiteClicks;
+  summary.actionRatePercent = summary.impressions.current28Days
+    ? Math.round((summary.totalActions / summary.impressions.current28Days) * 1000) / 10
+    : 0;
+
+  const recommendations = [];
+  if (summary.websiteClicks < Math.max(5, Math.round(summary.impressions.current28Days * 0.01))) {
+    recommendations.push("Strengthen free-estimate and service-page calls to action because website clicks are low relative to visibility.");
+  }
+  if (summary.callClicks >= summary.websiteClicks) {
+    recommendations.push("Keep the phone number prominent because customers currently favor calling over visiting the website.");
+  }
+  if (summary.directionRequests > Math.max(summary.callClicks, summary.websiteClicks)) {
+    recommendations.push("Keep location and service-area language prominent because direction requests are the strongest tracked action.");
+  }
+  if (summary.impressions.changePercent !== null && summary.impressions.changePercent < 0) {
+    recommendations.push("Profile impressions declined; add recent project photos and locally specific house, driveway, roof, and commercial cleaning posts.");
+  }
+  if (!recommendations.length) recommendations.push("Continue the current review-response and 2–3-post weekly cadence, then compare the next 28-day period.");
+
+  return {
+    fetchedAt: new Date().toISOString(),
+    source: "google-business-profile-performance",
+    range: { previousStart, previousEnd, currentStart, currentEnd },
+    summary,
+    metrics,
+    recommendations
+  };
+}
+
+async function syncPerformanceAnalytics() {
+  const token = await getGoogleAccessToken();
+  const rawLocation = process.env.GOOGLE_BUSINESS_PROFILE_LOCATION_ID || "";
+  const locationId = rawLocation.split("/").filter(Boolean).pop();
+  if (!token || !locationId) throw new Error("Google OAuth or Mayberry GBP location is not configured for analytics.");
+
+  const end = shiftDate(new Date(), -1);
+  const start = shiftDate(end, -55);
+  const startParts = googleDate(start);
+  const endParts = googleDate(end);
+  const url = new URL(`https://businessprofileperformance.googleapis.com/v1/locations/${locationId}:fetchMultiDailyMetricsTimeSeries`);
+  for (const metric of performanceMetrics) url.searchParams.append("dailyMetrics", metric);
+  url.searchParams.set("dailyRange.start_date.year", String(startParts.year));
+  url.searchParams.set("dailyRange.start_date.month", String(startParts.month));
+  url.searchParams.set("dailyRange.start_date.day", String(startParts.day));
+  url.searchParams.set("dailyRange.end_date.year", String(endParts.year));
+  url.searchParams.set("dailyRange.end_date.month", String(endParts.month));
+  url.searchParams.set("dailyRange.end_date.day", String(endParts.day));
+  const payload = await fetchJson(url, {
+    headers: googleAuthHeaders(token),
+    label: "Google Business Profile performance.fetchMultiDailyMetricsTimeSeries"
+  });
+  const report = summarizePerformance(payload, { start, end });
+  writeJsonIfChanged(googlePerformancePath, report);
+  console.log(`GBP analytics synced: impressions=${report.summary.impressions.current28Days} actions=${report.summary.totalActions} actionRate=${report.summary.actionRatePercent}%`);
+  return report;
+}
+
+function analyticsDigest(report) {
+  const summary = report.summary;
+  const change = summary.impressions.changePercent === null
+    ? "new baseline"
+    : `${summary.impressions.changePercent >= 0 ? "+" : ""}${summary.impressions.changePercent}% vs prior 28 days`;
+  return [
+    "✅ Mayberry weekly analytics complete",
+    `Impressions: ${summary.impressions.current28Days} (${change})`,
+    `Directions: ${summary.directionRequests} | Calls: ${summary.callClicks} | Website: ${summary.websiteClicks}`,
+    `Tracked actions: ${summary.totalActions} (${summary.actionRatePercent}% of impressions)`,
+    `Next focus: ${report.recommendations[0]}`
+  ].join("\n");
+}
+
 function allHtmlFiles(dir) {
   const out = [];
   for (const entry of readdirSync(dir)) {
@@ -665,20 +818,30 @@ function updateSiteFiles(data) {
 }
 
 function autoPushIfEnabled() {
-  const result = { enabled: process.env.MAYBERRY_REVIEWS_AUTO_PUSH === "1", pushed: false };
+  const result = { enabled: process.env.MAYBERRY_REVIEWS_AUTO_PUSH === "1", pushed: false, error: null };
   if (!result.enabled) return result;
-  const status = execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }).trim();
-  if (!status) return result;
-  execFileSync("git", ["add", "data/google-reviews.json", "."], { cwd: root, stdio: "inherit" });
-  execFileSync("git", ["commit", "-m", "Update Google reviews"], { cwd: root, stdio: "inherit" });
-  execFileSync("git", ["push"], { cwd: root, stdio: "inherit" });
-  result.pushed = true;
+  try {
+    const status = execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }).trim();
+    if (status) {
+      execFileSync("git", ["add", "data/google-reviews.json", "."], { cwd: root, stdio: "inherit" });
+      execFileSync("git", ["commit", "-m", "Update Google reviews"], { cwd: root, stdio: "inherit" });
+    }
+    const ahead = Number(execFileSync("git", ["rev-list", "--count", "@{upstream}..HEAD"], { cwd: root, encoding: "utf8" }).trim() || 0);
+    if (ahead > 0) {
+      execFileSync("git", ["push"], { cwd: root, stdio: "inherit" });
+      result.pushed = true;
+    }
+  } catch (error) {
+    result.error = String(error?.message || error).slice(0, 500);
+    console.error(`GitHub auto-push failed: ${result.error}`);
+  }
   return result;
 }
 
 function pushStatus(summary) {
   if (!summary) return "n/a";
   const pushResult = summary?.pushResult || {};
+  if (pushResult.error) return "failed — check GitHub authentication";
   if (pushResult.pushed) return "yes";
   if (!pushResult.enabled) return "off";
   return summary?.dataChanged || summary?.fileChanges ? "no changes" : "not needed";
@@ -702,6 +865,7 @@ function dailyDigestMessage(digest) {
   const review = digest.review;
   const post = digest.post;
   const lines = [
+    "✅ Mayberry automation job complete",
     `Business: ${digest.business || configuredBusinessName()}`,
     `Review sync: ${reviewStatus(review)}`,
     `Reviews: ${review?.reviewCount ?? "n/a"}`,
@@ -740,8 +904,18 @@ async function notifyDailyDigest(digest) {
 }
 
 async function main() {
+  if (args.has("--test-telegram")) {
+    const sent = await sendTelegramMessage("✅ Mayberry automation notifications are connected. Hermes will report review syncing, Google posts, weekly analytics, and failures.");
+    console.log(`Telegram test ${sent ? "sent" : "skipped because credentials are not configured"}.`);
+    return;
+  }
   if (discoverLocations) {
     await discoverGoogleLocations();
+    return;
+  }
+  if (syncAnalytics) {
+    const report = await syncPerformanceAnalytics();
+    await sendTelegramMessage(analyticsDigest(report));
     return;
   }
 
@@ -774,11 +948,16 @@ async function main() {
     postResult,
     pushResult
   });
-  if (maybePost) await notifyDailyDigest(digest);
+  await notifyDailyDigest(digest);
 }
 
 main().catch((error) => {
   console.error(error.stack || error.message);
+  if (syncAnalytics) {
+    sendTelegramMessage(`❌ Mayberry analytics job failed\n${String(error?.message || error).slice(0, 500)}`)
+      .finally(() => process.exit(1));
+    return;
+  }
   const digest = saveDailyDigestSection({
     status: "failed",
     error: String(error?.message || error),
@@ -789,6 +968,6 @@ main().catch((error) => {
     postResult: maybePost ? { attempted: true, published: false } : { attempted: false, published: false },
     pushResult: { enabled: process.env.MAYBERRY_REVIEWS_AUTO_PUSH === "1", pushed: false }
   });
-  const done = maybePost ? notifyDailyDigest(digest) : Promise.resolve();
+  const done = notifyDailyDigest(digest);
   done.finally(() => process.exit(1));
 });

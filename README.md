@@ -86,7 +86,7 @@ Then fill `GOOGLE_BUSINESS_PROFILE_ACCOUNT_ID` and `GOOGLE_BUSINESS_PROFILE_LOCA
 
 Set `MAYBERRY_REVIEWS_AUTO_PUSH=1` in `.env.local` only if the morning job should commit and push changed website files automatically.
 
-Telegram confirmations are sent as one daily digest after the 8:30 AM Google post check when `MAYBERRY_TELEGRAM_NOTIFY` is not `0`. The 7:15 AM review job records its stats locally, then the 8:30 AM job sends one message with the business name and simple stats for both runs. The script loads Mayberry's `.env.local` first, then `~/.hermes/.env`, so it can reuse the Hermes `TELEGRAM_BOT_TOKEN` and `TELEGRAM_HOME_CHANNEL` without copying secrets into this repo. Override the displayed name with `MAYBERRY_BUSINESS_NAME` and the destination with `MAYBERRY_TELEGRAM_CHAT_ID` only when this client needs different values.
+Telegram confirmations are sent after the 7:15 AM review run, the 8:30 AM Google post check, the Tuesday analytics run, and any failure when `MAYBERRY_TELEGRAM_NOTIFY` is not `0`. The script loads Mayberry's `.env.local` first, then `~/.hermes/.env`, so it can reuse the Hermes `TELEGRAM_BOT_TOKEN`, `TELEGRAM_HOME_CHANNEL`, and configured thread without copying secrets into this repo. Override the displayed name or destination only when this client needs different values.
 
 ## Google Business Profile Posts
 
@@ -116,15 +116,25 @@ Use this dry run to preview the next post without publishing:
 node scripts/sync-google-reviews.mjs --maybe-post --dry-run-post --local-data
 ```
 
+## Google Business Profile Analytics
+
+The Tuesday 8:00 AM analytics job reads 56 days of supported GBP performance data and compares the latest 28 days with the previous 28 days. It records profile impressions, calls, website clicks, direction requests, tracked action rate, and a sales-focused recommendation in `data/google-performance.json`, then sends a short Telegram report.
+
+```bash
+node scripts/sync-google-reviews.mjs --sync-analytics --no-telegram
+```
+
 To install or refresh LaunchAgents:
 
 ```bash
 cp automation/com.s4ai.mayberry-google-reviews.plist ~/Library/LaunchAgents/
 cp automation/com.s4ai.mayberry-google-posts.plist ~/Library/LaunchAgents/
+cp automation/com.s4ai.mayberry-google-analytics.plist ~/Library/LaunchAgents/
 launchctl unload ~/Library/LaunchAgents/com.s4ai.mayberry-google-reviews.plist 2>/dev/null || true
 launchctl unload ~/Library/LaunchAgents/com.s4ai.mayberry-google-posts.plist 2>/dev/null || true
 launchctl load ~/Library/LaunchAgents/com.s4ai.mayberry-google-reviews.plist
 launchctl load ~/Library/LaunchAgents/com.s4ai.mayberry-google-posts.plist
+launchctl load ~/Library/LaunchAgents/com.s4ai.mayberry-google-analytics.plist
 ```
 
 Logs:
@@ -132,6 +142,8 @@ Logs:
 - Review launchd stdout/stderr: `logs/review-automation-launchd.log`, `logs/review-automation-launchd.err`
 - Google post automation: `logs/google-post-automation.log`
 - Google post launchd stdout/stderr: `logs/google-post-automation-launchd.log`, `logs/google-post-automation-launchd.err`
+- Google analytics: `logs/google-analytics-automation.log`
+- Google analytics launchd stdout/stderr: `logs/google-analytics-automation-launchd.log`, `logs/google-analytics-automation-launchd.err`
 - Telegram digest state: `logs/automation-daily-summary.json`
 - Telegram confirmation: sent once after the 8:30 AM run through the Hermes bot, with business name, review count, changed files, reply stats, post status, and GitHub push status.
 
