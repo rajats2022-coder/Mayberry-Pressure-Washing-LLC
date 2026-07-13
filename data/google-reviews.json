@@ -2,10 +2,21 @@
   "businessName": "Mayberry Pressure Washing LLC",
   "placeId": "ChIJH1R4E00DQg4R_BKHMqJrDzc",
   "rating": 5,
-  "reviewCount": 26,
+  "reviewCount": 27,
   "source": "google-business-profile",
-  "lastFetchedAt": "2026-07-13T03:55:12.849Z",
+  "lastFetchedAt": "2026-07-13T11:15:06.130Z",
   "reviews": [
+    {
+      "id": "AbFvOqlFn2I9MR26wDaQwi_yXzW59uuuvJ_bcU15oompCvhWfc2opdYjbyAj0qZqQ7FVlpATrt7pYw",
+      "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqlFn2I9MR26wDaQwi_yXzW59uuuvJ_bcU15oompCvhWfc2opdYjbyAj0qZqQ7FVlpATrt7pYw",
+      "author": "Tyson Allen",
+      "rating": 5,
+      "text": "I’m actually from Canada, where I own a Junk removal company but while I was visiting some family friends in NC, I got to meet Carter and the crew. TLDR. Very professional, articulate, and knowledgeable. 10/10",
+      "createTime": "2026-07-13T04:41:55.636033Z",
+      "updateTime": "2026-07-13T04:41:55.636033Z",
+      "reply": "Thank you so much for the review, Tyson. I really appreciate you trusting Mayberry Pressure Washing with the reliable, professional service and the experience enough to recommend us, and I am glad you were happy with the result.\n\nIf you know someone in need of pressure washing, please check out our brand new website and have them fill out a request for a free estimate: https://www.mayberrypw.com/contact.",
+      "replyUpdateTime": "2026-07-13T11:15:06.840Z"
+    },
     {
       "id": "AbFvOqko7WPXRyvCJLu3iuPiNGO7uJ9Y8yPFpTCNNQ-FkITMoULh-juA79HY47cVjsCu-TuFFYtwsw",
       "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqko7WPXRyvCJLu3iuPiNGO7uJ9Y8yPFpTCNNQ-FkITMoULh-juA79HY47cVjsCu-TuFFYtwsw",
@@ -294,7 +305,7 @@
     }
   ],
   "expectedManagerEmail": "s4aiagency@gmail.com",
-  "googleReviewCount": 26,
+  "googleReviewCount": 27,
   "websiteReviewCount": 0,
-  "totalReviewCount": 26
+  "totalReviewCount": 27
 }
