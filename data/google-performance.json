@@ -1,32 +1,30 @@
 {
-  "fetchedAt": "2026-07-13T03:52:24.514Z",
+  "fetchedAt": "2026-07-14T12:00:05.331Z",
   "source": "google-business-profile-performance",
   "range": {
-    "previousStart": "2026-05-17",
-    "previousEnd": "2026-06-13",
-    "currentStart": "2026-06-14",
-    "currentEnd": "2026-07-11"
+    "previousStart": "2026-05-19",
+    "previousEnd": "2026-06-15",
+    "currentStart": "2026-06-16",
+    "currentEnd": "2026-07-13"
   },
   "summary": {
     "impressions": {
-      "current28Days": 128,
-      "previous28Days": 87,
-      "changePercent": 47.1
+      "current28Days": 116,
+      "previous28Days": 94,
+      "changePercent": 23.4
     },
     "directionRequests": 0,
-    "callClicks": 3,
+    "callClicks": 4,
     "websiteClicks": 17,
-    "totalActions": 20,
-    "actionRatePercent": 15.6
+    "totalActions": 21,
+    "actionRatePercent": 18.1
   },
   "metrics": {
     "BUSINESS_IMPRESSIONS_DESKTOP_MAPS": {
-      "current28Days": 15,
-      "previous28Days": 13,
-      "changePercent": 15.4,
+      "current28Days": 14,
+      "previous28Days": 14,
+      "changePercent": 0,
       "daily": {
-        "2026-05-17": 0,
-        "2026-05-18": 0,
         "2026-05-19": 1,
         "2026-05-20": 0,
         "2026-05-21": 0,
@@ -80,16 +78,16 @@
         "2026-07-08": 0,
         "2026-07-09": 0,
         "2026-07-10": 0,
-        "2026-07-11": 0
+        "2026-07-11": 0,
+        "2026-07-12": 0,
+        "2026-07-13": 0
       }
     },
     "BUSINESS_IMPRESSIONS_DESKTOP_SEARCH": {
-      "current28Days": 39,
-      "previous28Days": 21,
-      "changePercent": 85.7,
+      "current28Days": 32,
+      "previous28Days": 26,
+      "changePercent": 23.1,
       "daily": {
-        "2026-05-17": 1,
-        "2026-05-18": 1,
         "2026-05-19": 0,
         "2026-05-20": 0,
         "2026-05-21": 0,
@@ -143,16 +141,16 @@
         "2026-07-08": 1,
         "2026-07-09": 1,
         "2026-07-10": 0,
-        "2026-07-11": 0
+        "2026-07-11": 0,
+        "2026-07-12": 0,
+        "2026-07-13": 0
       }
     },
     "BUSINESS_IMPRESSIONS_MOBILE_MAPS": {
       "current28Days": 12,
-      "previous28Days": 13,
-      "changePercent": -7.7,
+      "previous28Days": 10,
+      "changePercent": 20,
       "daily": {
-        "2026-05-17": 0,
-        "2026-05-18": 3,
         "2026-05-19": 0,
         "2026-05-20": 0,
         "2026-05-21": 1,
@@ -206,16 +204,16 @@
         "2026-07-08": 0,
         "2026-07-09": 0,
         "2026-07-10": 0,
-        "2026-07-11": 0
+        "2026-07-11": 0,
+        "2026-07-12": 0,
+        "2026-07-13": 0
       }
     },
     "BUSINESS_IMPRESSIONS_MOBILE_SEARCH": {
-      "current28Days": 62,
-      "previous28Days": 40,
-      "changePercent": 55,
+      "current28Days": 58,
+      "previous28Days": 44,
+      "changePercent": 31.8,
       "daily": {
-        "2026-05-17": 1,
-        "2026-05-18": 2,
         "2026-05-19": 2,
         "2026-05-20": 0,
         "2026-05-21": 2,
@@ -268,8 +266,10 @@
         "2026-07-07": 1,
         "2026-07-08": 0,
         "2026-07-09": 2,
-        "2026-07-10": 0,
-        "2026-07-11": 0
+        "2026-07-10": 3,
+        "2026-07-11": 0,
+        "2026-07-12": 0,
+        "2026-07-13": 0
       }
     },
     "BUSINESS_DIRECTION_REQUESTS": {
@@ -277,8 +277,6 @@
       "previous28Days": 0,
       "changePercent": 0,
       "daily": {
-        "2026-05-17": 0,
-        "2026-05-18": 0,
         "2026-05-19": 0,
         "2026-05-20": 0,
         "2026-05-21": 0,
@@ -332,16 +330,16 @@
         "2026-07-08": 0,
         "2026-07-09": 0,
         "2026-07-10": 0,
-        "2026-07-11": 0
+        "2026-07-11": 0,
+        "2026-07-12": 0,
+        "2026-07-13": 0
       }
     },
     "CALL_CLICKS": {
-      "current28Days": 3,
+      "current28Days": 4,
       "previous28Days": 2,
-      "changePercent": 50,
+      "changePercent": 100,
       "daily": {
-        "2026-05-17": 0,
-        "2026-05-18": 0,
         "2026-05-19": 0,
         "2026-05-20": 0,
         "2026-05-21": 0,
@@ -394,17 +392,17 @@
         "2026-07-07": 0,
         "2026-07-08": 0,
         "2026-07-09": 0,
-        "2026-07-10": 0,
-        "2026-07-11": 0
+        "2026-07-10": 1,
+        "2026-07-11": 0,
+        "2026-07-12": 0,
+        "2026-07-13": 0
       }
     },
     "WEBSITE_CLICKS": {
       "current28Days": 17,
-      "previous28Days": 6,
-      "changePercent": 183.3,
+      "previous28Days": 7,
+      "changePercent": 142.9,
       "daily": {
-        "2026-05-17": 0,
-        "2026-05-18": 0,
         "2026-05-19": 0,
         "2026-05-20": 0,
         "2026-05-21": 0,
@@ -457,8 +455,10 @@
         "2026-07-07": 1,
         "2026-07-08": 1,
         "2026-07-09": 0,
-        "2026-07-10": 0,
-        "2026-07-11": 0
+        "2026-07-10": 1,
+        "2026-07-11": 0,
+        "2026-07-12": 0,
+        "2026-07-13": 0
       }
     }
   },
