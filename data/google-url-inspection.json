@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-07-17T12:51:03.169Z",
+  "siteUrl": "https://www.mayberrypw.com/",
+  "inspections": [
+    {
+      "inspectionUrl": "https://www.mayberrypw.com/",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "googleCanonical": "https://www.mayberrypw.com/",
+      "userCanonical": "https://mayberrypw.com/",
+      "lastCrawlTime": "2026-06-05T12:34:52Z"
+    },
+    {
+      "inspectionUrl": "https://www.mayberrypw.com/services",
+      "verdict": "NEUTRAL",
+      "coverageState": "Discovered - currently not indexed",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "googleCanonical": "",
+      "userCanonical": "",
+      "lastCrawlTime": null
+    },
+    {
+      "inspectionUrl": "https://www.mayberrypw.com/contact",
+      "verdict": "NEUTRAL",
+      "coverageState": "Discovered - currently not indexed",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "googleCanonical": "",
+      "userCanonical": "",
+      "lastCrawlTime": null
+    },
+    {
+      "inspectionUrl": "https://www.mayberrypw.com/services/pressure-washing",
+      "verdict": "NEUTRAL",
+      "coverageState": "URL is unknown to Google",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "googleCanonical": "",
+      "userCanonical": "",
+      "lastCrawlTime": null
+    },
+    {
+      "inspectionUrl": "https://www.mayberrypw.com/service-areas/mount-airy-nc",
+      "verdict": "NEUTRAL",
+      "coverageState": "URL is unknown to Google",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "googleCanonical": "",
+      "userCanonical": "",
+      "lastCrawlTime": null
+    }
+  ]
+}

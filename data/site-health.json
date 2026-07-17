@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-17T12:48:53.888Z",
-  "mode": "local",
+  "generatedAt": "2026-07-17T13:10:10.851Z",
+  "mode": "production",
   "status": "healthy",
   "urlCount": 35,
   "local": {
@@ -323,6 +323,276 @@
     ],
     "findings": []
   },
-  "production": null,
+  "production": {
+    "pages": [
+      {
+        "url": "https://www.mayberrypw.com/",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/",
+        "canonical": "https://www.mayberrypw.com/",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/services",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/services",
+        "canonical": "https://www.mayberrypw.com/services",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas",
+        "canonical": "https://www.mayberrypw.com/service-areas",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/gallery",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/gallery",
+        "canonical": "https://www.mayberrypw.com/gallery",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/reviews",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/reviews",
+        "canonical": "https://www.mayberrypw.com/reviews",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/contact",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/contact",
+        "canonical": "https://www.mayberrypw.com/contact",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/pressure-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/services/pressure-washing",
+        "canonical": "https://www.mayberrypw.com/services/pressure-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/house-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/services/house-washing",
+        "canonical": "https://www.mayberrypw.com/services/house-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/soft-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/services/soft-washing",
+        "canonical": "https://www.mayberrypw.com/services/soft-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/driveway-cleaning",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/services/driveway-cleaning",
+        "canonical": "https://www.mayberrypw.com/services/driveway-cleaning",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/roof-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/services/roof-washing",
+        "canonical": "https://www.mayberrypw.com/services/roof-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/gutter-cleaning",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/services/gutter-cleaning",
+        "canonical": "https://www.mayberrypw.com/services/gutter-cleaning",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/window-cleaning",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/services/window-cleaning",
+        "canonical": "https://www.mayberrypw.com/services/window-cleaning",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/commercial-pressure-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/services/commercial-pressure-washing",
+        "canonical": "https://www.mayberrypw.com/services/commercial-pressure-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/mount-airy-nc",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/mount-airy-nc",
+        "canonical": "https://www.mayberrypw.com/service-areas/mount-airy-nc",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/winston-salem-nc",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/winston-salem-nc",
+        "canonical": "https://www.mayberrypw.com/service-areas/winston-salem-nc",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc",
+        "canonical": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/elkin-nc",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/elkin-nc",
+        "canonical": "https://www.mayberrypw.com/service-areas/elkin-nc",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/dobson-nc",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/dobson-nc",
+        "canonical": "https://www.mayberrypw.com/service-areas/dobson-nc",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/wilkesboro-nc",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/wilkesboro-nc",
+        "canonical": "https://www.mayberrypw.com/service-areas/wilkesboro-nc",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/mount-airy-nc/pressure-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/mount-airy-nc/pressure-washing",
+        "canonical": "https://www.mayberrypw.com/service-areas/mount-airy-nc/pressure-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/mount-airy-nc/house-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/mount-airy-nc/house-washing",
+        "canonical": "https://www.mayberrypw.com/service-areas/mount-airy-nc/house-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/mount-airy-nc/driveway-cleaning",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/mount-airy-nc/driveway-cleaning",
+        "canonical": "https://www.mayberrypw.com/service-areas/mount-airy-nc/driveway-cleaning",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/winston-salem-nc/pressure-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/winston-salem-nc/pressure-washing",
+        "canonical": "https://www.mayberrypw.com/service-areas/winston-salem-nc/pressure-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/winston-salem-nc/house-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/winston-salem-nc/house-washing",
+        "canonical": "https://www.mayberrypw.com/service-areas/winston-salem-nc/house-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/winston-salem-nc/commercial-pressure-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/winston-salem-nc/commercial-pressure-washing",
+        "canonical": "https://www.mayberrypw.com/service-areas/winston-salem-nc/commercial-pressure-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/pressure-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/pressure-washing",
+        "canonical": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/pressure-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/driveway-cleaning",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/driveway-cleaning",
+        "canonical": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/driveway-cleaning",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/elkin-nc/soft-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/elkin-nc/soft-washing",
+        "canonical": "https://www.mayberrypw.com/service-areas/elkin-nc/soft-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/dobson-nc/roof-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/dobson-nc/roof-washing",
+        "canonical": "https://www.mayberrypw.com/service-areas/dobson-nc/roof-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/wilkesboro-nc/commercial-pressure-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/service-areas/wilkesboro-nc/commercial-pressure-washing",
+        "canonical": "https://www.mayberrypw.com/service-areas/wilkesboro-nc/commercial-pressure-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/resources/pressure-washing-cost-mount-airy-nc",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/resources/pressure-washing-cost-mount-airy-nc",
+        "canonical": "https://www.mayberrypw.com/resources/pressure-washing-cost-mount-airy-nc",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/resources/soft-washing-vs-pressure-washing",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/resources/soft-washing-vs-pressure-washing",
+        "canonical": "https://www.mayberrypw.com/resources/soft-washing-vs-pressure-washing",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/resources/how-often-wash-house-north-carolina",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/resources/how-often-wash-house-north-carolina",
+        "canonical": "https://www.mayberrypw.com/resources/how-often-wash-house-north-carolina",
+        "ok": true
+      },
+      {
+        "url": "https://www.mayberrypw.com/resources/choose-pressure-washing-company-mount-airy",
+        "status": 200,
+        "finalUrl": "https://www.mayberrypw.com/resources/choose-pressure-washing-company-mount-airy",
+        "canonical": "https://www.mayberrypw.com/resources/choose-pressure-washing-company-mount-airy",
+        "ok": true
+      }
+    ],
+    "redirects": {
+      "apex": {
+        "status": 307,
+        "location": "https://www.mayberrypw.com/"
+      },
+      "httpWww": {
+        "status": 308,
+        "location": "https://www.mayberrypw.com/"
+      }
+    },
+    "supportFiles": {
+      "robots": 200,
+      "sitemap": 200,
+      "indexNowKey": 200
+    },
+    "securityHeaders": {
+      "xContentTypeOptions": "nosniff",
+      "referrerPolicy": "strict-origin-when-cross-origin",
+      "permissionsPolicy": "camera=(), geolocation=(), microphone=()",
+      "xFrameOptions": "DENY"
+    },
+    "findings": []
+  },
   "findings": []
 }
