@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mayberrypw.com/sitemap.xml
+Sitemap: https://www.mayberrypw.com/sitemap.xml

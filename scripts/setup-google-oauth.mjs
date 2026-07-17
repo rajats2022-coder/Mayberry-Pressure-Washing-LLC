@@ -8,7 +8,15 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("..", import.meta.url)).replace(/\/$/, "");
 const envPath = join(root, ".env.local");
 const redirectUri = "http://127.0.0.1:8787/oauth2callback";
-const scope = "https://www.googleapis.com/auth/business.manage";
+const scopes = [
+  "https://www.googleapis.com/auth/business.manage",
+  "https://www.googleapis.com/auth/analytics.edit",
+  "https://www.googleapis.com/auth/analytics.readonly",
+  "https://www.googleapis.com/auth/webmasters",
+  "https://www.googleapis.com/auth/siteverification",
+  "https://www.googleapis.com/auth/service.management"
+];
+const noOpen = process.argv.includes("--no-open");
 
 loadDotEnv(envPath);
 
@@ -69,7 +77,7 @@ async function main() {
   authUrl.searchParams.set("client_id", process.env.GOOGLE_OAUTH_CLIENT_ID);
   authUrl.searchParams.set("redirect_uri", redirectUri);
   authUrl.searchParams.set("response_type", "code");
-  authUrl.searchParams.set("scope", scope);
+  authUrl.searchParams.set("scope", scopes.join(" "));
   authUrl.searchParams.set("access_type", "offline");
   authUrl.searchParams.set("prompt", "consent");
   authUrl.searchParams.set("login_hint", process.env.GOOGLE_BUSINESS_PROFILE_MANAGER_EMAIL || "s4aiagency@gmail.com");
@@ -108,8 +116,12 @@ async function main() {
   });
 
   server.listen(8787, "127.0.0.1", () => {
-    console.log("Opening Google OAuth. Sign in as s4aiagency@gmail.com.");
-    execFileSync("open", [authUrl.toString()]);
+    console.log(`Google OAuth is ready for ${process.env.GOOGLE_BUSINESS_PROFILE_MANAGER_EMAIL || "the configured manager account"}.`);
+    if (noOpen) {
+      console.log(`Authorize at: ${authUrl}`);
+    } else {
+      execFileSync("open", [authUrl.toString()]);
+    }
   });
 }
 

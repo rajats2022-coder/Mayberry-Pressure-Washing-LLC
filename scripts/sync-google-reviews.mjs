@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -18,6 +18,8 @@ const syncAnalytics = args.has("--sync-analytics");
 const expectedManagerEmail = "s4aiagency@gmail.com";
 const googlePostStatePath = join(root, "data", "google-post-automation.json");
 const googlePerformancePath = join(root, "data", "google-performance.json");
+const googleReviewHistoryPath = join(root, "data", "google-review-history.jsonl");
+const googlePerformanceHistoryPath = join(root, "data", "google-performance-history.jsonl");
 const digestStatePath = join(root, "logs", "automation-daily-summary.json");
 
 loadDotEnv(envPath);
@@ -109,6 +111,12 @@ function writeJsonIfChanged(path, value) {
     return true;
   }
   return false;
+}
+
+function appendSnapshot(path, value) {
+  mkdirSync(dirname(path), { recursive: true });
+  appendFileSync(path, `${JSON.stringify(value)}\n`);
+  return true;
 }
 
 function htmlEscape(value) {
@@ -435,7 +443,7 @@ async function draftReplyWithOpenRouter(review) {
     headers: {
       authorization: `Bearer ${apiKey}`,
       "content-type": "application/json",
-      "http-referer": "https://mayberrypw.com",
+      "http-referer": "https://www.mayberrypw.com",
       "x-title": "Mayberry Review Reply Automation"
     },
     body: JSON.stringify(payload),
@@ -504,8 +512,16 @@ function shouldCreateGooglePost(state) {
   return elapsedMs >= 47 * 60 * 60 * 1000;
 }
 
+function trackedPostContactUrl() {
+  const url = new URL(process.env.MAYBERRY_CONTACT_URL || "https://www.mayberrypw.com/contact");
+  if (!url.searchParams.has("utm_source")) url.searchParams.set("utm_source", "google");
+  if (!url.searchParams.has("utm_medium")) url.searchParams.set("utm_medium", "organic");
+  if (!url.searchParams.has("utm_campaign")) url.searchParams.set("utm_campaign", "gbp_post");
+  return url.toString();
+}
+
 function nextGooglePostSummary(state) {
-  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://www.mayberrypw.com/contact";
+  const contactUrl = trackedPostContactUrl();
   const posts = [
     `House siding, brick, and trim can collect grime fast in North Carolina weather. Mayberry Pressure Washing offers house washing and soft washing around Mount Airy and nearby areas. Request a free estimate here: ${contactUrl}`,
     `Driveways, sidewalks, and concrete pads make a big first impression. If yours is stained or weathered, Mayberry Pressure Washing can help clean it up with a free exterior cleaning quote: ${contactUrl}`,
@@ -526,7 +542,7 @@ async function createGoogleLocalPost(summary) {
     return null;
   }
 
-  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://www.mayberrypw.com/contact";
+  const contactUrl = trackedPostContactUrl();
   const url = `https://mybusiness.googleapis.com/v4/${locationName}/localPosts`;
   return fetchJson(url, {
     method: "POST",
@@ -708,6 +724,11 @@ async function syncPerformanceAnalytics() {
   });
   const report = summarizePerformance(payload, { start, end });
   writeJsonIfChanged(googlePerformancePath, report);
+  appendSnapshot(googlePerformanceHistoryPath, {
+    fetchedAt: report.fetchedAt,
+    range: report.range,
+    summary: report.summary
+  });
   console.log(`GBP analytics synced: impressions=${report.summary.impressions.current28Days} actions=${report.summary.totalActions} actionRate=${report.summary.actionRatePercent}%`);
   return report;
 }
@@ -802,7 +823,7 @@ function updateHtmlCounts(html, data) {
 }
 
 function updateSiteFiles(data) {
-  let changed = 0;
+  const changed = [];
   for (const file of allHtmlFiles(root)) {
     let html = readFileSync(file, "utf8");
     let next = updateHtmlCounts(html, data);
@@ -811,19 +832,21 @@ function updateSiteFiles(data) {
     }
     if (next !== html) {
       writeFileSync(file, next);
-      changed += 1;
+      changed.push(relative(root, file));
     }
   }
   return changed;
 }
 
-function autoPushIfEnabled() {
+function autoPushIfEnabled(siteFiles = []) {
   const result = { enabled: process.env.MAYBERRY_REVIEWS_AUTO_PUSH === "1", pushed: false, error: null };
   if (!result.enabled) return result;
   try {
     const status = execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }).trim();
     if (status) {
-      execFileSync("git", ["add", "data/google-reviews.json", "."], { cwd: root, stdio: "inherit" });
+      execFileSync("git", ["add", "--", "data/google-reviews.json", "data/google-review-history.jsonl", ...siteFiles], { cwd: root, stdio: "inherit" });
+      const staged = execFileSync("git", ["diff", "--cached", "--name-only"], { cwd: root, encoding: "utf8" }).trim();
+      if (!staged) return result;
       execFileSync("git", ["commit", "-m", "Update Google reviews"], { cwd: root, stdio: "inherit" });
     }
     const ahead = Number(execFileSync("git", ["rev-list", "--count", "@{upstream}..HEAD"], { cwd: root, encoding: "utf8" }).trim() || 0);
@@ -930,12 +953,25 @@ async function main() {
   const replyResult = replyUnanswered ? await replyToUnansweredReviews(nextData) : { attempted: 0, published: 0 };
   const postResult = maybePost ? await maybeCreateGooglePost() : { attempted: false, published: false };
   const dataChanged = writeJsonIfChanged(dataPath, nextData);
-  const fileChanges = updateSite ? updateSiteFiles(nextData) : 0;
+  const siteFiles = updateSite ? updateSiteFiles(nextData) : [];
+  const fileChanges = siteFiles.length;
+  const historyRecorded = !maybePost && appendSnapshot(googleReviewHistoryPath, {
+    recordedAt: new Date().toISOString(),
+    rating: Number(nextData.rating || 0),
+    reviewCount: Number(nextData.reviewCount || 0),
+    answeredCount: (nextData.reviews || []).filter((review) => review.reply).length,
+    unansweredCount: (nextData.reviews || []).filter((review) => review.name && !review.reply).length,
+    ratingBreakdown: (nextData.reviews || []).reduce((counts, review) => {
+      const key = String(Number(review.rating || 0));
+      counts[key] = Number(counts[key] || 0) + 1;
+      return counts;
+    }, {})
+  });
   let pushResult = { enabled: process.env.MAYBERRY_REVIEWS_AUTO_PUSH === "1", pushed: false };
 
-  if (dataChanged || fileChanges) {
+  if (dataChanged || fileChanges || historyRecorded) {
     console.log(`Review sync complete: dataChanged=${dataChanged} htmlFilesChanged=${fileChanges} reviewCount=${nextData.reviewCount} repliesAttempted=${replyResult.attempted} repliesPublished=${replyResult.published} googlePostAttempted=${postResult.attempted} googlePostPublished=${postResult.published}`);
-    pushResult = autoPushIfEnabled();
+    pushResult = autoPushIfEnabled(siteFiles);
   } else {
     console.log(`Review sync complete: no changes reviewCount=${nextData.reviewCount} repliesAttempted=${replyResult.attempted} repliesPublished=${replyResult.published} googlePostAttempted=${postResult.attempted} googlePostPublished=${postResult.published}`);
   }

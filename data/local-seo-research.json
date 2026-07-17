@@ -1,0 +1,85 @@
+{
+  "researchedAt": "2026-07-17",
+  "market": "Mount Airy, North Carolina and confirmed nearby Northwest North Carolina and Triad service areas",
+  "notes": [
+    "No search-volume claims are included because no paid keyword-volume source was available.",
+    "Location targeting is limited to client-provided coverage; GBP-only Clemmons and Greensboro listings require owner confirmation.",
+    "Catering, menu, and ordering keywords are not applicable to a pressure-washing company."
+  ],
+  "keywords": {
+    "primary": [
+      "pressure washing Mount Airy NC",
+      "pressure washing near me",
+      "pressure washing company Mount Airy"
+    ],
+    "secondary": [
+      "power washing Mount Airy NC",
+      "exterior cleaning Mount Airy NC",
+      "soft washing Mount Airy NC",
+      "residential pressure washing",
+      "commercial pressure washing"
+    ],
+    "services": [
+      "house washing",
+      "driveway cleaning",
+      "concrete cleaning",
+      "patio cleaning",
+      "sidewalk cleaning",
+      "roof washing",
+      "gutter cleaning",
+      "gutter brightening",
+      "window cleaning",
+      "deck cleaning",
+      "fence cleaning",
+      "wood staining",
+      "gutter guard installation",
+      "commercial exterior cleaning"
+    ],
+    "buyerIntent": [
+      "pressure washing estimate",
+      "pressure washing quote",
+      "pressure washing service near me",
+      "house washing company",
+      "driveway pressure washing",
+      "commercial pressure washing company"
+    ],
+    "locations": [
+      "Mount Airy NC",
+      "Winston-Salem NC",
+      "Pilot Mountain NC",
+      "Elkin NC",
+      "Dobson NC",
+      "Wilkesboro NC"
+    ]
+  },
+  "competitorsReviewed": [
+    {
+      "name": "Double E Pressure Washing",
+      "url": "https://www.doubleepw.com/",
+      "observedPositioning": "Mount Airy-focused residential and commercial pressure washing, soft washing, windows, concrete, roof and gutter work."
+    },
+    {
+      "name": "RK Exteriors",
+      "url": "https://www.rkexteriorsllc.com/",
+      "observedPositioning": "Winston-Salem-area pressure washing and soft washing with free-estimate messaging."
+    },
+    {
+      "name": "Jordan's Exterior Cleaning",
+      "url": "https://www.jordanspressurewash.com/",
+      "observedPositioning": "Pressure washing, roof and house washing, driveways, gutters, commercial cleaning and gutter guards."
+    },
+    {
+      "name": "Elite Softwash",
+      "url": "https://www.elitesoftwash1.com/",
+      "observedPositioning": "Soft washing, pressure washing, concrete, decks, patios, residential and commercial exterior cleaning."
+    }
+  ],
+  "officialGuidance": [
+    "https://support.google.com/business/answer/3038177",
+    "https://support.google.com/business/answer/9157481",
+    "https://support.google.com/business/answer/3474122",
+    "https://developers.google.com/search/docs/appearance/structured-data/local-business",
+    "https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap",
+    "https://www.indexnow.org/documentation"
+  ]
+}

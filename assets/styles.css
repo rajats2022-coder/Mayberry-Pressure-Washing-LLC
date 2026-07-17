@@ -2438,3 +2438,7 @@ body.chatbot-open .mobile-quick-cta,
     to { transform: translate3d(0, 0, 0); }
   }
 }
+/* Consent notice is injected only when no analytics choice has been saved. */
+.analytics-consent{position:fixed;z-index:1000;left:clamp(12px,3vw,32px);right:clamp(12px,3vw,32px);bottom:clamp(12px,3vw,28px);display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:980px;margin:0 auto;padding:18px 20px;border:1px solid rgba(255,255,255,.18);border-radius:16px;background:#1f2f41;color:#fff;box-shadow:0 18px 55px rgba(0,0,0,.28)}
+.analytics-consent p{margin:0;max-width:680px;line-height:1.5}.analytics-consent a{color:#fff;text-decoration:underline}.analytics-consent div{display:flex;gap:10px;flex-wrap:wrap}.analytics-consent button{cursor:pointer;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:10px 16px;background:transparent;color:#fff;font:inherit;font-weight:700}.analytics-consent .consent-allow{border-color:#f4cc69;background:#f4cc69;color:#1f2f41}
+@media (max-width:700px){.analytics-consent{align-items:stretch;flex-direction:column}.analytics-consent div,.analytics-consent button{width:100%}}

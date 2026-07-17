@@ -1,27 +1,28 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-const siteUrl = "https://mayberrypw.com";
+const siteUrl = "https://www.mayberrypw.com";
 const phone = "(336) 374-8664";
 const phoneHref = "tel:+13363748664";
 const email = "c.bray@mayberrypw.com";
 const facebook = "https://www.facebook.com/profile.php?id=61576662606045";
 const instagram = "https://www.instagram.com/mayberrypressurewashingllc/";
+const lastModified = "2026-07-17";
 
 const basePages = [
   { loc: "/", priority: "1.0" },
-  { loc: "/services.html", priority: "0.9" },
-  { loc: "/service-areas.html", priority: "0.9" },
-  { loc: "/gallery.html", priority: "0.7" },
-  { loc: "/reviews.html", priority: "0.8" },
-  { loc: "/contact.html", priority: "0.9" }
+  { loc: "/services", priority: "0.9" },
+  { loc: "/service-areas", priority: "0.9" },
+  { loc: "/gallery", priority: "0.7" },
+  { loc: "/reviews", priority: "0.8" },
+  { loc: "/contact", priority: "0.9" }
 ];
 
 const services = [
   {
     slug: "pressure-washing",
     name: "Pressure Washing",
-    title: "Pressure Washing Services in Mount Airy, NC | Mayberry Pressure Washing",
+    title: "Professional Pressure Washing | Mayberry Pressure Washing",
     h1: "Pressure washing services in Mount Airy, NC and nearby Triad towns.",
     description: "Pressure washing for concrete, siding-safe exterior cleaning plans, patios, sidewalks, storefronts, and curb-facing surfaces across Mount Airy, NC and nearby Triad communities.",
     image: "assets/images/gallery/driveway-surface-cleaning.jpg",
@@ -33,7 +34,7 @@ const services = [
   {
     slug: "house-washing",
     name: "House Washing",
-    title: "House Washing in Mount Airy, NC | Mayberry Pressure Washing",
+    title: "House Washing Services | Mayberry Pressure Washing",
     h1: "House washing in Mount Airy, NC for siding, trim, porches, and curb appeal.",
     description: "House washing for siding, soffits, trim, porches, and entry areas in Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and nearby towns.",
     image: "assets/images/gallery/house-siding-before-after.jpg",
@@ -57,7 +58,7 @@ const services = [
   {
     slug: "driveway-cleaning",
     name: "Driveway Cleaning",
-    title: "Driveway Cleaning in Mount Airy, NC | Mayberry Pressure Washing",
+    title: "Driveway & Concrete Cleaning | Mayberry Pressure Washing",
     h1: "Driveway cleaning in Mount Airy, NC for brighter concrete and cleaner curb appeal.",
     description: "Driveway cleaning and concrete surface cleaning for tire marks, algae, mud, and traffic stains in Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, and Wilkesboro.",
     image: "assets/images/gallery/driveway-surface-cleaning.jpg",
@@ -287,11 +288,18 @@ function esc(value) {
 }
 
 function rel(depth, file) {
-  return `${"../".repeat(depth)}${file}`;
+  const cleanFile = file === "index.html" ? "" : file.replace(/\.html(?=([?#]|$))/, "");
+  return `${"../".repeat(depth)}${cleanFile}`;
 }
 
 function jsonLd(data) {
   return JSON.stringify(data, null, 2).replaceAll("</script", "<\\/script");
+}
+
+function compactMeta(value, max = 158) {
+  if (value.length <= max) return value;
+  const shortened = value.slice(0, max - 1);
+  return `${shortened.slice(0, shortened.lastIndexOf(" "))}…`;
 }
 
 function header({ depth, active = "" }) {
@@ -306,31 +314,35 @@ function header({ depth, active = "" }) {
 }
 
 function footer(depth) {
-  return `<footer><div class="footer-grid"><div><strong>Mayberry Pressure Washing LLC</strong><p>Local pressure washing, soft washing, house washing, roof washing, driveway cleaning, gutters, windows, decks, fences, and commercial exterior cleaning.</p></div><div><strong>Top Services</strong><p><a href="${rel(depth, "services/pressure-washing.html")}">Pressure washing</a><br><a href="${rel(depth, "services/house-washing.html")}">House washing</a><br><a href="${rel(depth, "services/driveway-cleaning.html")}">Driveway cleaning</a><br><a href="${rel(depth, "services/commercial-pressure-washing.html")}">Commercial pressure washing</a></p></div><div><strong>Contact</strong><p><a href="${phoneHref}">${phone}</a><br><a href="mailto:${email}">${email}</a><br><a href="${rel(depth, "reviews.html")}">25 5-star Google reviews</a><br><a href="${facebook}" target="_blank" rel="noopener">Facebook Mayberry Pressure Washing LLC</a><br><a href="${instagram}">@mayberrypressurewashingllc</a></p></div></div></footer>`;
+  return `<footer><div class="footer-grid"><div><strong>Mayberry Pressure Washing LLC</strong><p>Local pressure washing, soft washing, house washing, roof washing, driveway cleaning, gutters, windows, decks, fences, and commercial exterior cleaning.</p></div><div><strong>Top Services</strong><p><a href="${rel(depth, "services/pressure-washing.html")}">Pressure washing</a><br><a href="${rel(depth, "services/house-washing.html")}">House washing</a><br><a href="${rel(depth, "services/driveway-cleaning.html")}">Driveway cleaning</a><br><a href="${rel(depth, "services/commercial-pressure-washing.html")}">Commercial pressure washing</a><br><a href="${rel(depth, "privacy.html")}">Privacy &amp; analytics choices</a></p></div><div><strong>Contact</strong><p><a href="${phoneHref}">${phone}</a><br><a href="mailto:${email}">${email}</a><br><a href="${rel(depth, "reviews.html")}">27 verified Google reviews</a><br><a href="${facebook}" target="_blank" rel="noopener">Facebook Mayberry Pressure Washing LLC</a><br><a href="${instagram}">@mayberrypressurewashingllc</a></p></div></div></footer>`;
 }
 
 function shell({ depth = 0, title, description, canonical, ogImage = "assets/images/pressure-washing-hero.png", active, body, schema, robots = "index, follow, max-image-preview:large" }) {
+  const metaDescription = compactMeta(description);
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>${esc(title)}</title>
-  <meta name="description" content="${esc(description)}" />
+  <meta name="description" content="${esc(metaDescription)}" />
   <meta name="theme-color" content="#33465e" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="robots" content="${robots}" />
   <link rel="canonical" href="${siteUrl}${canonical}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="${rel(depth, "assets/images/favicon-32.png")}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="${rel(depth, "assets/images/apple-touch-icon.png")}" />
   <meta property="og:title" content="${esc(title)}" />
-  <meta property="og:description" content="${esc(description)}" />
+  <meta property="og:description" content="${esc(metaDescription)}" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="${siteUrl}${canonical}" />
   <meta property="og:image" content="${siteUrl}/${ogImage}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${esc(title)}" />
-  <meta name="twitter:description" content="${esc(description)}" />
+  <meta name="twitter:description" content="${esc(metaDescription)}" />
   <meta name="twitter:image" content="${siteUrl}/${ogImage}" />
   <link rel="preconnect" href="https://unpkg.com" />
+  <script src="${rel(depth, "assets/site-analytics.js")}"></script>
   <link rel="stylesheet" href="${rel(depth, "assets/styles.css")}" />
   <script type="application/ld+json">
   ${jsonLd(schema)}
@@ -358,22 +370,14 @@ function businessSchema() {
     email,
     image: `${siteUrl}/assets/images/business-logo.jpg`,
     logo: `${siteUrl}/assets/images/business-logo.jpg`,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "1120 W Lebanon St",
-      addressLocality: "Mount Airy",
-      addressRegion: "NC",
-      postalCode: "27030",
-      addressCountry: "US"
-    },
+    address: { "@type": "PostalAddress", addressLocality: "Mount Airy", addressRegion: "NC", addressCountry: "US" },
     areaServed: cities.map((city) => `${city.name} ${city.state}`),
     sameAs: [
       "https://www.google.com/maps/search/?api=1&query=Mayberry%20Pressure%20Washing%20LLC&query_place_id=ChIJH1R4E00DQg4R_BKHMqJrDzc",
       facebook,
       instagram
     ],
-    aggregateRating: { "@type": "AggregateRating", ratingValue: "5.0", reviewCount: "13", bestRating: "5", worstRating: "1" },
-    openingHours: "Mo-Su 00:00-23:59",
+    aggregateRating: { "@type": "AggregateRating", ratingValue: "5.0", reviewCount: "27", bestRating: "5", worstRating: "1" },
     priceRange: "$$"
   };
 }
@@ -466,7 +470,7 @@ function pageHero({ eyebrow, h1, text, depth, cta = "Request Free Estimate", sec
 
 function renderServicePage(service) {
   const depth = 1;
-  const canonical = `/services/${service.slug}.html`;
+  const canonical = `/services/${service.slug}`;
   const details = serviceDetails[service.slug];
   const faq = [
     [`Do you offer ${service.name.toLowerCase()} near Mount Airy, NC?`, `Yes. Mayberry Pressure Washing LLC quotes ${service.name.toLowerCase()} in Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and nearby communities.`],
@@ -578,8 +582,8 @@ function renderServicePage(service) {
 
 function renderCityPage(city) {
   const depth = 1;
-  const canonical = `/service-areas/${city.slug}.html`;
-  const title = `Pressure Washing in ${city.name}, ${city.state} | Mayberry Pressure Washing`;
+  const canonical = `/service-areas/${city.slug}`;
+  const title = `Exterior Cleaning Service Area: ${city.name}, ${city.state} | Mayberry`;
   const description = `Pressure washing, house washing, driveway cleaning, roof washing, gutters, windows, decks, fences, and commercial exterior cleaning in ${city.name}, ${city.state}.`;
   const details = cityDetails[city.slug];
   const faq = [
@@ -654,7 +658,7 @@ function renderCityPage(city) {
 
 function renderCityServicePage(city, service) {
   const depth = 2;
-  const canonical = `/service-areas/${city.slug}/${service.slug}.html`;
+  const canonical = `/service-areas/${city.slug}/${service.slug}`;
   const title = `${service.name} in ${city.name}, ${city.state} | Mayberry Pressure Washing`;
   const h1 = `${service.name} in ${city.name}, ${city.state}.`;
   const description = `${service.name} in ${city.name}, ${city.state} from Mayberry Pressure Washing LLC, with quotes for homes, businesses, concrete, siding, rooflines, gutters, windows, decks, fences, and exterior surfaces.`;
@@ -731,7 +735,7 @@ function renderCityServicePage(city, service) {
 
 function renderSeoPlan() {
   const depth = 0;
-  const canonical = "/seo-plan.html";
+  const canonical = "/seo-plan";
   const description = "Website growth roadmap for Mayberry Pressure Washing LLC, including service details, town coverage, helpful homeowner resources, internal links, and local trust-building ideas.";
   const body = `${pageHero({
     eyebrow: "Website growth roadmap",
@@ -797,13 +801,14 @@ function renderSeoPlan() {
     active: "seo",
     body,
     schema: schemaFor({ canonical, name: "Mayberry Pressure Washing local SEO plan", description }),
+    robots: "noindex, nofollow",
     robots: "noindex, follow"
   });
 }
 
 function renderResourcePage(resource) {
   const depth = 1;
-  const canonical = `/resources/${resource.slug}.html`;
+  const canonical = `/resources/${resource.slug}`;
   const faq = [
     [`Is this a fixed price list?`, "No. This is a practical guide. Mayberry still needs the property city, photos, service needed, and surface details to quote accurately."],
     ["What is the fastest way to get an estimate?", "Call or text Mayberry Pressure Washing LLC with photos, the property city, and what needs cleaned."],
@@ -896,15 +901,15 @@ for (const resource of resourcePages) {
 }
 
 const generatedPages = [
-  ...services.map((service) => ({ loc: `/services/${service.slug}.html`, priority: "0.8" })),
-  ...cities.map((city) => ({ loc: `/service-areas/${city.slug}.html`, priority: "0.8" })),
-  ...cityServiceSlugs.map(([citySlug, serviceSlug]) => ({ loc: `/service-areas/${citySlug}/${serviceSlug}.html`, priority: "0.7" })),
-  ...resourcePages.map((resource) => ({ loc: `/resources/${resource.slug}.html`, priority: "0.7" }))
+  ...services.map((service) => ({ loc: `/services/${service.slug}`, priority: "0.8" })),
+  ...cities.map((city) => ({ loc: `/service-areas/${city.slug}`, priority: "0.8" })),
+  ...cityServiceSlugs.map(([citySlug, serviceSlug]) => ({ loc: `/service-areas/${citySlug}/${serviceSlug}`, priority: "0.7" })),
+  ...resourcePages.map((resource) => ({ loc: `/resources/${resource.slug}`, priority: "0.7" }))
 ];
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...basePages, ...generatedPages].map(({ loc, priority }) => `  <url><loc>${siteUrl}${loc}</loc><priority>${priority}</priority></url>`).join("\n")}
+${[...basePages, ...generatedPages].map(({ loc, priority }) => `  <url><loc>${siteUrl}${loc}</loc><lastmod>${lastModified}</lastmod><priority>${priority}</priority></url>`).join("\n")}
 </urlset>
 `;
 

@@ -1,0 +1,328 @@
+{
+  "generatedAt": "2026-07-17T12:48:53.888Z",
+  "mode": "local",
+  "status": "healthy",
+  "urlCount": 35,
+  "local": {
+    "pages": [
+      {
+        "url": "https://www.mayberrypw.com/",
+        "file": "index.html",
+        "title": "Mayberry Pressure Washing LLC | Mount Airy Exterior Cleaning",
+        "descriptionLength": 153,
+        "canonical": "https://www.mayberrypw.com/",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/services",
+        "file": "services.html",
+        "title": "Pressure Washing Services in Mount Airy, NC | Mayberry Pressure Washing",
+        "descriptionLength": 144,
+        "canonical": "https://www.mayberrypw.com/services",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas",
+        "file": "service-areas.html",
+        "title": "Pressure Washing Service Areas | Mount Airy, NC &amp; Triad | Mayberry",
+        "descriptionLength": 138,
+        "canonical": "https://www.mayberrypw.com/service-areas",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/gallery",
+        "file": "gallery.html",
+        "title": "Pressure Washing Gallery Mount Airy NC | Mayberry",
+        "descriptionLength": 143,
+        "canonical": "https://www.mayberrypw.com/gallery",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/reviews",
+        "file": "reviews.html",
+        "title": "Mayberry Pressure Washing Reviews | 27 5-Star Google Reviews",
+        "descriptionLength": 139,
+        "canonical": "https://www.mayberrypw.com/reviews",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/contact",
+        "file": "contact.html",
+        "title": "Contact Mayberry Pressure Washing LLC | Free Estimate",
+        "descriptionLength": 127,
+        "canonical": "https://www.mayberrypw.com/contact",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/pressure-washing",
+        "file": "services/pressure-washing.html",
+        "title": "Professional Pressure Washing | Mayberry Pressure Washing",
+        "descriptionLength": 151,
+        "canonical": "https://www.mayberrypw.com/services/pressure-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/house-washing",
+        "file": "services/house-washing.html",
+        "title": "House Washing Services | Mayberry Pressure Washing",
+        "descriptionLength": 156,
+        "canonical": "https://www.mayberrypw.com/services/house-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/soft-washing",
+        "file": "services/soft-washing.html",
+        "title": "Soft Washing in Mount Airy, NC | Mayberry Pressure Washing",
+        "descriptionLength": 122,
+        "canonical": "https://www.mayberrypw.com/services/soft-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/driveway-cleaning",
+        "file": "services/driveway-cleaning.html",
+        "title": "Driveway &amp; Concrete Cleaning | Mayberry Pressure Washing",
+        "descriptionLength": 156,
+        "canonical": "https://www.mayberrypw.com/services/driveway-cleaning",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/roof-washing",
+        "file": "services/roof-washing.html",
+        "title": "Roof Washing in Mount Airy, NC | Mayberry Pressure Washing",
+        "descriptionLength": 143,
+        "canonical": "https://www.mayberrypw.com/services/roof-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/gutter-cleaning",
+        "file": "services/gutter-cleaning.html",
+        "title": "Gutter Cleaning in Mount Airy, NC | Mayberry Pressure Washing",
+        "descriptionLength": 122,
+        "canonical": "https://www.mayberrypw.com/services/gutter-cleaning",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/window-cleaning",
+        "file": "services/window-cleaning.html",
+        "title": "Window Cleaning in Mount Airy, NC | Mayberry Pressure Washing",
+        "descriptionLength": 138,
+        "canonical": "https://www.mayberrypw.com/services/window-cleaning",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/services/commercial-pressure-washing",
+        "file": "services/commercial-pressure-washing.html",
+        "title": "Commercial Pressure Washing in Mount Airy, NC | Mayberry Pressure Washing",
+        "descriptionLength": 151,
+        "canonical": "https://www.mayberrypw.com/services/commercial-pressure-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/mount-airy-nc",
+        "file": "service-areas/mount-airy-nc.html",
+        "title": "Exterior Cleaning Service Area: Mount Airy, NC | Mayberry",
+        "descriptionLength": 150,
+        "canonical": "https://www.mayberrypw.com/service-areas/mount-airy-nc",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/winston-salem-nc",
+        "file": "service-areas/winston-salem-nc.html",
+        "title": "Exterior Cleaning Service Area: Winston-Salem, NC | Mayberry",
+        "descriptionLength": 153,
+        "canonical": "https://www.mayberrypw.com/service-areas/winston-salem-nc",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc",
+        "file": "service-areas/pilot-mountain-nc.html",
+        "title": "Exterior Cleaning Service Area: Pilot Mountain, NC | Mayberry",
+        "descriptionLength": 154,
+        "canonical": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/elkin-nc",
+        "file": "service-areas/elkin-nc.html",
+        "title": "Exterior Cleaning Service Area: Elkin, NC | Mayberry",
+        "descriptionLength": 145,
+        "canonical": "https://www.mayberrypw.com/service-areas/elkin-nc",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/dobson-nc",
+        "file": "service-areas/dobson-nc.html",
+        "title": "Exterior Cleaning Service Area: Dobson, NC | Mayberry",
+        "descriptionLength": 146,
+        "canonical": "https://www.mayberrypw.com/service-areas/dobson-nc",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/wilkesboro-nc",
+        "file": "service-areas/wilkesboro-nc.html",
+        "title": "Exterior Cleaning Service Area: Wilkesboro, NC | Mayberry",
+        "descriptionLength": 150,
+        "canonical": "https://www.mayberrypw.com/service-areas/wilkesboro-nc",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/mount-airy-nc/pressure-washing",
+        "file": "service-areas/mount-airy-nc/pressure-washing.html",
+        "title": "Pressure Washing in Mount Airy, NC | Mayberry Pressure Washing",
+        "descriptionLength": 153,
+        "canonical": "https://www.mayberrypw.com/service-areas/mount-airy-nc/pressure-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/mount-airy-nc/house-washing",
+        "file": "service-areas/mount-airy-nc/house-washing.html",
+        "title": "House Washing in Mount Airy, NC | Mayberry Pressure Washing",
+        "descriptionLength": 157,
+        "canonical": "https://www.mayberrypw.com/service-areas/mount-airy-nc/house-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/mount-airy-nc/driveway-cleaning",
+        "file": "service-areas/mount-airy-nc/driveway-cleaning.html",
+        "title": "Driveway Cleaning in Mount Airy, NC | Mayberry Pressure Washing",
+        "descriptionLength": 154,
+        "canonical": "https://www.mayberrypw.com/service-areas/mount-airy-nc/driveway-cleaning",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/winston-salem-nc/pressure-washing",
+        "file": "service-areas/winston-salem-nc/pressure-washing.html",
+        "title": "Pressure Washing in Winston-Salem, NC | Mayberry Pressure Washing",
+        "descriptionLength": 156,
+        "canonical": "https://www.mayberrypw.com/service-areas/winston-salem-nc/pressure-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/winston-salem-nc/house-washing",
+        "file": "service-areas/winston-salem-nc/house-washing.html",
+        "title": "House Washing in Winston-Salem, NC | Mayberry Pressure Washing",
+        "descriptionLength": 153,
+        "canonical": "https://www.mayberrypw.com/service-areas/winston-salem-nc/house-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/winston-salem-nc/commercial-pressure-washing",
+        "file": "service-areas/winston-salem-nc/commercial-pressure-washing.html",
+        "title": "Commercial Pressure Washing in Winston-Salem, NC | Mayberry Pressure Washing",
+        "descriptionLength": 149,
+        "canonical": "https://www.mayberrypw.com/service-areas/winston-salem-nc/commercial-pressure-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/pressure-washing",
+        "file": "service-areas/pilot-mountain-nc/pressure-washing.html",
+        "title": "Pressure Washing in Pilot Mountain, NC | Mayberry Pressure Washing",
+        "descriptionLength": 157,
+        "canonical": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/pressure-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/driveway-cleaning",
+        "file": "service-areas/pilot-mountain-nc/driveway-cleaning.html",
+        "title": "Driveway Cleaning in Pilot Mountain, NC | Mayberry Pressure Washing",
+        "descriptionLength": 149,
+        "canonical": "https://www.mayberrypw.com/service-areas/pilot-mountain-nc/driveway-cleaning",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/elkin-nc/soft-washing",
+        "file": "service-areas/elkin-nc/soft-washing.html",
+        "title": "Soft Washing in Elkin, NC | Mayberry Pressure Washing",
+        "descriptionLength": 151,
+        "canonical": "https://www.mayberrypw.com/service-areas/elkin-nc/soft-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/dobson-nc/roof-washing",
+        "file": "service-areas/dobson-nc/roof-washing.html",
+        "title": "Roof Washing in Dobson, NC | Mayberry Pressure Washing",
+        "descriptionLength": 152,
+        "canonical": "https://www.mayberrypw.com/service-areas/dobson-nc/roof-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/service-areas/wilkesboro-nc/commercial-pressure-washing",
+        "file": "service-areas/wilkesboro-nc/commercial-pressure-washing.html",
+        "title": "Commercial Pressure Washing in Wilkesboro, NC | Mayberry Pressure Washing",
+        "descriptionLength": 155,
+        "canonical": "https://www.mayberrypw.com/service-areas/wilkesboro-nc/commercial-pressure-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/resources/pressure-washing-cost-mount-airy-nc",
+        "file": "resources/pressure-washing-cost-mount-airy-nc.html",
+        "title": "How Much Does Pressure Washing Cost in Mount Airy, NC?",
+        "descriptionLength": 158,
+        "canonical": "https://www.mayberrypw.com/resources/pressure-washing-cost-mount-airy-nc",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/resources/soft-washing-vs-pressure-washing",
+        "file": "resources/soft-washing-vs-pressure-washing.html",
+        "title": "Soft Washing vs Pressure Washing | Mayberry Pressure Washing",
+        "descriptionLength": 137,
+        "canonical": "https://www.mayberrypw.com/resources/soft-washing-vs-pressure-washing",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/resources/how-often-wash-house-north-carolina",
+        "file": "resources/how-often-wash-house-north-carolina.html",
+        "title": "How Often Should You Wash Your House in North Carolina?",
+        "descriptionLength": 146,
+        "canonical": "https://www.mayberrypw.com/resources/how-often-wash-house-north-carolina",
+        "h1Count": 1,
+        "schemaCount": 1
+      },
+      {
+        "url": "https://www.mayberrypw.com/resources/choose-pressure-washing-company-mount-airy",
+        "file": "resources/choose-pressure-washing-company-mount-airy.html",
+        "title": "How to Choose a Pressure Washing Company in Mount Airy, NC",
+        "descriptionLength": 156,
+        "canonical": "https://www.mayberrypw.com/resources/choose-pressure-washing-company-mount-airy",
+        "h1Count": 1,
+        "schemaCount": 1
+      }
+    ],
+    "findings": []
+  },
+  "production": null,
+  "findings": []
+}

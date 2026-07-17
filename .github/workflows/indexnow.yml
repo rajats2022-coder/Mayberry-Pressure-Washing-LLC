@@ -1,0 +1,19 @@
+name: Submit production URLs to IndexNow
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for the production key file
+        run: curl --fail --silent --show-error --retry 10 --retry-delay 6 --retry-all-errors "https://www.mayberrypw.com/04de81dd16d2ed0fb321829ebc7b5972.txt"
+      - name: Submit canonical sitemap URLs
+        run: node scripts/submit-indexnow.mjs

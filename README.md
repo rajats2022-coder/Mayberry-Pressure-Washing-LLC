@@ -1,172 +1,109 @@
 # Mayberry Pressure Washing LLC Website
 
-Static website for Mayberry Pressure Washing LLC. Any update to tracked site files should be committed and pushed to `origin/main` so Vercel can deploy it live.
+Production website and local-marketing automation for Mayberry Pressure Washing LLC. The canonical site is `https://www.mayberrypw.com`, deployed from `origin/main` by Vercel.
 
-## Publishing Rule
+## Publishing
 
-After every site update, run a quick verification, commit the tracked changes, and push:
+Verify first, stage only the files that belong to the change, then commit and push:
 
 ```bash
+node scripts/audit-site.mjs
+node scripts/test-site-analytics.mjs
 git status --short
-git add .
+git add <changed-files>
 git commit -m "Describe the site update"
 git push origin main
 ```
 
-Do not commit `.env.local` or `logs/`. They are local runtime files only.
+Never commit `.env.local`, `logs/`, credentials, raw customer data, or discovered Google account and location identifiers.
 
-## Files
+## Business facts and scope
 
-- `index.html` - homepage
-- `services.html` - services overview
-- `service-areas.html` - service area / local SEO page
-- `services/*.html` - dedicated service SEO pages with matched title, H1, schema, FAQ, and internal links
-- `service-areas/*.html` - dedicated city SEO pages
-- `service-areas/*/*.html` - first city-service page batch for high-intent local searches
-- `seo-plan.html` - internal noindex rollout map for keywords and backlink planning
-- `gallery.html` - gallery placeholder for real client photos
-- `contact.html` - static estimate form draft
-- `assets/styles.css` - shared responsive styles
-- `assets/script.js` - mobile nav and static form status
-- `assets/images/pressure-washing-hero.png` - generated website hero image
-- `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt` - SEO / AI discovery files
+- Phone: `(336) 374-8664`
+- Email: `c.bray@mayberrypw.com`
+- Google rating at the July 17, 2026 audit: 5.0 from 27 reviews
+- Google review link: `https://g.page/r/CfwShzKiaw83EAE/review`
+- Profile type: service-area business; do not publish a street address
+- Website coverage pages: Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, and Wilkesboro
 
-## Before Publishing
+The live Google profile has a partly different service-area list. Confirm actual travel coverage, hours, and special hours with the owner before changing those fields. Do not publish insurance, licensing, prices, availability, offers, or service claims without evidence.
 
-Confirm phone number, email, hours, business address or service-area-only preference, owner name, logo, brand colors, and any approved customer review quotes.
+## Site structure
 
-The estimate form submits to Formspree (`https://formspree.io/f/xvznwqpl`) via the existing Vanilla JS AJAX handler in `assets/script.js`, with the form `action`/`method="POST"` kept as a native fallback when JavaScript is unavailable. Submissions arrive in the Formspree inbox/email tied to that form — confirm it forwards to the client's preferred address before handoff.
+- `index.html`, `services.html`, `service-areas.html`, `gallery.html`, `reviews.html`, and `contact.html` are the main public pages.
+- `services/*.html` contains the eight verified service pages.
+- `service-areas/*.html` and `service-areas/*/*.html` contain selective, useful location and city-service pages.
+- `resources/*.html` contains informational articles.
+- `privacy.html` explains the form, optional analytics, consent, and privacy controls; it is intentionally not indexed.
+- `seo-plan.html` is an internal, noindex rollout map.
+- `assets/site-analytics.js` manages consent-aware GA4 loading and conversion events.
+- `robots.txt` and `sitemap.xml` use the canonical `www` hostname and extensionless public URLs.
+- `googlea77b0aa828653eb4.html` is the Google site-verification file.
+- `04de81dd16d2ed0fb321829ebc7b5972.txt` is the public IndexNow key file.
 
-## Local SEO Rollout
+Keep location pages selective. Add one only when Mayberry really covers the area and the page can contain distinct service detail, project media, or useful local guidance. Do not create doorway pages.
 
-The current rollout targets `service + city + brand` searches without creating hundreds of thin doorway pages. Keep adding city-service pages only when there is enough useful local copy, project media, or service detail to make the page distinct.
+## Form and analytics
 
-Current priority service pages: pressure washing, house washing, soft washing, driveway cleaning, roof washing, gutter cleaning, window cleaning, and commercial pressure washing.
+The estimate form submits to the existing Formspree form with an AJAX handler and native POST fallback. Confirm delivery to the client's preferred inbox during ownership handoff.
 
-Current priority city pages: Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, and Wilkesboro.
+GA4 is a dedicated Mayberry property and stream. The consent banner blocks Analytics until opt-in and honors Global Privacy Control and Do Not Track. The site records `generate_lead`, `quote_request`, `phone_click`, and `contact_click` without deliberately sending form contents, email addresses, phone numbers, or query strings to Analytics.
 
-Backlink targets should stay local and real: Google Business Profile, Facebook, Instagram, local chamber or directory listings, supplier/vendor pages, customer mentions, sponsorships, and community pages. Avoid paid link farms and generic spam directories.
+```bash
+node scripts/setup-ga4.mjs
+node scripts/test-site-analytics.mjs
+```
 
-Current contact details from the provided Facebook profile screenshot:
-- Facebook: https://www.facebook.com/profile.php?id=61576662606045
-- Phone: (336) 374-8664
-- Email: c.bray@mayberrypw.com
-- Address: 1120 W Lebanon St, Mount Airy, NC 27030
-- Hours: Always open
+## Google Business Profile automation
 
-Current review details:
-- Google Business Profile: 5.0 from 25 Google reviews
-- Site review count: 25 Google Business Profile reviews only
-- Leave a review: https://g.page/r/CfwShzKiaw83EAE/review
+Installed LaunchAgents:
 
-## Google Review Automation
+- `com.s4ai.mayberry-google-reviews` — daily at 7:15 AM
+- `com.s4ai.mayberry-google-posts` — daily check at 8:30 AM, with a 47-hour duplicate guard
+- `com.s4ai.mayberry-google-analytics` — weekly GBP performance report
+- `com.s4ai.mayberry-search-console` — weekly Search Console report
+- `com.s4ai.mayberry-profile-health` — weekly profile, media, site, and broken-link audit
 
-The site has a daily macOS LaunchAgent installed at:
-
-`~/Library/LaunchAgents/com.s4ai.mayberry-google-reviews.plist`
-
-It runs every morning at 7:15 AM:
+The review workflow fetches the owned profile's reviews, replies only to unanswered reviews, synchronizes the public review count, writes current-state and append-only history, and sends a concise Telegram status. Auto-publish uses exact staged paths; a GitHub push failure is reported but does not convert a successful review/reply sync into a failed job.
 
 ```bash
 node scripts/sync-google-reviews.mjs --update-site --reply-unanswered
-```
-
-The updater reads `data/google-reviews.json`, fetches Google review data when credentials are available, replies to Google reviews that do not already have an owner reply, updates the featured homepage review count, rewrites `reviews.html`, and refreshes review-count/schema text across the static HTML files. The public site count should use only the live Google Business Profile review count.
-
-Use `s4aiagency@gmail.com` for the Google Business Profile manager account. Copy `.env.example` to `.env.local` and fill in credentials. Prefer Google Business Profile OAuth credentials because the official Reviews API returns the full owned-location review list and supports owner replies. A Places API key can update the public rating/count and a limited set of reviews, but it is not a full review-history or reply source.
-
-After adding `GOOGLE_OAUTH_CLIENT_ID` and `GOOGLE_OAUTH_CLIENT_SECRET`, run:
-
-```bash
-node scripts/setup-google-oauth.mjs
-node scripts/sync-google-reviews.mjs --discover-locations
-```
-
-Then fill `GOOGLE_BUSINESS_PROFILE_ACCOUNT_ID` and `GOOGLE_BUSINESS_PROFILE_LOCATION_ID` from the discovered Mayberry location. Review replies are drafted with OpenRouter using `openai/gpt-4.1-nano` when `OPENROUTER_API_KEY` is set. If it is not set, the script uses a deterministic local fallback that includes the reviewer first name, service details detected from the review, and the Mayberry contact URL.
-
-Set `MAYBERRY_REVIEWS_AUTO_PUSH=1` in `.env.local` only if the morning job should commit and push changed website files automatically.
-
-Telegram confirmations are sent after the 7:15 AM review run, the 8:30 AM Google post check, the Tuesday analytics run, and any failure when `MAYBERRY_TELEGRAM_NOTIFY` is not `0`. The script loads Mayberry's `.env.local` first, then `~/.hermes/.env`, so it can reuse the Hermes `TELEGRAM_BOT_TOKEN`, `TELEGRAM_HOME_CHANNEL`, and configured thread without copying secrets into this repo. Override the displayed name or destination only when this client needs different values.
-
-## Google Business Profile Posts
-
-Google posts are handled by a separate macOS LaunchAgent template:
-
-`automation/com.s4ai.mayberry-google-posts.plist`
-
-It checks daily at 8:30 AM:
-
-```bash
-node scripts/sync-google-reviews.mjs --maybe-post --local-data
-```
-
-The script publishes no more than once every 47 hours, so the result is effectively every other day even though the scheduler checks daily.
-
-Post strategy:
-- 2-3 Google posts per week.
-- Rotate house washing, driveway/concrete cleaning, seasonal refreshes, roofline/gutter care, service-area coverage, and commercial exterior cleaning.
-- Use one clear quote request CTA.
-- Link every post to:
-
-`https://www.mayberrypw.com/contact`
-
-Use this dry run to preview the next post without publishing:
-
-```bash
 node scripts/sync-google-reviews.mjs --maybe-post --dry-run-post --local-data
-```
-
-## Google Business Profile Analytics
-
-The Tuesday 8:00 AM analytics job reads 56 days of supported GBP performance data and compares the latest 28 days with the previous 28 days. It records profile impressions, calls, website clicks, direction requests, tracked action rate, and a sales-focused recommendation in `data/google-performance.json`, then sends a short Telegram report.
-
-```bash
 node scripts/sync-google-reviews.mjs --sync-analytics --no-telegram
+node scripts/manage-google-profile.mjs audit
 ```
 
-To install or refresh LaunchAgents:
+Posts rotate verified services and seasonal maintenance topics, use one quote CTA, add campaign tracking, and never invent an offer, price, event, or availability.
+
+## Search Console, IndexNow, and health checks
 
 ```bash
-cp automation/com.s4ai.mayberry-google-reviews.plist ~/Library/LaunchAgents/
-cp automation/com.s4ai.mayberry-google-posts.plist ~/Library/LaunchAgents/
-cp automation/com.s4ai.mayberry-google-analytics.plist ~/Library/LaunchAgents/
-launchctl unload ~/Library/LaunchAgents/com.s4ai.mayberry-google-reviews.plist 2>/dev/null || true
-launchctl unload ~/Library/LaunchAgents/com.s4ai.mayberry-google-posts.plist 2>/dev/null || true
-launchctl load ~/Library/LaunchAgents/com.s4ai.mayberry-google-reviews.plist
-launchctl load ~/Library/LaunchAgents/com.s4ai.mayberry-google-posts.plist
-launchctl load ~/Library/LaunchAgents/com.s4ai.mayberry-google-analytics.plist
+node scripts/setup-search-console.mjs status
+node scripts/setup-search-console.mjs report
+node scripts/setup-search-console.mjs inspect
+node scripts/submit-indexnow.mjs
+node scripts/audit-site.mjs --production
+node scripts/run-profile-health.mjs
 ```
 
-Logs:
-- Review automation: `logs/review-automation.log`
-- Review launchd stdout/stderr: `logs/review-automation-launchd.log`, `logs/review-automation-launchd.err`
-- Google post automation: `logs/google-post-automation.log`
-- Google post launchd stdout/stderr: `logs/google-post-automation-launchd.log`, `logs/google-post-automation-launchd.err`
-- Google analytics: `logs/google-analytics-automation.log`
-- Google analytics launchd stdout/stderr: `logs/google-analytics-automation-launchd.log`, `logs/google-analytics-automation-launchd.err`
-- Telegram digest state: `logs/automation-daily-summary.json`
-- Telegram confirmation: sent once after the 8:30 AM run through the Hermes bot, with business name, review count, changed files, reply stats, post status, and GitHub push status.
+Current snapshots live under `data/`; matching `*.jsonl` files are append-only history. The IndexNow GitHub Actions workflow runs after production deployments and waits for the public key before submitting all canonical URLs.
 
-## Google Photo Uploads
+To install or refresh the two repository LaunchAgent templates:
 
-When the client sends photos and the request says, "Here are the pictures from Mayberry Pressure Washing," place the images in:
+```bash
+cp launchd/com.s4ai.mayberry-search-console.plist ~/Library/LaunchAgents/
+cp launchd/com.s4ai.mayberry-profile-health.plist ~/Library/LaunchAgents/
+plutil -lint ~/Library/LaunchAgents/com.s4ai.mayberry-*.plist
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.s4ai.mayberry-search-console.plist
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.s4ai.mayberry-profile-health.plist
+```
 
-`automation/google-photo-inbox/`
+## Photo uploads
 
-Then upload them to the Google Business Profile:
+Only upload real Mayberry media. Put approved files in `automation/google-photo-inbox/`, then run:
 
 ```bash
 node scripts/upload-google-photos.mjs
 ```
 
-Photos are uploaded as additional business photos with this description by default:
-
-`Finished a nice cleaning today, satisfied customer.`
-
-After upload, files move into `automation/google-photo-archive/`, and the upload log is written to `data/google-photo-uploads.json`.
-
-If Google's byte-upload finalize endpoint returns a server error, add the approved photos to the live site first and upload them by public URL:
-
-```bash
-MAYBERRY_PHOTO_SOURCE_BASE_URL=https://www.mayberrypw.com node scripts/upload-google-photos.mjs assets/images/gallery/example-photo.jpg
-```
+Successful files move to `automation/google-photo-archive/`; the upload state is saved in `data/google-photo-uploads.json`. Do not generate or reuse unrelated business photography as proof of completed Mayberry work.
