@@ -2,10 +2,21 @@
   "businessName": "Mayberry Pressure Washing LLC",
   "placeId": "ChIJH1R4E00DQg4R_BKHMqJrDzc",
   "rating": 5,
-  "reviewCount": 27,
+  "reviewCount": 28,
   "source": "google-business-profile",
-  "lastFetchedAt": "2026-07-20T11:15:06.364Z",
+  "lastFetchedAt": "2026-07-21T11:15:06.391Z",
   "reviews": [
+    {
+      "id": "AbFvOqks82xsVmOHXe-BDMHAQkueDslQ5fIgYmUuEBV-O_nEO_iO-95lGQx_qaKol0yVy0Z1GSexkQ",
+      "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqks82xsVmOHXe-BDMHAQkueDslQ5fIgYmUuEBV-O_nEO_iO-95lGQx_qaKol0yVy0Z1GSexkQ",
+      "author": "Chris Smith",
+      "rating": 5,
+      "text": "Great Job!  I will not wait as long to do this again. Will defiantly get them to do this next year. Thank you",
+      "createTime": "2026-07-20T20:22:12.724390Z",
+      "updateTime": "2026-07-20T20:22:12.724390Z",
+      "reply": "Thank you so much for the review, Chris. I really appreciate you trusting Mayberry Pressure Washing with the work, and I am glad you were happy with the result.\n\nIf you know someone in need of pressure washing, please check out our brand new website and have them fill out a request for a free estimate: https://www.mayberrypw.com/contact.",
+      "replyUpdateTime": "2026-07-21T11:15:07.091Z"
+    },
     {
       "id": "AbFvOqlFn2I9MR26wDaQwi_yXzW59uuuvJ_bcU15oompCvhWfc2opdYjbyAj0qZqQ7FVlpATrt7pYw",
       "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqlFn2I9MR26wDaQwi_yXzW59uuuvJ_bcU15oompCvhWfc2opdYjbyAj0qZqQ7FVlpATrt7pYw",
@@ -305,7 +316,7 @@
     }
   ],
   "expectedManagerEmail": "s4aiagency@gmail.com",
-  "googleReviewCount": 27,
+  "googleReviewCount": 28,
   "websiteReviewCount": 0,
-  "totalReviewCount": 27
+  "totalReviewCount": 28
 }
