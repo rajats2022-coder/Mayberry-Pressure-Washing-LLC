@@ -437,19 +437,24 @@ async function draftReplyWithOpenRouter(review) {
     ]
   };
 
-  const response = await fetchJson("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      authorization: `Bearer ${apiKey}`,
-      "content-type": "application/json",
-      "http-referer": "https://www.mayberrypw.com",
-      "x-title": "Mayberry Review Reply Automation"
-    },
-    body: JSON.stringify(payload),
-    label: "OpenRouter review reply draft"
-  });
-  const text = response?.choices?.[0]?.message?.content?.trim();
-  return text || fallbackReply(review);
+  try {
+    const response = await fetchJson("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${apiKey}`,
+        "content-type": "application/json",
+        "http-referer": "https://www.mayberrypw.com",
+        "x-title": "Mayberry Review Reply Automation"
+      },
+      body: JSON.stringify(payload),
+      label: "OpenRouter review reply draft"
+    });
+    const text = response?.choices?.[0]?.message?.content?.trim();
+    return text || fallbackReply(review);
+  } catch {
+    console.warn("OpenRouter draft unavailable; using the local Mayberry reply template.");
+    return fallbackReply(review);
+  }
 }
 
 function isReplyableBusinessProfileReview(review) {
