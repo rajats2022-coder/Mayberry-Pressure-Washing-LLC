@@ -131,6 +131,13 @@ async function verify(token) {
   console.log("Search Console ownership verified and sitemap submitted.");
 }
 
+async function submit(token) {
+  await fetchJson(`https://www.googleapis.com/webmasters/v3/sites/${encodedSite}/sitemaps/${encodeURIComponent(sitemapUrl)}`, {
+    method: "PUT", headers: authHeaders(token), label: "Search Console sitemaps.submit"
+  });
+  console.log(`Search Console sitemap submitted: ${sitemapUrl}`);
+}
+
 async function status(token) {
   const sites = await fetchJson("https://www.googleapis.com/webmasters/v3/sites", { headers: authHeaders(token), label: "Search Console sites.list" });
   const entry = (sites.siteEntry || []).find((item) => item.siteUrl === siteUrl);
@@ -182,6 +189,7 @@ const token = await accessToken();
 if (command === "enable-api") await enableApi(token);
 else if (command === "prepare") await prepare(token);
 else if (command === "verify") await verify(token);
+else if (command === "submit") await submit(token);
 else if (command === "report") await report(token);
 else if (command === "inspect") await inspect(token);
 else if (command === "status") await status(token);

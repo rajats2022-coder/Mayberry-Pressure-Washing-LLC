@@ -79,6 +79,7 @@ Posts rotate verified services and seasonal maintenance topics, use one quote CT
 
 ```bash
 node scripts/setup-search-console.mjs status
+node scripts/setup-search-console.mjs submit
 node scripts/setup-search-console.mjs report
 node scripts/setup-search-console.mjs inspect
 node scripts/submit-indexnow.mjs
