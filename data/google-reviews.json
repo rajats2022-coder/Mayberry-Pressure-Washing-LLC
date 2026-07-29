@@ -2,10 +2,32 @@
   "businessName": "Mayberry Pressure Washing LLC",
   "placeId": "ChIJH1R4E00DQg4R_BKHMqJrDzc",
   "rating": 5,
-  "reviewCount": 28,
+  "reviewCount": 30,
   "source": "google-business-profile",
-  "lastFetchedAt": "2026-07-21T11:15:06.391Z",
+  "lastFetchedAt": "2026-07-29T03:30:01.416Z",
   "reviews": [
+    {
+      "id": "AbFvOqlbNvGx-1dApfZ9-0ZdW8LUSurXXvRztA4PmnR1J6OiU9ZztzW5C02Weclc5A-UDsfi-2V7TA",
+      "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqlbNvGx-1dApfZ9-0ZdW8LUSurXXvRztA4PmnR1J6OiU9ZztzW5C02Weclc5A-UDsfi-2V7TA",
+      "author": "Dan/Tema Church",
+      "rating": 5,
+      "text": "Carter was very pleasant to work with and did an incredible job cleaning everything on our property.  The list is too long to add here.  We are excited to have everything look so good and will be sure to use Mayberry Pressure Washing again.  Thank you so very much!",
+      "createTime": "2026-07-28T14:06:02.582492Z",
+      "updateTime": "2026-07-28T14:06:02.582492Z",
+      "reply": null,
+      "replyUpdateTime": null
+    },
+    {
+      "id": "AbFvOqlI46mrZf3QIi2wHVTpKFKoJ85FDLAHSmJs9Hpg9Lt_RPaxCdOw6T-Cn4eSmVVY92x1SHkdag",
+      "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqlI46mrZf3QIi2wHVTpKFKoJ85FDLAHSmJs9Hpg9Lt_RPaxCdOw6T-Cn4eSmVVY92x1SHkdag",
+      "author": "Chris Oakman",
+      "rating": 5,
+      "text": "Jared did an excellent, professional job today in good time! We had driveway, house and pool deck cleaned. Reasonable pricing. Highly recommend!",
+      "createTime": "2026-07-21T20:36:26.713179Z",
+      "updateTime": "2026-07-21T20:36:26.713179Z",
+      "reply": null,
+      "replyUpdateTime": null
+    },
     {
       "id": "AbFvOqks82xsVmOHXe-BDMHAQkueDslQ5fIgYmUuEBV-O_nEO_iO-95lGQx_qaKol0yVy0Z1GSexkQ",
       "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqks82xsVmOHXe-BDMHAQkueDslQ5fIgYmUuEBV-O_nEO_iO-95lGQx_qaKol0yVy0Z1GSexkQ",
@@ -15,7 +37,7 @@
       "createTime": "2026-07-20T20:22:12.724390Z",
       "updateTime": "2026-07-20T20:22:12.724390Z",
       "reply": "Thank you so much for the review, Chris. I really appreciate you trusting Mayberry Pressure Washing with the work, and I am glad you were happy with the result.\n\nIf you know someone in need of pressure washing, please check out our brand new website and have them fill out a request for a free estimate: https://www.mayberrypw.com/contact.",
-      "replyUpdateTime": "2026-07-21T11:15:07.091Z"
+      "replyUpdateTime": "2026-07-21T11:15:06.979078Z"
     },
     {
       "id": "AbFvOqlFn2I9MR26wDaQwi_yXzW59uuuvJ_bcU15oompCvhWfc2opdYjbyAj0qZqQ7FVlpATrt7pYw",
@@ -316,7 +338,7 @@
     }
   ],
   "expectedManagerEmail": "s4aiagency@gmail.com",
-  "googleReviewCount": 28,
+  "googleReviewCount": 30,
   "websiteReviewCount": 0,
-  "totalReviewCount": 28
+  "totalReviewCount": 30
 }
