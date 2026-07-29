@@ -9,11 +9,11 @@ const dataPath = join(root, "data", "google-reviews.json");
 const envPath = join(root, ".env.local");
 const hermesEnvPath = process.env.HOME ? join(process.env.HOME, ".hermes", ".env") : "";
 const args = new Set(process.argv.slice(2));
-const updateSite = args.has("--update-site") || args.has("--local-data");
+const maybePost = args.has("--maybe-post");
+const updateSite = args.has("--update-site") || (args.has("--local-data") && !maybePost);
 const localDataOnly = args.has("--local-data");
 const replyUnanswered = args.has("--reply-unanswered");
 const discoverLocations = args.has("--discover-locations");
-const maybePost = args.has("--maybe-post");
 const syncAnalytics = args.has("--sync-analytics");
 const expectedManagerEmail = "s4aiagency@gmail.com";
 const googlePostStatePath = join(root, "data", "google-post-automation.json");
@@ -524,18 +524,53 @@ function trackedPostContactUrl() {
   return url.toString();
 }
 
+function sanitizeGooglePostSummary(value) {
+  return String(value || "")
+    .replace(/\b(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/g, "")
+    .replace(/https?:\/\/\S+/gi, "")
+    .replace(/\s+([,.;:!?])/g, "$1")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 function nextGooglePostSummary(state) {
-  const contactUrl = trackedPostContactUrl();
   const posts = [
-    `House siding, brick, and trim can collect grime fast in North Carolina weather. Mayberry Pressure Washing offers house washing and soft washing around Mount Airy and nearby areas. Request a free estimate here: ${contactUrl}`,
-    `Driveways, sidewalks, and concrete pads make a big first impression. If yours is stained or weathered, Mayberry Pressure Washing can help clean it up with a free exterior cleaning quote: ${contactUrl}`,
-    `Getting a property ready for guests, listing photos, or a seasonal refresh? Mayberry Pressure Washing handles house washing, driveway cleaning, gutters, windows, decks, fences, and commercial exterior cleaning. Start here: ${contactUrl}`,
-    `Rooflines, gutters, and exterior surfaces need the right cleaning method, not just high pressure. Mayberry Pressure Washing can recommend the right service for your home or business. Request a free estimate: ${contactUrl}`,
-    `Serving Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and surrounding areas. Tell Mayberry Pressure Washing what needs cleaned and get a free estimate online: ${contactUrl}`,
-    `Commercial storefronts, apartments, sidewalks, and building exteriors need to look cared for. Mayberry Pressure Washing helps local properties stay clean from the curb. Request a quote here: ${contactUrl}`
+    "House siding, brick, and trim can collect grime fast in North Carolina weather. Mayberry Pressure Washing offers house washing and soft washing around Mount Airy and nearby areas. Use the button below to request a free estimate.",
+    "Driveways, sidewalks, and concrete pads make a big first impression. If yours is stained or weathered, Mayberry Pressure Washing can help clean it up. Use the button below for a free exterior-cleaning quote.",
+    "Getting a property ready for guests, listing photos, or a seasonal refresh? Mayberry Pressure Washing handles house washing, driveway cleaning, gutters, windows, decks, fences, and commercial exterior cleaning. Use the button below to get started.",
+    "Rooflines, gutters, and exterior surfaces need the right cleaning method, not just high pressure. Mayberry Pressure Washing can recommend the right service for your home or business. Use the button below to request a free estimate.",
+    "Serving Mount Airy, Winston-Salem, Pilot Mountain, Elkin, Dobson, Wilkesboro, and surrounding areas. Tell Mayberry Pressure Washing what needs cleaning and use the button below to request a free estimate.",
+    "Commercial storefronts, apartments, sidewalks, and building exteriors need to look cared for. Mayberry Pressure Washing helps local properties stay clean from the curb. Use the button below to request a quote."
   ];
   const index = Number(state.postIndex || 0) % posts.length;
   return posts[index];
+}
+
+async function fetchGoogleLocalPosts(token, locationName) {
+  return fetchJson(`https://mybusiness.googleapis.com/v4/${locationName}/localPosts?pageSize=100`, {
+    headers: googleAuthHeaders(token),
+    label: "Google Business Profile localPosts.list"
+  });
+}
+
+async function waitForGoogleLocalPostState(token, locationName, postName, { attempts = 10, intervalMs = 3000 } = {}) {
+  let post = null;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const posts = await fetchGoogleLocalPosts(token, locationName);
+    post = (posts.localPosts || []).find((item) => item.name === postName) || null;
+    if (post?.state === "LIVE" || post?.state === "REJECTED") return post;
+    if (attempt < attempts - 1) await new Promise((resolve) => setTimeout(resolve, intervalMs));
+  }
+  return post;
+}
+
+async function deleteGoogleLocalPost(token, postName) {
+  if (!postName) return;
+  await fetchJson(`https://mybusiness.googleapis.com/v4/${postName}`, {
+    method: "DELETE",
+    headers: googleAuthHeaders(token),
+    label: "Google Business Profile localPosts.delete"
+  });
 }
 
 async function createGoogleLocalPost(summary) {
@@ -548,20 +583,39 @@ async function createGoogleLocalPost(summary) {
 
   const contactUrl = trackedPostContactUrl();
   const url = `https://mybusiness.googleapis.com/v4/${locationName}/localPosts`;
-  return fetchJson(url, {
-    method: "POST",
-    headers: { ...googleAuthHeaders(token), "content-type": "application/json" },
-    body: JSON.stringify({
-      languageCode: "en-US",
-      summary,
-      topicType: "STANDARD",
-      callToAction: {
-        actionType: "LEARN_MORE",
-        url: contactUrl
-      }
-    }),
-    label: "Google Business Profile localPosts.create"
-  });
+  const publish = async (postSummary) => {
+    const created = await fetchJson(url, {
+      method: "POST",
+      headers: { ...googleAuthHeaders(token), "content-type": "application/json" },
+      body: JSON.stringify({
+        languageCode: "en-US",
+        summary: postSummary,
+        topicType: "STANDARD",
+        callToAction: {
+          actionType: "LEARN_MORE",
+          url: contactUrl
+        }
+      }),
+      label: "Google Business Profile localPosts.create"
+    });
+    const verified = await waitForGoogleLocalPostState(token, locationName, created.name);
+    return { created, verified, summary: postSummary };
+  };
+
+  const sanitizedSummary = sanitizeGooglePostSummary(summary);
+  const first = await publish(sanitizedSummary);
+  if (first.verified?.state === "LIVE") return { ...first, recovered: false };
+  if (first.verified?.state !== "REJECTED") {
+    throw new Error(`Google post remained ${first.verified?.state || "UNKNOWN"} and was not reported as published.`);
+  }
+
+  await deleteGoogleLocalPost(token, first.created.name);
+  console.warn("Google rejected the Mayberry post; retrying once with conservative policy-safe copy.");
+  const fallbackSummary = "Mayberry Pressure Washing provides professional exterior cleaning for homes and businesses in Mount Airy and surrounding communities. Use the button below to learn more or request an estimate.";
+  const retry = await publish(fallbackSummary);
+  if (retry.verified?.state === "LIVE") return { ...retry, recovered: true };
+  if (retry.verified?.state === "REJECTED") await deleteGoogleLocalPost(token, retry.created.name);
+  throw new Error(`Google rejected the policy-safe Mayberry retry; the posting incident remains open and the cadence was not advanced.`);
 }
 
 async function maybeCreateGooglePost() {
@@ -577,8 +631,8 @@ async function maybeCreateGooglePost() {
     return { attempted: true, published: false };
   }
 
-  const result = await createGoogleLocalPost(summary);
-  if (!result) return { attempted: true, published: false };
+  const published = await createGoogleLocalPost(summary);
+  if (!published) return { attempted: true, published: false };
 
   const nextState = {
     lastPostedAt: new Date().toISOString(),
@@ -586,15 +640,16 @@ async function maybeCreateGooglePost() {
     posts: [
       {
         createdAt: new Date().toISOString(),
-        name: result.name || null,
-        summary
+        name: published.created.name || null,
+        summary: published.summary,
+        recoveredFromRejection: published.recovered
       },
       ...(state.posts || [])
     ].slice(0, 50)
   };
   writeJsonIfChanged(googlePostStatePath, nextState);
-  console.log(`Created Google post ${result.name || ""}`.trim());
-  return { attempted: true, published: true };
+  console.log(`Created and verified LIVE Google post ${published.created.name || ""}`.trim());
+  return { attempted: true, published: true, recoveredFromRejection: published.recovered };
 }
 
 const performanceMetrics = [
@@ -878,7 +933,7 @@ function postStatus(summary) {
   if (!summary) return "no report";
   if (summary.status === "failed") return "failed";
   const postResult = summary.postResult || {};
-  if (postResult.published) return "published";
+  if (postResult.published) return postResult.recoveredFromRejection ? "published after automatic policy-safe retry" : "published and verified live";
   if (postResult.attempted) return "checked, not published";
   return "not due";
 }
