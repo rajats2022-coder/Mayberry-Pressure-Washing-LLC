@@ -7,15 +7,16 @@ const phoneHref = "tel:+13363748664";
 const email = "c.bray@mayberrypw.com";
 const facebook = "https://www.facebook.com/profile.php?id=61576662606045";
 const instagram = "https://www.instagram.com/mayberrypressurewashingllc/";
-const lastModified = "2026-07-17";
+const baseLastModified = "2026-07-17";
+const generatedLastModified = "2026-07-29";
 
 const basePages = [
-  { loc: "/", priority: "1.0" },
-  { loc: "/services", priority: "0.9" },
-  { loc: "/service-areas", priority: "0.9" },
-  { loc: "/gallery", priority: "0.7" },
-  { loc: "/reviews", priority: "0.8" },
-  { loc: "/contact", priority: "0.9" }
+  { loc: "/", lastmod: baseLastModified },
+  { loc: "/services", lastmod: baseLastModified },
+  { loc: "/service-areas", lastmod: baseLastModified },
+  { loc: "/gallery", lastmod: baseLastModified },
+  { loc: "/reviews", lastmod: baseLastModified },
+  { loc: "/contact", lastmod: baseLastModified }
 ];
 
 const services = [
@@ -124,20 +125,6 @@ const cities = [
   { slug: "elkin-nc", name: "Elkin", state: "NC", angle: "nearby", intro: "in and around Elkin" },
   { slug: "dobson-nc", name: "Dobson", state: "NC", angle: "nearby", intro: "around Dobson and nearby Surry County communities" },
   { slug: "wilkesboro-nc", name: "Wilkesboro", state: "NC", angle: "nearby", intro: "west of Mount Airy around Wilkesboro" }
-];
-
-const cityServiceSlugs = [
-  ["mount-airy-nc", "pressure-washing"],
-  ["mount-airy-nc", "house-washing"],
-  ["mount-airy-nc", "driveway-cleaning"],
-  ["winston-salem-nc", "pressure-washing"],
-  ["winston-salem-nc", "house-washing"],
-  ["winston-salem-nc", "commercial-pressure-washing"],
-  ["pilot-mountain-nc", "pressure-washing"],
-  ["pilot-mountain-nc", "driveway-cleaning"],
-  ["elkin-nc", "soft-washing"],
-  ["dobson-nc", "roof-washing"],
-  ["wilkesboro-nc", "commercial-pressure-washing"]
 ];
 
 const cityDetails = {
@@ -435,15 +422,10 @@ function cityLinks(depth, currentSlug = "") {
     .join("");
 }
 
-function cityServiceLinks(depth, filter = {}) {
-  return cityServiceSlugs
-    .filter(([citySlug, serviceSlug]) => (!filter.citySlug || citySlug === filter.citySlug) && (!filter.serviceSlug || serviceSlug === filter.serviceSlug))
-    .slice(0, 8)
-    .map(([citySlug, serviceSlug]) => {
-      const city = cityBySlug.get(citySlug);
-      const service = serviceBySlug.get(serviceSlug);
-      return `<a href="${rel(depth, `service-areas/${city.slug}/${service.slug}.html`)}">${service.name} in ${city.name}</a>`;
-    })
+function resourceLinks(depth, currentSlug = "") {
+  return resourcePages
+    .filter((resource) => resource.slug !== currentSlug)
+    .map((resource) => `<a href="${rel(depth, `resources/${resource.slug}.html`)}">${resource.h1}</a>`)
     .join("");
 }
 
@@ -533,8 +515,8 @@ function renderServicePage(service) {
 
     <section class="section">
       <div class="wrap">
-        <div class="section-head"><h2>Local ${esc(service.name.toLowerCase())} pages.</h2><p>Use these pages when the property is in a specific town and the customer needs details for that service.</p></div>
-        <div class="link-grid">${cityServiceLinks(depth, { serviceSlug: service.slug }) || cityLinks(depth)}</div>
+        <div class="section-head"><h2>Areas served for ${esc(service.name.toLowerCase())}.</h2><p>Choose the property location for local coverage details, then request a quote for this service.</p></div>
+        <div class="link-grid">${cityLinks(depth)}</div>
       </div>
     </section>
 
@@ -609,8 +591,8 @@ function renderCityPage(city) {
 
     <section class="section alt">
       <div class="wrap">
-        <div class="section-head"><h2>${esc(city.name)} exterior cleaning services.</h2><p>Use the local service links below when a customer is searching for a specific service in ${esc(city.name)}.</p></div>
-        <div class="link-grid">${cityServiceLinks(depth, { citySlug: city.slug }) || serviceLinks(depth)}</div>
+        <div class="section-head"><h2>${esc(city.name)} exterior cleaning services.</h2><p>Compare Mayberry's full service pages, then request a quote for a property in ${esc(city.name)}.</p></div>
+        <div class="link-grid">${serviceLinks(depth)}</div>
       </div>
     </section>
 
@@ -770,7 +752,7 @@ function renderSeoPlan() {
     <section class="section alt">
       <div class="wrap">
         <div class="section-head"><h2>First city-service rollout batch.</h2><p>These are the focused landing pages added first. More can be added later after the site has real project examples and search data.</p></div>
-        <div class="link-grid">${cityServiceLinks(depth)}</div>
+        <div class="link-grid">${serviceLinks(depth)}${cityLinks(depth)}</div>
       </div>
     </section>
 
@@ -855,6 +837,13 @@ function renderResourcePage(resource) {
     </section>
 
     <section class="section">
+      <div class="wrap">
+        <div class="section-head"><h2>More homeowner resources.</h2><p>Continue with Mayberry's related cost, timing, method, and hiring guides.</p></div>
+        <div class="link-grid">${resourceLinks(depth, resource.slug)}</div>
+      </div>
+    </section>
+
+    <section class="section">
       <div class="wrap faq-grid">
         <div class="section-head"><p class="eyebrow light"><i data-lucide="circle-help"></i> Quick answers</p><h2>Estimate questions.</h2></div>
         <div class="faq-list">${faq.map(([q, a], index) => `<details${index === 0 ? " open" : ""}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}</div>
@@ -888,12 +877,6 @@ for (const city of cities) {
   writePage(`service-areas/${city.slug}.html`, renderCityPage(city));
 }
 
-for (const [citySlug, serviceSlug] of cityServiceSlugs) {
-  const city = cityBySlug.get(citySlug);
-  const service = serviceBySlug.get(serviceSlug);
-  writePage(`service-areas/${city.slug}/${service.slug}.html`, renderCityServicePage(city, service));
-}
-
 writePage("seo-plan.html", renderSeoPlan());
 
 for (const resource of resourcePages) {
@@ -901,15 +884,14 @@ for (const resource of resourcePages) {
 }
 
 const generatedPages = [
-  ...services.map((service) => ({ loc: `/services/${service.slug}`, priority: "0.8" })),
-  ...cities.map((city) => ({ loc: `/service-areas/${city.slug}`, priority: "0.8" })),
-  ...cityServiceSlugs.map(([citySlug, serviceSlug]) => ({ loc: `/service-areas/${citySlug}/${serviceSlug}`, priority: "0.7" })),
-  ...resourcePages.map((resource) => ({ loc: `/resources/${resource.slug}`, priority: "0.7" }))
+  ...services.map((service) => ({ loc: `/services/${service.slug}`, lastmod: generatedLastModified })),
+  ...cities.map((city) => ({ loc: `/service-areas/${city.slug}`, lastmod: generatedLastModified })),
+  ...resourcePages.map((resource) => ({ loc: `/resources/${resource.slug}`, lastmod: generatedLastModified }))
 ];
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...basePages, ...generatedPages].map(({ loc, priority }) => `  <url><loc>${siteUrl}${loc}</loc><lastmod>${lastModified}</lastmod><priority>${priority}</priority></url>`).join("\n")}
+${[...basePages, ...generatedPages].map(({ loc, lastmod }) => `  <url><loc>${siteUrl}${loc}</loc><lastmod>${lastmod}</lastmod></url>`).join("\n")}
 </urlset>
 `;
 

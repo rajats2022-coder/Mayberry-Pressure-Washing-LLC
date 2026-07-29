@@ -32,7 +32,7 @@ The live Google profile has a partly different service-area list. Confirm actual
 
 - `index.html`, `services.html`, `service-areas.html`, `gallery.html`, `reviews.html`, and `contact.html` are the main public pages.
 - `services/*.html` contains the eight verified service pages.
-- `service-areas/*.html` and `service-areas/*/*.html` contain selective, useful location and city-service pages.
+- `service-areas/*.html` contains the six selective location pages. Older city-service combinations permanently redirect to these stronger location pages and are excluded from the sitemap.
 - `resources/*.html` contains informational articles.
 - `privacy.html` explains the form, optional analytics, consent, and privacy controls; it is intentionally not indexed.
 - `seo-plan.html` is an internal, noindex rollout map.

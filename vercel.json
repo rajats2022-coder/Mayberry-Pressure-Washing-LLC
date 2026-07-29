@@ -3,6 +3,61 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/service-areas/mount-airy-nc/pressure-washing",
+      "destination": "/service-areas/mount-airy-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/mount-airy-nc/house-washing",
+      "destination": "/service-areas/mount-airy-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/mount-airy-nc/driveway-cleaning",
+      "destination": "/service-areas/mount-airy-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/winston-salem-nc/pressure-washing",
+      "destination": "/service-areas/winston-salem-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/winston-salem-nc/house-washing",
+      "destination": "/service-areas/winston-salem-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/winston-salem-nc/commercial-pressure-washing",
+      "destination": "/service-areas/winston-salem-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/pilot-mountain-nc/pressure-washing",
+      "destination": "/service-areas/pilot-mountain-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/pilot-mountain-nc/driveway-cleaning",
+      "destination": "/service-areas/pilot-mountain-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/elkin-nc/soft-washing",
+      "destination": "/service-areas/elkin-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/dobson-nc/roof-washing",
+      "destination": "/service-areas/dobson-nc",
+      "permanent": true
+    },
+    {
+      "source": "/service-areas/wilkesboro-nc/commercial-pressure-washing",
+      "destination": "/service-areas/wilkesboro-nc",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         { "type": "host", "value": "mayberrypw.com" }
