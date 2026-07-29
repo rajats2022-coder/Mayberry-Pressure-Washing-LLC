@@ -395,11 +395,10 @@ function positiveReviewDetail(review) {
 }
 
 function fallbackReply(review) {
-  const contactUrl = process.env.MAYBERRY_CONTACT_URL || "https://www.mayberrypw.com/contact";
   const author = firstName(review.author);
   if (review.rating >= 4) {
     const greeting = author ? `, ${author}` : "";
-    return `Thank you so much for the review${greeting}. I really appreciate you trusting Mayberry Pressure Washing with ${positiveReviewDetail(review)}, and I am glad you were happy with the result.\n\nIf you know someone in need of pressure washing, please check out our brand new website and have them fill out a request for a free estimate: ${contactUrl}.`;
+    return `Thank you so much for the review${greeting}. I really appreciate you trusting Mayberry Pressure Washing with ${positiveReviewDetail(review)}, and I am glad you were happy with the result. Thank you again for supporting our local business.`;
   }
   const greeting = author ? `, ${author}` : "";
   return `Thank you for the feedback${greeting}. I appreciate you taking the time to share your experience, and I would welcome a direct conversation so we can better understand what happened and make it right.`;
