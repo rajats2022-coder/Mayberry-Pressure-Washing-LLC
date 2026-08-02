@@ -2,10 +2,32 @@
   "businessName": "Mayberry Pressure Washing LLC",
   "placeId": "ChIJH1R4E00DQg4R_BKHMqJrDzc",
   "rating": 5,
-  "reviewCount": 30,
+  "reviewCount": 32,
   "source": "google-business-profile",
-  "lastFetchedAt": "2026-07-29T11:58:36.215Z",
+  "lastFetchedAt": "2026-08-01T21:57:39.609Z",
   "reviews": [
+    {
+      "id": "AbFvOqlKw3L-45Sw2CNV1sftXsozugCiUFYu8CtRDeny8aSKllM49flk1xI6U5Lc8qnx4FaCQ9wUTg",
+      "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqlKw3L-45Sw2CNV1sftXsozugCiUFYu8CtRDeny8aSKllM49flk1xI6U5Lc8qnx4FaCQ9wUTg",
+      "author": "Jeff Beyer",
+      "rating": 5,
+      "text": "Clicked on a Facebook ad and Carter called me within 2 minutes - almost unheard of in this day and age. He and his crew did excellent work at a very fair price and was timely with excellent communication throughout. I would highly recommend him and will definitely be using his company again in the future!",
+      "createTime": "2026-08-01T00:37:17.396947Z",
+      "updateTime": "2026-08-01T00:37:17.396947Z",
+      "reply": "Thank you so much for the review, Jeff. I really appreciate you trusting Mayberry Pressure Washing with the communication and scheduling and the fair pricing and finished work, and I am glad you were happy with the result. Thank you again for supporting our local business.",
+      "replyUpdateTime": "2026-08-01T21:57:40.467Z"
+    },
+    {
+      "id": "AbFvOqmu1YyryUEraP941hXXyUPQn-Hb2xbUrJqny2BedpDZmH68WKydWu9RheN_Z4ZiJusf912Vvw",
+      "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqmu1YyryUEraP941hXXyUPQn-Hb2xbUrJqny2BedpDZmH68WKydWu9RheN_Z4ZiJusf912Vvw",
+      "author": "Richard Vaughn",
+      "rating": 5,
+      "text": "I had an excellent experience with Carter and his pressure washing service. He was professional, arrived on time, and did an outstanding job cleaning the fence around my house. He paid close attention to every detail. He was friendly, efficient, and took the time to make sure everything was done right. I highly recommend his company for reliable, high-quality pressure washing services.",
+      "createTime": "2026-07-29T22:53:21.996366Z",
+      "updateTime": "2026-07-29T23:01:34.376766Z",
+      "reply": "Thank you so much for the review, Richard. I really appreciate you trusting Mayberry Pressure Washing with your home and the reliable, professional service, and I am glad you were happy with the result. Thank you again for supporting our local business.",
+      "replyUpdateTime": "2026-07-30T12:36:02.242885Z"
+    },
     {
       "id": "AbFvOqlbNvGx-1dApfZ9-0ZdW8LUSurXXvRztA4PmnR1J6OiU9ZztzW5C02Weclc5A-UDsfi-2V7TA",
       "name": "accounts/112847676151231508867/locations/66607773508852365/reviews/AbFvOqlbNvGx-1dApfZ9-0ZdW8LUSurXXvRztA4PmnR1J6OiU9ZztzW5C02Weclc5A-UDsfi-2V7TA",
@@ -338,7 +360,7 @@
     }
   ],
   "expectedManagerEmail": "s4aiagency@gmail.com",
-  "googleReviewCount": 30,
+  "googleReviewCount": 32,
   "websiteReviewCount": 0,
-  "totalReviewCount": 30
+  "totalReviewCount": 32
 }
