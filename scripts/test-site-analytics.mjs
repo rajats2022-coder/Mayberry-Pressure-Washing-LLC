@@ -11,7 +11,7 @@ function run(choice) {
   const document = {
     title: "Analytics test",
     head: { append: (node) => scripts.push(node) },
-    body: { append: () => {} },
+    body: { append: () => {}, classList: { add() {}, remove() {} } },
     createElement: (tag) => ({ tag, querySelectorAll: () => [], setAttribute() {}, remove() {} }),
     querySelector: () => null,
     querySelectorAll: () => [],
@@ -32,6 +32,7 @@ function run(choice) {
 
 const denied = run(null);
 if (denied.scripts.length !== 0 || denied.tracked !== false) throw new Error("Analytics loaded or tracked before consent.");
+if (/phone_click",\s*\{\s*link_text/.test(source)) throw new Error("Phone click tracking must not send visible CTA text or phone numbers.");
 const granted = run("granted");
 if (granted.scripts.length !== 1 || !String(granted.scripts[0].src).includes("googletagmanager.com/gtag/js")) throw new Error("Analytics did not load after stored consent.");
 if (granted.tracked !== true || !granted.dataLayer.length) throw new Error("Conversion tracking did not fire after consent.");

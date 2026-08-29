@@ -7,8 +7,10 @@ const phoneHref = "tel:+13363748664";
 const email = "c.bray@mayberrypw.com";
 const facebook = "https://www.facebook.com/profile.php?id=61576662606045";
 const instagram = "https://www.instagram.com/mayberrypressurewashingllc/";
-const baseLastModified = "2026-07-17";
-const generatedLastModified = "2026-07-29";
+const publicGoogleRating = "5.0";
+const publicGoogleReviewCount = "34";
+const baseLastModified = "2026-08-29";
+const generatedLastModified = "2026-08-29";
 
 const basePages = [
   { loc: "/", lastmod: baseLastModified },
@@ -129,28 +131,28 @@ const cities = [
 
 const cityDetails = {
   "mount-airy-nc": {
-    proof: "Good fit for older homes, brick walkways, concrete driveways, storefront entries, and properties around Mount Airy that deal with pollen, red clay, shaded siding, and high-visibility curb appeal.",
-    local: ["Downtown Mount Airy storefronts", "older siding and porches", "concrete driveways", "Surry County homes"]
+    context: "Quotes can cover siding, porches, concrete driveways, walkways, storefront entries, and other exterior surfaces when the property location and job scope are confirmed.",
+    local: ["Siding and porches", "concrete driveways", "walkways and entries", "residential or commercial exteriors"]
   },
   "winston-salem-nc": {
-    proof: "Useful for larger residential lots, rentals, storefronts, office entries, apartment walkways, and Triad properties where scheduling and access matter as much as the cleaning itself.",
-    local: ["Triad homes and businesses", "storefront entrances", "rental properties", "walkways and common areas"]
+    context: "Quotes can cover homes, rentals, storefronts, office entries, walkways, and other exterior surfaces when the property location, access, and job scope are confirmed.",
+    local: ["Homes and businesses", "storefront entrances", "rental-property exteriors", "walkways and common areas"]
   },
   "pilot-mountain-nc": {
-    proof: "Common requests include driveway cleaning, siding washdowns, patios, and exterior surfaces that collect tree cover, shade staining, pollen, and road grime near Pilot Mountain.",
-    local: ["Pilot Mountain homes", "shaded siding", "driveways and patios", "nearby Surry County routes"]
+    context: "Quotes can cover siding, driveways, patios, rooflines, and other exterior surfaces when the property location and job scope are confirmed.",
+    local: ["Siding and trim", "driveways and patios", "rooflines and gutters", "residential or commercial exteriors"]
   },
   "elkin-nc": {
-    proof: "A strong fit for house washing, soft washing, decks, fences, and concrete cleanup around homes and small businesses in the Elkin service area.",
-    local: ["Elkin homes", "decks and fences", "siding and trim", "small business exteriors"]
+    context: "Quotes can cover house washing, soft washing, decks, fences, concrete, and small-business exteriors when the property location and job scope are confirmed.",
+    local: ["House-washing surfaces", "decks and fences", "concrete and walkways", "small-business exteriors"]
   },
   "dobson-nc": {
-    proof: "Dobson jobs often need practical exterior cleaning for siding, rooflines, gutters, driveways, and rural or semi-rural properties with organic buildup.",
-    local: ["Dobson homes", "rooflines and gutters", "driveways", "nearby Surry County properties"]
+    context: "Quotes can cover siding, rooflines, gutters, driveways, and other exterior surfaces when the property location and job scope are confirmed.",
+    local: ["Siding and trim", "rooflines and gutters", "driveways and walkways", "residential or commercial exteriors"]
   },
   "wilkesboro-nc": {
-    proof: "Wilkesboro pages support commercial exterior cleaning, storefront washing, sidewalks, entries, and larger exterior surfaces west of Mount Airy.",
-    local: ["Wilkesboro businesses", "storefronts", "sidewalks and entries", "commercial exterior surfaces"]
+    context: "Quotes can cover commercial exteriors, storefronts, sidewalks, entries, and residential exterior surfaces when the property location and job scope are confirmed.",
+    local: ["Commercial exteriors", "storefronts", "sidewalks and entries", "residential exterior surfaces"]
   }
 };
 
@@ -158,13 +160,13 @@ const serviceDetails = {
   "pressure-washing": {
     signs: ["Concrete looks dark or streaky", "Sidewalks or patios are slick", "Mud and tire tracks keep returning", "A storefront entrance looks worn before customers walk in"],
     process: ["Check the surface and drainage", "Choose pressure and cleaning method", "Clean the high-traffic areas evenly", "Rinse edges and review the result"],
-    timing: "Most smaller pressure washing jobs can often be scoped as a half-day or less, while larger commercial or multi-surface jobs need a custom schedule.",
+    timing: "Timing depends on the surface area, buildup, access, water availability, and whether several services are combined. Mayberry confirms timing with the quote.",
     pricing: "Pricing should be quoted after photos or a walkthrough because square footage, buildup, access, and water availability change the job."
   },
   "house-washing": {
     signs: ["Green or black growth on siding", "Pollen film around porches and trim", "Soffits and fascia look dingy", "The home looks older from the street than it should"],
     process: ["Review siding material and staining", "Protect sensitive areas", "Apply the right wash method", "Rinse siding, trim, and entry areas"],
-    timing: "Many house washing jobs can be handled in one visit, with timing based on home size, access, and the amount of buildup.",
+    timing: "Timing depends on the home size, number of stories, access, surface condition, and any add-on services. Mayberry confirms timing with the quote.",
     pricing: "A real quote should account for home size, number of stories, siding condition, porches, trim, and any add-ons like windows or gutters."
   },
   "soft-washing": {
@@ -176,7 +178,7 @@ const serviceDetails = {
   "driveway-cleaning": {
     signs: ["Tire marks are visible from the street", "Concrete has dark organic growth", "Walkways look uneven or stained", "A driveway hurts curb appeal even after the yard is clean"],
     process: ["Clear the surface", "Pre-treat heavy buildup where needed", "Surface clean the concrete", "Rinse edges, garage apron, and runoff paths"],
-    timing: "Many driveway cleaning jobs are efficient single-visit jobs, but long drives, heavy buildup, or add-on patios and sidewalks can extend timing.",
+    timing: "Timing depends on driveway size, buildup, slope, access, water availability, and any patios or sidewalks included in the scope.",
     pricing: "Driveway cleaning should be priced by size, concrete condition, buildup, slope, water access, and any extra sidewalks or patios."
   },
   "roof-washing": {
@@ -295,13 +297,13 @@ function header({ depth, active = "" }) {
     <nav class="nav" aria-label="Primary navigation">
       <a class="brand" href="${rel(depth, "index.html")}" aria-label="Mayberry Pressure Washing home"><span class="brand-mark"><img src="${rel(depth, "assets/images/business-logo.jpg")}" alt="" /></span><span>Mayberry Pressure Washing <small>Residential &amp; Commercial Exterior Cleaning</small></span></a>
       <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false"><i data-lucide="menu"></i></button>
-      <div class="nav-links">${link("services.html", "Services", "services")}${link("service-areas.html", "Service Areas", "areas")}${link("gallery.html", "Gallery", "gallery")}${link("reviews.html", "Reviews", "reviews")}${link("contact.html", "Contact", "contact")}<a href="${facebook}" target="_blank" rel="noopener">Facebook</a><a class="btn btn-phone" href="${phoneHref}"><i data-lucide="phone"></i> Call/Text</a><a class="btn btn-primary" href="${rel(depth, "contact.html")}"><i data-lucide="clipboard-check"></i> Free Estimate</a></div>
+      <div class="nav-links">${link("services.html", "Services", "services")}${link("service-areas.html", "Service Areas", "areas")}${link("gallery.html", "Gallery", "gallery")}${link("reviews.html", "Reviews", "reviews")}${link("contact.html", "Contact", "contact")}<a href="${facebook}" target="_blank" rel="noopener">Facebook</a><a class="btn btn-phone" href="${phoneHref}"><i data-lucide="phone"></i> Call</a><a class="btn btn-primary" href="${rel(depth, "contact.html")}"><i data-lucide="clipboard-check"></i> Free Estimate</a></div>
     </nav>
   </header>`;
 }
 
 function footer(depth) {
-  return `<footer><div class="footer-grid"><div><strong>Mayberry Pressure Washing LLC</strong><p>Local pressure washing, soft washing, house washing, roof washing, driveway cleaning, gutters, windows, decks, fences, and commercial exterior cleaning.</p></div><div><strong>Top Services</strong><p><a href="${rel(depth, "services/pressure-washing.html")}">Pressure washing</a><br><a href="${rel(depth, "services/house-washing.html")}">House washing</a><br><a href="${rel(depth, "services/driveway-cleaning.html")}">Driveway cleaning</a><br><a href="${rel(depth, "services/commercial-pressure-washing.html")}">Commercial pressure washing</a><br><a href="${rel(depth, "privacy.html")}">Privacy &amp; analytics choices</a></p></div><div><strong>Contact</strong><p><a href="${phoneHref}">${phone}</a><br><a href="mailto:${email}">${email}</a><br><a href="${rel(depth, "reviews.html")}">27 verified Google reviews</a><br><a href="${facebook}" target="_blank" rel="noopener">Facebook Mayberry Pressure Washing LLC</a><br><a href="${instagram}">@mayberrypressurewashingllc</a></p></div></div></footer>`;
+  return `<footer><div class="footer-grid"><div><strong>Mayberry Pressure Washing LLC</strong><p>Local pressure washing, soft washing, house washing, roof washing, driveway cleaning, gutters, windows, decks, fences, and commercial exterior cleaning.</p></div><div><strong>Top Services</strong><p><a href="${rel(depth, "services/pressure-washing.html")}">Pressure washing</a><br><a href="${rel(depth, "services/house-washing.html")}">House washing</a><br><a href="${rel(depth, "services/driveway-cleaning.html")}">Driveway cleaning</a><br><a href="${rel(depth, "services/commercial-pressure-washing.html")}">Commercial pressure washing</a><br><a href="${rel(depth, "privacy.html")}">Privacy &amp; analytics choices</a></p></div><div><strong>Contact</strong><p><a href="${phoneHref}">${phone}</a><br><a href="mailto:${email}">${email}</a><br><a href="${rel(depth, "reviews.html")}">${publicGoogleReviewCount} Google reviews</a><br><a href="${facebook}" target="_blank" rel="noopener">Facebook Mayberry Pressure Washing LLC</a><br><a href="${instagram}">@mayberrypressurewashingllc</a></p></div></div></footer>`;
 }
 
 function shell({ depth = 0, title, description, canonical, ogImage = "assets/images/pressure-washing-hero.png", active, body, schema, robots = "index, follow, max-image-preview:large" }) {
@@ -357,15 +359,13 @@ function businessSchema() {
     email,
     image: `${siteUrl}/assets/images/business-logo.jpg`,
     logo: `${siteUrl}/assets/images/business-logo.jpg`,
-    address: { "@type": "PostalAddress", addressLocality: "Mount Airy", addressRegion: "NC", addressCountry: "US" },
     areaServed: cities.map((city) => `${city.name} ${city.state}`),
     sameAs: [
       "https://www.google.com/maps/search/?api=1&query=Mayberry%20Pressure%20Washing%20LLC&query_place_id=ChIJH1R4E00DQg4R_BKHMqJrDzc",
       facebook,
       instagram
     ],
-    aggregateRating: { "@type": "AggregateRating", ratingValue: "5.0", reviewCount: "27", bestRating: "5", worstRating: "1" },
-    priceRange: "$$"
+    aggregateRating: { "@type": "AggregateRating", ratingValue: publicGoogleRating, reviewCount: publicGoogleReviewCount, bestRating: "5", worstRating: "1" }
   };
 }
 
@@ -439,7 +439,7 @@ function pageHero({ eyebrow, h1, text, depth, cta = "Request Free Estimate", sec
           <div class="hero-actions">
             <a class="btn btn-primary" href="${rel(depth, "contact.html")}"><i data-lucide="send"></i> ${esc(cta)}</a>
             <a class="btn btn-secondary" href="${rel(depth, secondaryHref)}"><i data-lucide="list-checks"></i> ${esc(secondaryLabel)}</a>
-            <a class="btn btn-secondary" href="${phoneHref}"><i data-lucide="phone"></i> Call/Text ${phone}</a>
+            <a class="btn btn-secondary" href="${phoneHref}"><i data-lucide="phone"></i> Call ${phone}</a>
           </div>
         </div>
         <aside class="hero-stat-panel" aria-label="Estimate guidance">
@@ -571,7 +571,7 @@ function renderCityPage(city) {
   const faq = [
     [`Does Mayberry Pressure Washing serve ${city.name}, ${city.state}?`, `Yes. Mayberry Pressure Washing LLC quotes exterior cleaning projects in ${city.name}, ${city.state} and nearby communities when route and job scope line up.`],
     [`What services are available in ${city.name}?`, "Common requests include pressure washing, house washing, soft washing, driveway cleaning, roof washing, gutter cleaning, window cleaning, deck cleaning, fence cleaning, and commercial exterior cleaning."],
-    ["How do I get a local estimate?", "Send the property city, photos, and surfaces that need cleaned through the estimate page or by phone/text."]
+    ["How do I get a local estimate?", "Send the property city, photos, and surfaces that need cleaned through the estimate page, or call Mayberry directly."]
   ];
   const body = `${pageHero({
     eyebrow: `${city.name}, ${city.state} service area`,
@@ -585,7 +585,7 @@ function renderCityPage(city) {
     <section class="section tight-section">
       <div class="wrap seo-intro">
         <div><p class="eyebrow light"><i data-lucide="navigation"></i> Local service area</p><h2>Exterior cleaning ${esc(city.intro)}.</h2></div>
-        <p>This page connects ${esc(city.name)} searches with Mayberry's core exterior cleaning services. ${esc(details.proof)} The title, H1, meta description, and internal links are all aligned around pressure washing in ${esc(city.name)}, ${esc(city.state)}.</p>
+        <p>Mayberry can review exterior-cleaning requests in ${esc(city.name)} when the route, property access, and job scope line up. ${esc(details.context)} Send the property location and photos so coverage can be confirmed before scheduling.</p>
       </div>
     </section>
 
@@ -602,13 +602,13 @@ function renderCityPage(city) {
           <div class="section-head"><p class="eyebrow light"><i data-lucide="map-pin"></i> Local service fit</p><h2>Exterior cleaning needs Mayberry can quote in ${esc(city.name)}.</h2><p>These are the common property types and service requests homeowners and businesses usually need help with in this area.</p></div>
           <div class="keyword-cloud"><span>House washing</span><span>Driveway cleaning</span><span>Soft washing</span><span>Roofline and gutter care</span><span>Commercial exterior cleaning</span></div>
         </div>
-        <div class="local-service-panel"><strong>Local proof points</strong><ul class="mini-list">${details.local.map((item) => `<li><i data-lucide="map-pin"></i><span>${esc(item)}</span></li>`).join("")}</ul></div>
+        <div class="local-service-panel"><strong>Service needs to mention</strong><ul class="mini-list">${details.local.map((item) => `<li><i data-lucide="map-pin"></i><span>${esc(item)}</span></li>`).join("")}</ul></div>
       </div>
     </section>
 
     <section class="section alt">
       <div class="wrap split">
-        <img class="seo-photo" src="${rel(depth, "assets/images/gallery/house-siding-before-after.jpg")}" alt="Exterior cleaning work near ${esc(city.name)}, ${esc(city.state)} by Mayberry Pressure Washing" loading="lazy" />
+        <img class="seo-photo" src="${rel(depth, "assets/images/gallery/house-siding-before-after.jpg")}" alt="Mayberry Pressure Washing exterior-cleaning before-and-after example" loading="lazy" />
         <div class="seo-panel">
           <p class="eyebrow light"><i data-lucide="route"></i> Nearby coverage</p>
           <h2>Nearby Mayberry service areas.</h2>
@@ -649,7 +649,7 @@ function renderCityServicePage(city, service) {
   const faq = [
     [`Do you offer ${service.name.toLowerCase()} in ${city.name}, ${city.state}?`, `Yes. Mayberry Pressure Washing LLC can quote ${service.name.toLowerCase()} in ${city.name}, ${city.state} when the route, property access, and job scope line up.`],
     [`What is included with ${service.name.toLowerCase()} in ${city.name}?`, `The scope depends on the property, but common surfaces include ${service.surfaces.slice(0, 4).join(", ")}.`],
-    ["What is the fastest way to request a quote?", "Send the city, service needed, photos of the surfaces, and any timing notes by phone/text or through the estimate page."]
+    ["What is the fastest way to request a quote?", "Send the city, service needed, photos of the surfaces, and any timing notes through the estimate page, or call Mayberry directly."]
   ];
   const body = `${pageHero({
     eyebrow: `${service.name} in ${city.name}`,
@@ -663,7 +663,7 @@ function renderCityServicePage(city, service) {
     <section class="section tight-section">
       <div class="wrap seo-intro">
         <div><p class="eyebrow light"><i data-lucide="${service.icon}"></i> Local service</p><h2>${esc(service.name)} details for ${esc(city.name)} properties.</h2></div>
-        <p>${esc(service.copy)} ${esc(local.proof)} If the property is in or near ${esc(city.name)}, send photos and timing notes so Mayberry can confirm the route, access, and right cleaning method.</p>
+        <p>${esc(service.copy)} ${esc(local.context)} If the property is in or near ${esc(city.name)}, send photos and timing notes so Mayberry can confirm the route, access, and right cleaning method.</p>
       </div>
     </section>
 
@@ -783,7 +783,6 @@ function renderSeoPlan() {
     active: "seo",
     body,
     schema: schemaFor({ canonical, name: "Mayberry Pressure Washing local SEO plan", description }),
-    robots: "noindex, nofollow",
     robots: "noindex, follow"
   });
 }
@@ -793,7 +792,7 @@ function renderResourcePage(resource) {
   const canonical = `/resources/${resource.slug}`;
   const faq = [
     [`Is this a fixed price list?`, "No. This is a practical guide. Mayberry still needs the property city, photos, service needed, and surface details to quote accurately."],
-    ["What is the fastest way to get an estimate?", "Call or text Mayberry Pressure Washing LLC with photos, the property city, and what needs cleaned."],
+    ["What is the fastest way to get an estimate?", "Use the estimate form with photos, the property city, and what needs cleaned, or call Mayberry directly."],
     ["Can several services be quoted together?", "Yes. House washing, driveway cleaning, gutters, windows, roof washing, decks, fences, and commercial exterior cleaning can be scoped together."]
   ];
   const body = `${pageHero({

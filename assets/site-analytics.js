@@ -49,6 +49,7 @@
     analyticsAllowed = choice === "granted" && !privacySignal;
     localStorage.setItem(storageKey, analyticsAllowed ? "granted" : "denied");
     document.querySelector("[data-analytics-consent]")?.remove();
+    document.body.classList.remove("analytics-consent-open");
     if (analyticsAllowed) loadAnalytics();
   };
 
@@ -62,6 +63,7 @@
     notice.querySelectorAll("[data-consent]").forEach((button) => {
       button.addEventListener("click", () => setConsent(button.dataset.consent));
     });
+    document.body.classList.add("analytics-consent-open");
     document.body.append(notice);
   };
 
@@ -81,11 +83,12 @@
       if (!link) return;
       const href = link.getAttribute("href") || "";
       const label = link.textContent.trim().slice(0, 80);
+      const ctaLocation = link.closest(".site-header") ? "header" : link.closest(".mobile-quick-cta") ? "mobile_quick_cta" : link.closest("footer") ? "footer" : "content";
       if (href.startsWith("tel:")) {
-        window.mayberryTrack("phone_click", { link_text: label });
+        window.mayberryTrack("phone_click", { cta_location: ctaLocation });
       } else if (/contact(?:\.html)?(?:[?#]|$)/.test(href)) {
         const quoteIntent = /quote|estimate|book|schedule/i.test(label);
-        window.mayberryTrack(quoteIntent ? "quote_request" : "contact_click", { link_text: label });
+        window.mayberryTrack(quoteIntent ? "quote_request" : "contact_click", { cta_location: ctaLocation });
       }
     });
   });

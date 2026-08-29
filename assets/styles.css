@@ -1839,7 +1839,11 @@ footer a, footer p { color: rgba(255,255,255,.72); }
   pointer-events: none;
 }
 body.chatbot-open .mobile-quick-cta,
+body.analytics-consent-open .mobile-quick-cta,
 .chatbot-widget.has-conversation .chatbot-suggestions {
+  display: none;
+}
+body.nav-open .analytics-consent {
   display: none;
 }
 .chatbot-launcher,
@@ -2109,6 +2113,10 @@ body.chatbot-open .mobile-quick-cta,
     background: rgba(6,24,50,.92);
     box-shadow: var(--shadow);
     backdrop-filter: blur(22px);
+    max-height: calc(100svh - 112px - env(safe-area-inset-top));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
   .nav-links.open { display: flex; }
   .nav-links .btn { width: 100%; }

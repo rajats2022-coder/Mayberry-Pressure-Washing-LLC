@@ -46,7 +46,7 @@ if (navLinks) {
     <a href="${navHref("gallery")}"${isActiveNav(["gallery"]) ? ' aria-current="page"' : ""}>Gallery</a>
     <a href="${navHref("reviews")}"${isActiveNav(["reviews"]) ? ' aria-current="page"' : ""}>Reviews</a>
     <a href="${navHref("contact")}"${isActiveNav(["contact"]) ? ' aria-current="page"' : ""}>Contact</a>
-    <a class="btn btn-phone" href="tel:+13363748664"><i data-lucide="phone"></i> Call/Text</a>
+    <a class="btn btn-phone" href="tel:+13363748664"><i data-lucide="phone"></i> Call</a>
     <a class="btn btn-primary" href="${navHref("contact")}"><i data-lucide="clipboard-check"></i> Free Estimate</a>
   `;
 
@@ -69,14 +69,15 @@ if (navToggle && navLinks) {
   navToggle.addEventListener("click", () => {
     const isOpen = navLinks.classList.toggle("open");
     navToggle.setAttribute("aria-expanded", String(isOpen));
+    document.body.classList.toggle("nav-open", isOpen);
   });
 }
 
 const mobileCta = document.createElement("div");
 mobileCta.className = "mobile-quick-cta";
 mobileCta.innerHTML = `
-  <a class="mobile-quick-cta-call" href="tel:+13363748664" aria-label="Call or text Mayberry Pressure Washing">
-    <i data-lucide="phone"></i><span>Call/Text</span>
+  <a class="mobile-quick-cta-call" href="tel:+13363748664" aria-label="Call Mayberry Pressure Washing">
+    <i data-lucide="phone"></i><span>Call</span>
   </a>
   <a class="mobile-quick-cta-estimate" href="${relativeRoot}contact" aria-label="Request a free estimate from Mayberry Pressure Washing">
     <i data-lucide="clipboard-check"></i><span>Free Estimate</span>
@@ -147,19 +148,19 @@ document.querySelectorAll("[data-estimate-form]").forEach((form) => {
         form.reset();
         sentSuccessfully = true;
         window.mayberryTrack?.("generate_lead", { form_name: "estimate_request" });
-        setStatus("success", "Sent. Thanks, your estimate request went through. Mayberry Pressure Washing will be in touch within one business day.");
+        setStatus("success", "Sent. Thanks, your estimate request went through. Mayberry Pressure Washing received the form submission.");
         if (button) button.innerHTML = '<i data-lucide="check-circle"></i> Request Sent';
       } else {
         const result = await response.json().catch(() => null);
         if (result && Array.isArray(result.errors) && result.errors.length) {
           setStatus("error", result.errors.map((error) => error.message).join(", "));
         } else {
-          setStatus("error", "Something went wrong sending your request. Please call, text, or message us on Facebook.");
+          setStatus("error", "Something went wrong sending your request. Please call, email, or message us on Facebook.");
         }
         if (button && defaultButtonHtml) button.innerHTML = defaultButtonHtml;
       }
     } catch (error) {
-      setStatus("error", "Something went wrong sending your request. Please call, text, or message us on Facebook.");
+      setStatus("error", "Something went wrong sending your request. Please call, email, or message us on Facebook.");
       if (button && defaultButtonHtml) button.innerHTML = defaultButtonHtml;
     } finally {
       if (button) button.disabled = sentSuccessfully;
@@ -352,10 +353,10 @@ const chatbotAnswers = [
     name: "estimate",
     match: (text) => includesAny(text, ["estimate", "quote", "price", "cost", "how much", "book", "schedule", "appointment"]),
     reply: () => ({
-      text: `For the fastest estimate, send the property city, what needs cleaned, and a few photos. You can call or text ${chatbotConfig.phone}, use the contact page, email us, or message on Facebook.`,
+      text: `For an estimate, send the property city, what needs cleaned, and a few photos through the contact page, or call ${chatbotConfig.phone}. You can also email or message on Facebook.`,
       actions: [
         ["Start estimate", chatbotConfig.pages.contact],
-        ["Call/Text", chatbotConfig.phoneHref],
+        ["Call", chatbotConfig.phoneHref],
         ["Email", chatbotConfig.emailHref],
         ["Facebook", chatbotConfig.facebook]
       ]
@@ -467,9 +468,9 @@ const chatbotAnswers = [
     name: "contact",
     match: (text) => includesAny(text, ["contact", "call", "text", "phone", "number", "email", "facebook", "instagram", "message"]),
     reply: () => ({
-      text: `You can call or text ${chatbotConfig.phone}, email ${chatbotConfig.email}, message us on Facebook, or use the contact page. Texting photos is usually the fastest way to get the quote moving.`,
+      text: `You can call ${chatbotConfig.phone}, email ${chatbotConfig.email}, message on Facebook, or use the contact page with the property details and photos.`,
       actions: [
-        ["Call/Text", chatbotConfig.phoneHref],
+        ["Call", chatbotConfig.phoneHref],
         ["Email", chatbotConfig.emailHref],
         ["Contact page", chatbotConfig.pages.contact],
         ["Facebook", chatbotConfig.facebook],
@@ -492,9 +493,9 @@ const chatbotAnswers = [
     name: "hours",
     match: (text) => includesAny(text, ["hours", "open", "available", "when are you open"]),
     reply: () => ({
-      text: "Call or text with the city, service needed, and photos of the surfaces. Mayberry can confirm the current schedule and availability for your property.",
+      text: "Call with the city and service needed, or use the estimate form to include photos of the surfaces. Mayberry can confirm the current schedule and availability for your property.",
       actions: [
-        ["Call/Text", chatbotConfig.phoneHref],
+        ["Call", chatbotConfig.phoneHref],
         ["Contact page", chatbotConfig.pages.contact]
       ]
     })

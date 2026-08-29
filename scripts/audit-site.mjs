@@ -7,6 +7,7 @@ const root = fileURLToPath(new URL("..", import.meta.url)).replace(/\/$/, "");
 const envPath = join(root, ".env.local");
 const hermesEnvPath = process.env.HOME ? join(process.env.HOME, ".hermes", ".env") : "";
 const production = process.argv.includes("--production");
+const record = !process.argv.includes("--no-record");
 const currentPath = join(root, "data", "site-health.json");
 const historyPath = join(root, "data", "site-health-history.jsonl");
 const origin = "https://www.mayberrypw.com";
@@ -59,6 +60,8 @@ function auditLocal(urls) {
     if (h1Count !== 1) findings.push({ type: "h1-count", url, count: h1Count });
     if (!html.includes("assets/site-analytics.js") && !html.includes("../assets/site-analytics.js")) findings.push({ type: "analytics-missing", url });
     if (!html.includes('rel="icon"') || !html.includes('rel="apple-touch-icon"')) findings.push({ type: "icon-missing", url });
+    for (const count of html.matchAll(/"reviewCount"\s*:\s*"(\d+)"/g)) if (count[1] !== "34") findings.push({ type: "review-count-mismatch", url, value: count[1], expected: "34" });
+    if (/"priceRange"\s*:|"streetAddress"\s*:|"addressLocality"\s*:/.test(html)) findings.push({ type: "unsupported-localbusiness-field", url });
     for (const schema of schemas) { try { JSON.parse(schema[1]); } catch (error) { findings.push({ type: "invalid-json-ld", url, error: error.message }); } }
     for (const match of html.matchAll(/<img\b([^>]*)>/gi)) if (!/\balt=(?:"[^"]*"|'[^']*')/i.test(match[1])) findings.push({ type: "missing-image-alt", url });
     for (const match of html.matchAll(/\bhref="([^"]+)"/gi)) if (!localTargetExists(file, match[1])) findings.push({ type: "broken-local-link", url, href: match[1] });
@@ -67,6 +70,12 @@ function auditLocal(urls) {
     pages.push({ url, file: relative(root, file), title, descriptionLength: description.length, canonical, h1Count, schemaCount: schemas.length });
   }
   for (const [title, duplicates] of titles) if (duplicates.length > 1) findings.push({ type: "duplicate-title", title, urls: duplicates });
+  const notFoundSource = join(root, "404.html");
+  if (!existsSync(notFoundSource)) findings.push({ type: "missing-custom-404" });
+  else if (!/Mayberry Pressure Washing/.test(readFileSync(notFoundSource, "utf8"))) findings.push({ type: "unbranded-custom-404" });
+  const contact = readFileSync(join(root, "contact.html"), "utf8");
+  if (!/<form[^>]+action="https:\/\/formspree\.io\/f\/xvznwqpl"[^>]+method="POST"/i.test(contact)) findings.push({ type: "form-wiring" });
+  if (!/href="privacy"/.test(contact)) findings.push({ type: "form-privacy-link" });
   return { pages, findings };
 }
 
@@ -79,19 +88,30 @@ async function auditProduction(urls) {
       return { url, status: response.status, finalUrl: response.url, canonical, ok: response.ok && response.url === url && canonical === url };
     } catch (error) { return { url, status: 0, finalUrl: "", canonical: "", ok: false, error: error.message }; }
   }));
-  const [apex, httpWww, robots, sitemap, key] = await Promise.all([
+  const redirectConfig = JSON.parse(readFileSync(join(root, "vercel.json"), "utf8"));
+  const retiredRoutes = redirectConfig.redirects.filter((rule) => rule.source.startsWith("/service-areas/") && !rule.source.includes(":"));
+  const retiredResults = await Promise.all(retiredRoutes.map(async (rule) => {
+    const response = await fetch(`${origin}${rule.source}`, { redirect: "manual" });
+    const expectedLocation = `${origin}${rule.destination}`;
+    return { source: rule.source, destination: rule.destination, status: response.status, location: response.headers.get("location") || "", ok: response.status === 308 && response.headers.get("location") === expectedLocation };
+  }));
+  const [apex, httpWww, robots, sitemap, key, missing] = await Promise.all([
     fetch("https://mayberrypw.com/", { redirect: "manual" }),
     fetch("http://www.mayberrypw.com/", { redirect: "manual" }),
     fetch(`${origin}/robots.txt`),
     fetch(`${origin}/sitemap.xml`),
-    fetch(`${origin}/04de81dd16d2ed0fb321829ebc7b5972.txt`)
+    fetch(`${origin}/04de81dd16d2ed0fb321829ebc7b5972.txt`),
+    fetch(`${origin}/s4-lifecycle-404-check`, { redirect: "manual" })
   ]);
+  const missingBody = await missing.text();
   return {
     pages: results,
     redirects: {
       apex: { status: apex.status, location: apex.headers.get("location") || "" },
-      httpWww: { status: httpWww.status, location: httpWww.headers.get("location") || "" }
+      httpWww: { status: httpWww.status, location: httpWww.headers.get("location") || "" },
+      retired: retiredResults
     },
+    notFound: { status: missing.status, branded: /Mayberry Pressure Washing/.test(missingBody), ok: missing.status === 404 && /Mayberry Pressure Washing/.test(missingBody) },
     supportFiles: { robots: robots.status, sitemap: sitemap.status, indexNowKey: key.status },
     securityHeaders: {
       xContentTypeOptions: robots.headers.get("x-content-type-options") || "",
@@ -99,7 +119,11 @@ async function auditProduction(urls) {
       permissionsPolicy: robots.headers.get("permissions-policy") || "",
       xFrameOptions: robots.headers.get("x-frame-options") || ""
     },
-    findings: results.filter((item) => !item.ok).map((item) => ({ type: "production-page", ...item }))
+    findings: [
+      ...results.filter((item) => !item.ok).map((item) => ({ type: "production-page", ...item })),
+      ...retiredResults.filter((item) => !item.ok).map((item) => ({ type: "retired-redirect", ...item })),
+      ...(missing.status === 404 && /Mayberry Pressure Washing/.test(missingBody) ? [] : [{ type: "production-404", status: missing.status, branded: /Mayberry Pressure Washing/.test(missingBody) }])
+    ]
   };
 }
 
@@ -124,8 +148,10 @@ if (live && live.supportFiles.robots !== 200) findings.push({ type: "robots-stat
 if (live && live.supportFiles.sitemap !== 200) findings.push({ type: "sitemap-status", status: live.supportFiles.sitemap });
 if (live && live.supportFiles.indexNowKey !== 200) findings.push({ type: "indexnow-key-status", status: live.supportFiles.indexNowKey });
 const report = { generatedAt: new Date().toISOString(), mode: production ? "production" : "local", status: findings.length ? "attention" : "healthy", urlCount: urls.length, local, production: live, findings };
-writeFileSync(currentPath, `${JSON.stringify(report, null, 2)}\n`);
-appendFileSync(historyPath, `${JSON.stringify({ generatedAt: report.generatedAt, mode: report.mode, status: report.status, urlCount: report.urlCount, findingCount: findings.length })}\n`);
-await notify(report);
+if (record) {
+  writeFileSync(currentPath, `${JSON.stringify(report, null, 2)}\n`);
+  appendFileSync(historyPath, `${JSON.stringify({ generatedAt: report.generatedAt, mode: report.mode, status: report.status, urlCount: report.urlCount, findingCount: findings.length })}\n`);
+  await notify(report);
+}
 console.log(`Site health ${report.status}: urls=${urls.length}, findings=${findings.length}, mode=${report.mode}.`);
 if (findings.length) process.exitCode = 1;
