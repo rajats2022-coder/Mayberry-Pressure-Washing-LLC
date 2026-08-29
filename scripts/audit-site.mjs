@@ -93,7 +93,9 @@ async function auditProduction(urls) {
   const retiredResults = await Promise.all(retiredRoutes.map(async (rule) => {
     const response = await fetch(`${origin}${rule.source}`, { redirect: "manual" });
     const expectedLocation = `${origin}${rule.destination}`;
-    return { source: rule.source, destination: rule.destination, status: response.status, location: response.headers.get("location") || "", ok: response.status === 308 && response.headers.get("location") === expectedLocation };
+    const location = response.headers.get("location") || "";
+    const resolvedLocation = location ? new URL(location, origin).toString() : "";
+    return { source: rule.source, destination: rule.destination, status: response.status, location, ok: response.status === 308 && resolvedLocation === expectedLocation };
   }));
   const [apex, httpWww, robots, sitemap, key, missing] = await Promise.all([
     fetch("https://mayberrypw.com/", { redirect: "manual" }),
