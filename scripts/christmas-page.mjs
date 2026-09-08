@@ -10,7 +10,7 @@ const faqs = [
   ["Can we discuss rooflines, trees, and entryways?", "Yes. Share the parts of your property you have in mind. Mayberry will review access and your ideas, then explain which display areas can be included in your quote."],
   ["Are removal, storage, or maintenance included?", "These are not assumed to be included. Mention any after-installation support or removal you need so availability, scope, and pricing can be confirmed before scheduling."],
   ["Where is Christmas light installation available?", "Mayberry is based in Mount Airy, North Carolina. Include your property location in your request so Christmas lighting coverage and scheduling can be confirmed."],
-  ["How much does installation cost?", "Your quote depends on the agreed display areas, materials, property access, and timing. Share photos and your priorities so Mayberry can review a plan for your property."]
+  ["How much does installation cost?", "All Christmas light installation jobs have a $750 minimum. Your final quote depends on the agreed display areas, materials, property access, and timing. Share photos and your priorities so Mayberry can review a plan for your property."]
 ];
 
 export function renderChristmasPage({ shell }) {
@@ -35,6 +35,7 @@ export function renderChristmasPage({ shell }) {
         <p class="holiday-eyebrow"><span aria-hidden="true">✦</span> Christmas light installation</p>
         <h1 id="holiday-title">Christmas lights.<br> A little <em>magic.</em></h1>
         <p class="holiday-lead">Bring a warm holiday glow to your home with Christmas light installation from Mayberry. Share your ideas, and let’s plan a display for your property.</p>
+        <p class="holiday-minimum"><strong>$750 minimum per Christmas light installation.</strong></p>
         <div class="holiday-actions"><a class="holiday-button" href="${quoteUrl}">Plan my Christmas lights <span aria-hidden="true">↗</span></a><a class="holiday-call" href="tel:+13363748664">Call (336) 374-8664</a></div>
         <p class="holiday-local">Based in Mount Airy, NC · Coverage and timing confirmed by quote</p>
       </div>
