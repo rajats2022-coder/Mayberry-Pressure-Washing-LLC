@@ -2462,7 +2462,17 @@ body.nav-open .analytics-consent {
 .christmas-banner-close { position: absolute; right: 8px; top: 18px; width: 44px; height: 44px; border: 0; background: transparent; color: white; font-size: 26px; cursor: pointer; }
 .christmas-banner-close[hidden] { display: none; }
 .christmas-banner a:focus-visible, .christmas-banner button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
-.christmas-bulbs { position: absolute; inset: 0 0 auto; height: 16px; pointer-events: none; background: radial-gradient(ellipse at 10px 5px, #ffe3a0 0 4px, transparent 5px), radial-gradient(ellipse at 43px 5px, #b0e8dc 0 4px, transparent 5px); background-size: 66px 16px; border-top: 2px solid #713322; }
+/* Slow decorative twinkle; no flashing or color jumps. */
+.christmas-bulbs { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-around; height: 22px; pointer-events: none; border-top: 2px solid #482d2a; overflow: visible; }
+.christmas-bulb { --bulb-color: #ffe3a0; position: relative; display: block; width: 7px; height: 11px; margin-top: 4px; flex: 0 0 7px; border-radius: 45% 45% 50% 50%; background: var(--bulb-color); box-shadow: 0 2px 8px 2px var(--bulb-color); animation: christmas-twinkle 3.8s ease-in-out infinite; animation-delay: calc(var(--bulb-index) * -0.37s); }
+.christmas-bulb::before { content: ""; position: absolute; top: -5px; left: 2px; width: 3px; height: 5px; background: #4e4537; }
+.christmas-bulb:nth-child(4n + 2) { --bulb-color: #b0e8dc; }
+.christmas-bulb:nth-child(4n + 3) { --bulb-color: #ffb6b1; }
+.christmas-bulb:nth-child(4n) { --bulb-color: #c9e6ff; }
+@keyframes christmas-twinkle { 0%, 100% { opacity: .72; box-shadow: 0 2px 5px 1px var(--bulb-color); } 50% { opacity: 1; box-shadow: 0 2px 12px 3px var(--bulb-color); } }
+@media (max-width: 700px) { .christmas-bulb:nth-child(n + 17) { display: none; } }
+@media (prefers-reduced-motion: reduce) { .christmas-bulb { animation: none; opacity: 1; box-shadow: 0 2px 6px 1px var(--bulb-color); } }
+
 .seasonal-service-intro { padding: 60px 0; background: #082a36; color: #fff8e6; }
 .seasonal-service-intro p { max-width: 650px; margin: 16px 0; }
 .seasonal-service-intro + .page-hero { margin-top: 0; }

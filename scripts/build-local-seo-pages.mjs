@@ -294,7 +294,7 @@ function compactMeta(value, max = 158) {
 
 function christmasBanner() {
   return `<aside class="christmas-banner" aria-label="Christmas light installation" data-christmas-banner>
-    <span class="christmas-bulbs" aria-hidden="true"></span>
+    <span class="christmas-bulbs" aria-hidden="true">${Array.from({ length: 36 }, (_, i) => `<span class="christmas-bulb" style="--bulb-index:${i}"></span>`).join("")}</span>
     <div class="christmas-banner-inner"><p><strong>A little Christmas magic. A whole lot less ladder time.</strong><span>Christmas light installation from Mayberry</span></p><a href="/services/christmas-light-installation" class="christmas-banner-link">Explore Christmas lights <span aria-hidden="true">→</span></a></div>
     <button type="button" class="christmas-banner-close" aria-label="Dismiss Christmas lights banner" hidden>×</button>
   </aside>`;
