@@ -1,3 +1,4 @@
+import { publicGoogleRating, publicGoogleReviewCount, reviewSnippets, refreshReviewHtml } from "./review-content.mjs";
 import { renderChristmasPage } from "./christmas-page.mjs";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -8,10 +9,8 @@ const phoneHref = "tel:+13363748664";
 const email = "c.bray@mayberrypw.com";
 const facebook = "https://www.facebook.com/profile.php?id=61576662606045";
 const instagram = "https://www.instagram.com/mayberrypressurewashingllc/";
-const publicGoogleRating = "5.0";
-const publicGoogleReviewCount = "34";
-const baseLastModified = "2026-08-29";
-const generatedLastModified = "2026-08-29";
+const baseLastModified = "2026-09-08";
+const generatedLastModified = "2026-09-08";
 
 const basePages = [
   { loc: "/", lastmod: baseLastModified },
@@ -208,12 +207,6 @@ const serviceDetails = {
   }
 };
 
-const reviewSnippets = [
-  ["Victor Wilson", "Guys came out today and did a great job on my house! Fast great communication would highly recommend!!"],
-  ["Sharon Richardson", "Pressure washed one of our properties. Did an excellent job! Was on time, did exactly as stated, and completed in a timely manner."],
-  ["Owen Greenstreet", "They washed my driveway and house, everything looked outstanding. 10/10 Definitely recommend."],
-  ["Sam Foxworth", "Mayberry Pressure Washing LLC did an awesome job on my house, driveway, and gutters. Carter was professional, quick, and the results were great."]
-];
 
 const resourcePages = [
   {
@@ -547,7 +540,7 @@ function renderServicePage(service) {
 
     <section class="section">
       <div class="wrap">
-        <div class="section-head"><p class="eyebrow light"><i data-lucide="star"></i> Service proof</p><h2>Reviews near the decision point.</h2><p>These customer review snippets reinforce trust while a visitor is comparing the service.</p></div>
+        <div class="section-head"><p class="eyebrow light"><i data-lucide="star"></i> Service proof</p><h2>What Mayberry customers say.</h2><p>Recent Google reviews from customers who hired Mayberry for exterior cleaning.</p></div>
         <div class="reviews-grid compact-reviews">${reviewSnippets.slice(0, 3).map(([name, quote]) => `<article class="review-card"><div><strong>${esc(name)}</strong></div><p class="stars" aria-label="5 out of 5 stars">5 stars</p><blockquote>${esc(quote)}</blockquote></article>`).join("")}</div>
       </div>
     </section>
@@ -876,7 +869,7 @@ function renderResourcePage(resource) {
 function writePage(path, html) {
   const fullPath = join(process.cwd(), path);
   mkdirSync(dirname(fullPath), { recursive: true });
-  writeFileSync(fullPath, html);
+  writeFileSync(fullPath, refreshReviewHtml(html));
 }
 
 writePage("services/christmas-light-installation.html", renderChristmasPage({ shell }));
@@ -916,5 +909,5 @@ for (const file of ["index.html", "services.html", "service-areas.html", "galler
   let html = readFileSync(path, "utf8");
   html = html.replace(/\s*<aside class="christmas-banner"[\s\S]*?<\/aside>/g, "");
   html = html.replace('<header class="site-header">', `${christmasBanner()}\n  <header class="site-header">`);
-  writeFileSync(path, html);
+  writeFileSync(path, refreshReviewHtml(html, file === "reviews.html"));
 }

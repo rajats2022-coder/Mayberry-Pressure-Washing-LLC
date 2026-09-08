@@ -340,6 +340,18 @@ const escapeChatHTML = (value) => value
 
 const chatbotAnswers = [
   {
+    name: "christmas-lighting",
+    match: (text) => /\b(?:christmas|xmas)\b|\bholiday\s+(?:light|lights|lighting)\b/.test(text),
+    reply: () => ({
+      text: "Mayberry offers Christmas light installation. Share your property location, photos, display ideas, and preferred timing for a quote. Coverage, materials, display areas, and any removal or support requests are confirmed before scheduling.",
+      actions: [
+        ["Explore Christmas lights", "/services/christmas-light-installation"],
+        ["Request a Christmas light quote", "/contact?service=christmas-light-installation"],
+        ["Call Mayberry", chatbotConfig.phoneHref]
+      ]
+    })
+  },
+  {
     name: "greeting",
     match: (text) => includesAny(text, ["hello", "hi", "hey", "good morning", "good afternoon", "good evening", "whats up"]),
     reply: () => ({
