@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { publicGoogleReviewCount } from "./review-content.mjs";
 import { appendFileSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -60,7 +61,7 @@ function auditLocal(urls) {
     if (h1Count !== 1) findings.push({ type: "h1-count", url, count: h1Count });
     if (!html.includes("assets/site-analytics.js") && !html.includes("../assets/site-analytics.js")) findings.push({ type: "analytics-missing", url });
     if (!html.includes('rel="icon"') || !html.includes('rel="apple-touch-icon"')) findings.push({ type: "icon-missing", url });
-    for (const count of html.matchAll(/"reviewCount"\s*:\s*"(\d+)"/g)) if (count[1] !== "34") findings.push({ type: "review-count-mismatch", url, value: count[1], expected: "34" });
+    for (const count of html.matchAll(/"reviewCount"\s*:\s*"(\d+)"/g)) if (count[1] !== publicGoogleReviewCount) findings.push({ type: "review-count-mismatch", url, value: count[1], expected: publicGoogleReviewCount });
     if (/"priceRange"\s*:|"streetAddress"\s*:|"addressLocality"\s*:/.test(html)) findings.push({ type: "unsupported-localbusiness-field", url });
     for (const schema of schemas) { try { JSON.parse(schema[1]); } catch (error) { findings.push({ type: "invalid-json-ld", url, error: error.message }); } }
     for (const match of html.matchAll(/<img\b([^>]*)>/gi)) if (!/\balt=(?:"[^"]*"|'[^']*')/i.test(match[1])) findings.push({ type: "missing-image-alt", url });

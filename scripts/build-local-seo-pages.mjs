@@ -1,4 +1,6 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { publicGoogleRating, publicGoogleReviewCount, reviewSnippets, refreshReviewHtml } from "./review-content.mjs";
+import { renderChristmasPage } from "./christmas-page.mjs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 const siteUrl = "https://www.mayberrypw.com";
@@ -7,10 +9,8 @@ const phoneHref = "tel:+13363748664";
 const email = "c.bray@mayberrypw.com";
 const facebook = "https://www.facebook.com/profile.php?id=61576662606045";
 const instagram = "https://www.instagram.com/mayberrypressurewashingllc/";
-const publicGoogleRating = "5.0";
-const publicGoogleReviewCount = "34";
-const baseLastModified = "2026-08-29";
-const generatedLastModified = "2026-08-29";
+const baseLastModified = "2026-09-08";
+const generatedLastModified = "2026-09-08";
 
 const basePages = [
   { loc: "/", lastmod: baseLastModified },
@@ -207,12 +207,6 @@ const serviceDetails = {
   }
 };
 
-const reviewSnippets = [
-  ["Victor Wilson", "Guys came out today and did a great job on my house! Fast great communication would highly recommend!!"],
-  ["Sharon Richardson", "Pressure washed one of our properties. Did an excellent job! Was on time, did exactly as stated, and completed in a timely manner."],
-  ["Owen Greenstreet", "They washed my driveway and house, everything looked outstanding. 10/10 Definitely recommend."],
-  ["Sam Foxworth", "Mayberry Pressure Washing LLC did an awesome job on my house, driveway, and gutters. Carter was professional, quick, and the results were great."]
-];
 
 const resourcePages = [
   {
@@ -291,9 +285,18 @@ function compactMeta(value, max = 158) {
   return `${shortened.slice(0, shortened.lastIndexOf(" "))}…`;
 }
 
+function christmasBanner() {
+  return `<aside class="christmas-banner" aria-label="Christmas light installation" data-christmas-banner>
+    <span class="christmas-bulbs" aria-hidden="true">${Array.from({ length: 36 }, (_, i) => `<span class="christmas-bulb" style="--bulb-index:${i}"></span>`).join("")}</span>
+    <div class="christmas-banner-inner"><p><strong>Less ladder time. More Christmas magic.</strong><span>Christmas light installation from Mayberry</span></p><a href="/services/christmas-light-installation" class="christmas-banner-link">Explore Christmas lights <span aria-hidden="true">→</span></a></div>
+    <button type="button" class="christmas-banner-close" aria-label="Dismiss Christmas lights banner" hidden>×</button>
+  </aside>`;
+}
+
 function header({ depth, active = "" }) {
   const link = (href, label, key) => `<a href="${rel(depth, href)}"${active === key ? ' aria-current="page"' : ""}>${label}</a>`;
-  return `<header class="site-header">
+  return `${christmasBanner()}
+  <header class="site-header">
     <nav class="nav" aria-label="Primary navigation">
       <a class="brand" href="${rel(depth, "index.html")}" aria-label="Mayberry Pressure Washing home"><span class="brand-mark"><img src="${rel(depth, "assets/images/business-logo.jpg")}" alt="" /></span><span>Mayberry Pressure Washing <small>Residential &amp; Commercial Exterior Cleaning</small></span></a>
       <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false"><i data-lucide="menu"></i></button>
@@ -306,7 +309,7 @@ function footer(depth) {
   return `<footer><div class="footer-grid"><div><strong>Mayberry Pressure Washing LLC</strong><p>Local pressure washing, soft washing, house washing, roof washing, driveway cleaning, gutters, windows, decks, fences, and commercial exterior cleaning.</p></div><div><strong>Top Services</strong><p><a href="${rel(depth, "services/pressure-washing.html")}">Pressure washing</a><br><a href="${rel(depth, "services/house-washing.html")}">House washing</a><br><a href="${rel(depth, "services/driveway-cleaning.html")}">Driveway cleaning</a><br><a href="${rel(depth, "services/commercial-pressure-washing.html")}">Commercial pressure washing</a><br><a href="${rel(depth, "privacy.html")}">Privacy &amp; analytics choices</a></p></div><div><strong>Contact</strong><p><a href="${phoneHref}">${phone}</a><br><a href="mailto:${email}">${email}</a><br><a href="${rel(depth, "reviews.html")}">${publicGoogleReviewCount} Google reviews</a><br><a href="${facebook}" target="_blank" rel="noopener">Facebook Mayberry Pressure Washing LLC</a><br><a href="${instagram}">@mayberrypressurewashingllc</a></p></div></div></footer>`;
 }
 
-function shell({ depth = 0, title, description, canonical, ogImage = "assets/images/pressure-washing-hero.png", active, body, schema, robots = "index, follow, max-image-preview:large" }) {
+function shell({ depth = 0, title, description, canonical, ogImage = "assets/images/pressure-washing-hero.png", active, body, schema, extraCss, robots = "index, follow, max-image-preview:large" }) {
   const metaDescription = compactMeta(description);
   return `<!doctype html>
 <html lang="en">
@@ -333,6 +336,7 @@ function shell({ depth = 0, title, description, canonical, ogImage = "assets/ima
   <link rel="preconnect" href="https://unpkg.com" />
   <script src="${rel(depth, "assets/site-analytics.js")}"></script>
   <link rel="stylesheet" href="${rel(depth, "assets/styles.css")}" />
+${extraCss ? `  <link rel="stylesheet" href="${rel(depth, extraCss)}" />` : ""}
   <script type="application/ld+json">
   ${jsonLd(schema)}
   </script>
@@ -536,7 +540,7 @@ function renderServicePage(service) {
 
     <section class="section">
       <div class="wrap">
-        <div class="section-head"><p class="eyebrow light"><i data-lucide="star"></i> Service proof</p><h2>Reviews near the decision point.</h2><p>These customer review snippets reinforce trust while a visitor is comparing the service.</p></div>
+        <div class="section-head"><p class="eyebrow light"><i data-lucide="star"></i> Service proof</p><h2>What Mayberry customers say.</h2><p>Recent Google reviews from customers who hired Mayberry for exterior cleaning.</p></div>
         <div class="reviews-grid compact-reviews">${reviewSnippets.slice(0, 3).map(([name, quote]) => `<article class="review-card"><div><strong>${esc(name)}</strong></div><p class="stars" aria-label="5 out of 5 stars">5 stars</p><blockquote>${esc(quote)}</blockquote></article>`).join("")}</div>
       </div>
     </section>
@@ -865,8 +869,10 @@ function renderResourcePage(resource) {
 function writePage(path, html) {
   const fullPath = join(process.cwd(), path);
   mkdirSync(dirname(fullPath), { recursive: true });
-  writeFileSync(fullPath, html);
+  writeFileSync(fullPath, refreshReviewHtml(html));
 }
+
+writePage("services/christmas-light-installation.html", renderChristmasPage({ shell }));
 
 for (const service of services) {
   writePage(`services/${service.slug}.html`, renderServicePage(service));
@@ -883,6 +889,7 @@ for (const resource of resourcePages) {
 }
 
 const generatedPages = [
+  { loc: "/services/christmas-light-installation", lastmod: "2026-09-08" },
   ...services.map((service) => ({ loc: `/services/${service.slug}`, lastmod: generatedLastModified })),
   ...cities.map((city) => ({ loc: `/service-areas/${city.slug}`, lastmod: generatedLastModified })),
   ...resourcePages.map((resource) => ({ loc: `/resources/${resource.slug}`, lastmod: generatedLastModified }))
@@ -895,3 +902,12 @@ ${[...basePages, ...generatedPages].map(({ loc, lastmod }) => `  <url><loc>${sit
 `;
 
 writePage("sitemap.xml", sitemap);
+
+// Keep the seasonal entry point in initial HTML, including handwritten pages.
+for (const file of ["index.html", "services.html", "service-areas.html", "gallery.html", "reviews.html", "contact.html", "privacy.html", "404.html"]) {
+  const path = join(process.cwd(), file);
+  let html = readFileSync(path, "utf8");
+  html = html.replace(/\s*<aside class="christmas-banner"[\s\S]*?<\/aside>/g, "");
+  html = html.replace('<header class="site-header">', `${christmasBanner()}\n  <header class="site-header">`);
+  writeFileSync(path, refreshReviewHtml(html, file === "reviews.html"));
+}
