@@ -2450,3 +2450,25 @@ body.nav-open .analytics-consent {
 .analytics-consent{position:fixed;z-index:1000;left:clamp(12px,3vw,32px);right:clamp(12px,3vw,32px);bottom:clamp(12px,3vw,28px);display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:980px;margin:0 auto;padding:18px 20px;border:1px solid rgba(255,255,255,.18);border-radius:16px;background:#1f2f41;color:#fff;box-shadow:0 18px 55px rgba(0,0,0,.28)}
 .analytics-consent p{margin:0;max-width:680px;line-height:1.5}.analytics-consent a{color:#fff;text-decoration:underline}.analytics-consent div{display:flex;gap:10px;flex-wrap:wrap}.analytics-consent button{cursor:pointer;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:10px 16px;background:transparent;color:#fff;font:inherit;font-weight:700}.analytics-consent .consent-allow{border-color:#f4cc69;background:#f4cc69;color:#1f2f41}
 @media (max-width:700px){.analytics-consent{align-items:stretch;flex-direction:column}.analytics-consent div,.analytics-consent button{width:100%}}
+
+/* Seasonal entry point: rendered in HTML, above the sticky site header. */
+.christmas-banner { position: relative; z-index: 41; color: #fff9e9; background: #a32232; padding: 25px 56px 17px; }
+.christmas-banner-inner { display: flex; align-items: center; justify-content: center; gap: 32px; max-width: 1180px; margin: auto; }
+.christmas-banner p { margin: 0; line-height: 1.4; }
+.christmas-banner strong { display: block; font-size: 17px; }
+.christmas-banner p span { font-size: 13px; color: #fff0d5; }
+.christmas-banner-link { display: inline-flex; align-items: center; justify-content: center; gap: 12px; flex-shrink: 0; min-height: 44px; padding: 10px 20px; border-radius: 999px; background: #fff0c5; color: #592019; font-weight: 800; text-decoration: none; }
+.christmas-banner-link:hover { background: #fff; }
+.christmas-banner-close { position: absolute; right: 8px; top: 18px; width: 44px; height: 44px; border: 0; background: transparent; color: white; font-size: 26px; cursor: pointer; }
+.christmas-banner-close[hidden] { display: none; }
+.christmas-banner a:focus-visible, .christmas-banner button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+.christmas-bulbs { position: absolute; inset: 0 0 auto; height: 16px; pointer-events: none; background: radial-gradient(ellipse at 10px 5px, #ffe3a0 0 4px, transparent 5px), radial-gradient(ellipse at 43px 5px, #b0e8dc 0 4px, transparent 5px); background-size: 66px 16px; border-top: 2px solid #713322; }
+.seasonal-service-intro { padding: 60px 0; background: #082a36; color: #fff8e6; }
+.seasonal-service-intro p { max-width: 650px; margin: 16px 0; }
+.seasonal-service-intro + .page-hero { margin-top: 0; }
+@media (max-width: 700px) {
+  .christmas-banner { padding: 24px 45px 16px 20px; }
+  .christmas-banner-inner { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .christmas-banner strong { font-size: 15px; }
+  .christmas-banner-link { font-size: 13px; padding: 8px 15px; }
+}

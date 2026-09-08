@@ -83,12 +83,15 @@
       if (!link) return;
       const href = link.getAttribute("href") || "";
       const label = link.textContent.trim().slice(0, 80);
-      const ctaLocation = link.closest(".site-header") ? "header" : link.closest(".mobile-quick-cta") ? "mobile_quick_cta" : link.closest("footer") ? "footer" : "content";
+      const serviceIntent = location.pathname.includes("/services/christmas-light-installation") || new URLSearchParams(location.search).get("service") === "christmas-light-installation" || href.includes("christmas-light-installation") ? "christmas_light_installation" : "general";
+      const ctaLocation = link.closest("[data-christmas-banner]") ? "seasonal_banner" : link.closest(".site-header") ? "header" : link.closest(".mobile-quick-cta") ? "mobile_quick_cta" : link.closest("footer") ? "footer" : "content";
       if (href.startsWith("tel:")) {
-        window.mayberryTrack("phone_click", { cta_location: ctaLocation });
+        window.mayberryTrack("phone_click", { cta_location: ctaLocation, service_intent: serviceIntent });
       } else if (/contact(?:\.html)?(?:[?#]|$)/.test(href)) {
-        const quoteIntent = /quote|estimate|book|schedule/i.test(label);
-        window.mayberryTrack(quoteIntent ? "quote_request" : "contact_click", { cta_location: ctaLocation });
+        const quoteIntent = href.includes("service=christmas-light-installation") || /quote|estimate|book|schedule/i.test(label);
+        window.mayberryTrack(quoteIntent ? "quote_request" : "contact_click", { cta_location: ctaLocation, service_intent: serviceIntent });
+      } else if (href.includes("/services/christmas-light-installation")) {
+        window.mayberryTrack("service_page_click", { cta_location: ctaLocation, service_intent: serviceIntent });
       }
     });
   });

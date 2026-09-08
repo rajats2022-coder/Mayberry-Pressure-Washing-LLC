@@ -18,6 +18,7 @@ if (navLinks) {
       <button type="button" class="nav-group-trigger" aria-expanded="false">Services <i data-lucide="chevron-down"></i></button>
       <div class="nav-menu">
         <a href="${navHref("services")}">All Services</a>
+        <a href="${navHref("services/christmas-light-installation")}">Christmas Light Installation</a>
         <a href="${navHref("services/pressure-washing")}">Pressure Washing</a>
         <a href="${navHref("services/house-washing")}">House Washing</a>
         <a href="${navHref("services/driveway-cleaning")}">Driveway Cleaning</a>
@@ -147,7 +148,7 @@ document.querySelectorAll("[data-estimate-form]").forEach((form) => {
       if (response.ok) {
         form.reset();
         sentSuccessfully = true;
-        window.mayberryTrack?.("generate_lead", { form_name: "estimate_request" });
+        window.mayberryTrack?.("generate_lead", { form_name: "estimate_request", service_intent: data.get("service") === "Christmas light installation" ? "christmas_light_installation" : "general" });
         setStatus("success", "Sent. Thanks, your estimate request went through. Mayberry Pressure Washing received the form submission.");
         if (button) button.innerHTML = '<i data-lucide="check-circle"></i> Request Sent';
       } else {
@@ -317,7 +318,8 @@ const chatbotConfig = {
     "fence cleaning",
     "wood staining",
     "gutter guards",
-    "commercial exterior cleaning"
+    "commercial exterior cleaning",
+    "Christmas light installation"
   ]
 };
 
@@ -687,3 +689,24 @@ const createChatbot = () => {
 };
 
 createChatbot();
+
+// Seasonal banner is useful without JavaScript; enhance with a dismiss action.
+const christmasBanner = document.querySelector("[data-christmas-banner]");
+const christmasDismiss = christmasBanner?.querySelector(".christmas-banner-close");
+if (christmasDismiss) {
+  christmasDismiss.hidden = false;
+  christmasDismiss.addEventListener("click", () => {
+    christmasBanner.remove();
+    document.querySelector(".brand")?.focus();
+  });
+}
+const seasonalService = new URLSearchParams(location.search).get("service");
+const serviceSelect = document.querySelector('select[name="service"]');
+if (serviceSelect && seasonalService === "christmas-light-installation") {
+  serviceSelect.value = "Christmas light installation";
+}
+if (currentPath.includes('/services/christmas-light-installation') || seasonalService === 'christmas-light-installation') {
+  document.querySelectorAll('.site-header a.btn-primary, .mobile-quick-cta a').forEach((link) => {
+    if (link.getAttribute('href')?.endsWith('contact')) link.href = '/contact?service=christmas-light-installation';
+  });
+}
